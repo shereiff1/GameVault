@@ -6,6 +6,7 @@ namespace GameVault.DAL.Entites
 {
     public class Game
     {
+        // use camel case 
         public int GameId { get; private set; }
         public string Title { get; private set; }
         public DateTime? CreatedOn { get; private set; }
