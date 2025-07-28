@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Projects\\GameVault\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {}
+    "E:\\Projects\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {}
   },
   "projects": {
-    "E:\\Projects\\GameVault\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {
+    "E:\\Projects\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Projects\\GameVault\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
+        "projectUniqueName": "E:\\Projects\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
         "projectName": "GameVault.DAL",
-        "projectPath": "E:\\Projects\\GameVault\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
+        "projectPath": "E:\\Projects\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
         "packagesPath": "C:\\Users\\sheri\\.nuget\\packages\\",
-        "outputPath": "E:\\Projects\\GameVault\\GameVault\\GameVault.DAL\\obj\\",
+        "outputPath": "E:\\Projects\\GameVault\\GameVault.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

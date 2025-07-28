@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Wc1/IJoPYt0=",
+  "dgSpecHash": "TUJMCns2P/E=",
   "success": true,
-  "projectFilePath": "E:\\Projects\\GameVault\\GameVault\\GameVault.PLL\\GameVault.PLL.csproj",
+  "projectFilePath": "E:\\Projects\\GameVault\\GameVault.PLL\\GameVault.PLL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\sheri\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\sheri\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
