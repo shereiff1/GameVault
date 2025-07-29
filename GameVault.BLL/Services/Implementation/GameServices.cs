@@ -1,5 +1,3 @@
-﻿
-
 using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.Services.Abstraction;
@@ -21,37 +19,85 @@ namespace GameVault.BLL.Services.Implementation
 
         public bool Add(GameDTO gameDto)
         {
-            var game = _mapper.Map<Game>(gameDto);
-            return _gameRepo.Add(game);
+            try
+            {
+                var game = _mapper.Map<Game>(gameDto);
+                return _gameRepo.Add(game);
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
 
         public (bool, List<GameDTO>?) GetAll(bool includeDeleted = false)
         {
-            var (success, games) = _gameRepo.GetAll(includeDeleted);
-            return (success, games != null ? _mapper.Map<List<GameDTO>>(games) : null);
+            try
+            {
+                var (success, games) = _gameRepo.GetAll(includeDeleted);
+                return (success, games != null ? _mapper.Map<List<GameDTO>>(games) : null);
+            }
+            catch (Exception ex)
+            {
+
+                return (false, null);
+            }
         }
 
         public (bool, GameDTO?) GetById(int gameId)
         {
-            var (success, game) = _gameRepo.GetById(gameId);
-            return (success, game != null ? _mapper.Map<GameDTO>(game) : null);
+            try
+            {
+                var (success, game) = _gameRepo.GetById(gameId);
+                return (success, game != null ? _mapper.Map<GameDTO>(game) : null);
+            }
+            catch (Exception ex)
+            {
+
+                return (false, null);
+            }
         }
 
         public bool Update(GameDTO gameDto)
         {
-            var game = _mapper.Map<Game>(gameDto);
-            return _gameRepo.Update(game);
+            try
+            {
+                var game = _mapper.Map<Game>(gameDto);
+                return _gameRepo.Update(game);
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
 
         public bool Delete(int gameId)
         {
-            return _gameRepo.Delete(gameId);
+            try
+            {
+                return _gameRepo.Delete(gameId);
+            }
+            catch (Exception ex)
+            {
+
+                return false;
+            }
         }
 
         public (bool, List<GameDTO>) GetByCompany(int companyId)
         {
-            var (success, games) = _gameRepo.GetByCompany(companyId);
-            return (success, _mapper.Map<List<GameDTO>>(games));
+            try
+            {
+                var (success, games) = _gameRepo.GetByCompany(companyId);
+                return (success, _mapper.Map<List<GameDTO>>(games));
+            }
+            catch (Exception ex)
+            {
+
+                return (false, new List<GameDTO>());
+            }
         }
     }
 }
