@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entites;
@@ -68,6 +68,10 @@ namespace GameVault.BLL.Services.Implementation
             }
             catch (Exception ex)
             {
+
+                return false;
+            }
+        }
 
                 return false;
             }
