@@ -13,12 +13,23 @@ namespace GameVault.DAL.Repository.Implementation
             _context = context;
         }
 
-        public bool Add(Game game)
+        public bool Add(Game game, int companyId)
         {
             try
             {
+                var company = _context.companies.Find(companyId);
+                if (company == null)
+                {
+                    // we should edit this and add new company.
+                    Console.WriteLine("Company not found");
+                    return false;
+                }
+
+                game.CompanyId = companyId;
+
                 _context.games.Add(game);
                 _context.SaveChanges();
+
                 return true;
             }
             catch (Exception ex)

@@ -7,17 +7,30 @@ namespace GameVault.DAL.Entities
 {
     public class Review
     {
-        public int ReviewId { get; private set; }
-        public string Comment { get; private set; }
-        public float Rating { get; private set; }
+        public Review(string comment, float rating, int userId, string createdBy, int gameId)
+        {
+            Comment = comment;
+            Rating = rating;
+            UserId = userId;
+            CreatedOn = DateTime.Now;
+            CreatedBy = createdBy;
+            GameId = gameId;
+            IsDeleted = false;
+        }
+
+        public int ReviewId { get;  set; }
+        public string Comment { get;  set; }
+        public float Rating { get;  set; }
         [ForeignKey("User")]
-        public int UserId { get; private set; }
-        public DateTime? CreatedOn { get; private set; }
-        public bool IsDeleted { get; private set; }
-        public DateTime? ModifiedOn { get; private set; }
-        public string CreatedBy { get; private set; }
+        public int UserId { get;  set; }
+        public DateTime? CreatedOn { get;  set; }
+        public bool IsDeleted { get;  set; }
+        public DateTime? ModifiedOn { get;  set; }
+        public string CreatedBy { get;  set; }
         [ForeignKey("Game")]
         public int GameId { get; set; }
+
+
 
     }
 }

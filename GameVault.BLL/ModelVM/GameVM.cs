@@ -1,9 +1,9 @@
 ﻿
 namespace GameVault.BLL.ModelVM
 {
-    public class GameDTO
+    public class GameVM
     {
-        //string title int companyId, string createdBy
+        // the ctor string title int companyId, string createdBy
         public int Id { get; set; }
         public string Title { get; set; }
         public string CreatedBy { get; set; }
