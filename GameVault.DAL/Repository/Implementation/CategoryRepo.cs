@@ -1,5 +1,7 @@
 using GameVault_DAL.Entities;
 using GameVault_DAL.Repo.Abstraction;
+﻿using Microsoft.EntityFrameworkCore;
+using GameVault_DAL.Database;
 
 namespace GameVault_DAL.Repo.Implementation
 {
