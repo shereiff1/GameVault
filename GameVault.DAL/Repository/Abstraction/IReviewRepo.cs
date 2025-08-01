@@ -1,8 +1,12 @@
-﻿
+using GameVault_DAL.Entities;
 
-namespace GameVault.DAL.Repository.Abstraction
+namespace GameVault_DAL.Repo.Abstraction
 {
     public interface IReviewRepo
     {
+        Task<(bool, string?)> CreateAsync(Review review);
+        Task<List<Review>> GetAllAsync();
+        Task<(bool, string?)> DeleteAsync(int id);
+        Task<(bool, string?)> UpdateAsync(Review review);
     }
 }
