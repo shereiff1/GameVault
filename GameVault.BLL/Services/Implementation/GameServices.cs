@@ -17,89 +17,79 @@ namespace GameVault.BLL.Services.Implementation
             _mapper = mapper;
         }
 
-        public bool Add(int companyId, GameVM gameDto)
+        public async Task<bool> AddAsync(int companyId, GameVM gameDto)
         {
             try
             {
                 var game = _mapper.Map<Game>(gameDto);
-                return _gameRepo.Add(game, companyId);
+                return await _gameRepo.AddAsync(game, companyId);
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
 
-        public (bool, List<GameVM>?) GetAll(bool includeDeleted = false)
+        public async Task<(bool, List<GameVM>?)> GetAllAsync(bool includeDeleted = false)
         {
             try
             {
-                var (success, games) = _gameRepo.GetAll(includeDeleted);
+                var (success, games) = await _gameRepo.GetAllAsync(includeDeleted);
                 return (success, games != null ? _mapper.Map<List<GameVM>>(games) : null);
             }
             catch (Exception ex)
             {
-
                 return (false, null);
             }
         }
 
-        public (bool, GameVM?) GetById(int gameId)
+        public async Task<(bool, GameVM?)> GetByIdAsync(int gameId)
         {
             try
             {
-                var (success, game) = _gameRepo.GetById(gameId);
+                var (success, game) = await _gameRepo.GetByIdAsync(gameId);
                 return (success, game != null ? _mapper.Map<GameVM>(game) : null);
             }
             catch (Exception ex)
             {
-
                 return (false, null);
             }
         }
 
-        public bool Update(GameVM gameDto)
+        public async Task<bool> UpdateAsync(GameVM gameDto)
         {
             try
             {
                 var game = _mapper.Map<Game>(gameDto);
-                return _gameRepo.Update(game);
+                return await _gameRepo.UpdateAsync(game);
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
 
-                return false;
-            }
-        }
-
-        public bool Delete(int gameId)
+        public async Task<bool> DeleteAsync(int gameId)
         {
             try
             {
-                return _gameRepo.Delete(gameId);
+                return await _gameRepo.DeleteAsync(gameId);
             }
             catch (Exception ex)
             {
-
                 return false;
             }
         }
 
-        public (bool, List<GameVM>) GetByCompany(int companyId)
+        public async Task<(bool, List<GameVM>)> GetByCompanyAsync(int companyId)
         {
             try
             {
-                var (success, games) = _gameRepo.GetByCompany(companyId);
+                var (success, games) = await _gameRepo.GetByCompanyAsync(companyId);
                 return (success, _mapper.Map<List<GameVM>>(games));
             }
             catch (Exception ex)
             {
-
                 return (false, new List<GameVM>());
             }
         }

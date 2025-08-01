@@ -9,32 +9,30 @@ namespace GameVault.DAL.Entites
         [Key]
         public int GameId { get; private set; }
 
-
         [Required]
         [MaxLength(200)]
-        public string Title { get;  set; }
+        public string Title { get; private set; }
 
-        public DateTime CreatedOn { get;  set; }
-        public DateTime? ModifiedOn { get;  set; }
+        public DateTime CreatedOn { get; private set; }
+        public DateTime? ModifiedOn { get; private set; }
 
         [Required]
         [MaxLength(100)]
-        public string CreatedBy { get;  set; }
+        public string CreatedBy { get; private set; }
 
-        public bool IsDeleted { get;  set; }
+        public bool IsDeleted { get; private set; }
 
-        [Required]
-        [ForeignKey("Company")]
-        public int CompanyId { get;  set; }
+        // FK & Navigation
+        [ForeignKey(nameof(Company))]
+        public int CompanyId { get; private set; }
+        public virtual Company Company { get; private set; }
 
-        public virtual Company Company { get;  set; }
-        public virtual List<Review>? Reviews { get; set; } = new List<Review>();
+        // Collections
+        public virtual List<Review>? Reviews { get; private set; } = new();
+        public virtual List<Category>? Categories { get; private set; } = new();
+        public virtual List<User>? Users { get; private set; } = new();
 
-        public virtual List<Category>? Categories { get; set; } = new List<Category>();
-
-        public virtual List<User>? Users { get; set; } = new List<User>();
-
-        private Game() { } 
+        private Game() { }
 
         public Game(string title, int companyId, string createdBy)
         {

@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GameVault.DAL.Entities;
 
 namespace GameVault.DAL.Repository.Abstraction
 {
     public interface IInventoryItemRepo
     {
-        bool Add(InventoryItem item);
-        (bool, List<InventoryItem>?) GetAll(bool includeDeleted = false);
-        (bool, InventoryItem?) GetById(int inventoryItemId);
-        bool Update(InventoryItem item);
-        bool Delete(int inventoryItemId);
-        (bool, List<InventoryItem>) GetByCompany(int companyid);
-        (bool, List<InventoryItem>) GetByGame(int gameId);
+        Task<bool> AddAsync(InventoryItem item);
+        Task<(bool, List<InventoryItem>?)> GetAllAsync(bool includeDeleted = false);
+        Task<(bool, InventoryItem?)> GetByIdAsync(int inventoryItemId);
+        Task<bool> UpdateAsync(InventoryItem item);
+        Task<bool> DeleteAsync(int inventoryItemId);
+        Task<(bool, List<InventoryItem>)> GetByCompanyAsync(int companyId);
+        Task<(bool, List<InventoryItem>)> GetByGameAsync(int gameId);
     }
 }
