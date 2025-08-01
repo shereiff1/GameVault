@@ -18,6 +18,11 @@ namespace GameVault.BLL.Mappers
                 .ForMember(dest => dest.CompanyName, opt => opt.MapFrom(src => src.Company.CompanyName))
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
             CreateMap<Company, CompanyVM>().ReverseMap();
+            
+            CreateMap<User, UpdateUserProfile>()
+                .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash)).ReverseMap();
+            CreateMap<User, UserPrivateProfile>().ReverseMap();
+            CreateMap<User, UserPublicProfile>().ReverseMap();
         }
     }
 }
