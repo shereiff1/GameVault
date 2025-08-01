@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.DAL.Entites;
 using GameVault.DAL.Entities;
