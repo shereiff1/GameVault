@@ -5,7 +5,6 @@ namespace GameVault_DAL.Repo.Implementation
 {
     public class CategoryRepo : ICategoryRepo
     {
-        Connection string and database context would typically be injected here
         private readonly ApplicationDbContext _context;
         public CategoryRepo(ApplicationDbContext context)
         {
