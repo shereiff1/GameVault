@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+
+using System.ComponentModel.DataAnnotations;
+
 using System.Globalization;
 using GameVault.DAL.Entites;
 using Microsoft.AspNetCore.Identity;
@@ -18,6 +20,8 @@ namespace GameVault.DAL.Entities
         public List<Game>? Library {get; private set;} = new List<Game>();
 
         //public List<User>? Friends { get; private set; } = new List<User>();
+
+        public User() { }
 
         public User(string Email, string Username, string Password) : base()
         {

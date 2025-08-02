@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GameVault.DAL.Entities;
 
 namespace GameVault.DAL.Repository.Abstraction
 {
-    internal interface ICompanyRepo
+    public interface ICompanyRepo
     {
+        Task<bool> AddAsync(Company company);
+        Task<(bool, List<Company>?)> GetAllAsync(bool includeDeleted = false);
+        Task<(bool, Company?)> GetByIdAsync(int companyId);
+        Task<bool> UpdateAsync(Company company);
+        Task<bool> DeleteAsync(int companyId);
+        Task<bool> ExistsAsync(int companyId);
     }
 }

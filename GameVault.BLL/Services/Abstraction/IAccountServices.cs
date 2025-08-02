@@ -1,4 +1,4 @@
-﻿
+
 
 using GameVault.BLL.ModelVM.User;
 using GameVault.DAL.Entities;
@@ -12,7 +12,7 @@ namespace GameVault.BLL.Services.Abstraction
 
          Task<IdentityResult> SignUp(UserSignUp user);
 
-        void Logout();
+        Task Logout();
 
     }
 }

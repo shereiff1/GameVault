@@ -1,7 +1,7 @@
-﻿using GameVault.DAL.Entites;
+using GameVault.DAL.Entites;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.Design;
+
 namespace GameVault.DAL.Entities
 {
     public class InventoryItem
@@ -32,12 +32,13 @@ namespace GameVault.DAL.Entities
         public InventoryItem(Inventory inventory, int gameId, int quantity, decimal price)
         {
             Inventory = inventory;
-            CompanyId = inventory.CompanyId; 
+            CompanyId = inventory.CompanyId;
             GameId = gameId;
             SetQuantity(quantity);
             SetPrice(price);
             CreatedOn = DateTime.Now;
         }
+
         public void SetQuantity(int qty)
         {
             Quantity = qty;
