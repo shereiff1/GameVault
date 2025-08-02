@@ -14,6 +14,7 @@ namespace GameVault.DAL.Database
         public DbSet<InventoryItem> inventoryItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Inventory> inventories { get; set; }
+        public DbSet<User> Users { get; set; }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
