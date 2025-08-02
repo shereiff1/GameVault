@@ -14,19 +14,19 @@ namespace GameVault.DAL.Repository.Implementation
             _context = context;
         }
 
-        public bool AddItem(int companyId, InventoryItem newItem)
+        public async Task<bool> AddItemAsync(int companyId, InventoryItem newItem)
         {
             try
             {
-                var inv = _context.inventories
-                                  .Include(i => i.Items)
-                                  .FirstOrDefault(i => i.CompanyId == companyId);
+                var inv = await _context.inventories
+                                        .Include(i => i.Items)
+                                        .FirstOrDefaultAsync(i => i.CompanyId == companyId);
 
                 if (inv == null)
                     return false;
 
                 inv.Items.Add(newItem);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -36,15 +36,15 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public (bool Success, List<Inventory>? Inventories) GetAll(bool includeDeleted = false)
+        public async Task<(bool Success, List<Inventory>? Inventories)> GetAllAsync(bool includeDeleted = false)
         {
             try
             {
-                var list = _context.inventories
-                                   .Include(inv => inv.Company)
-                                   .Include(inv => inv.Items)
-                                     .ThenInclude(item => item.Game)
-                                   .ToList();
+                var list = await _context.inventories
+                                         .Include(inv => inv.Company)
+                                         .Include(inv => inv.Items)
+                                            .ThenInclude(item => item.Game)
+                                         .ToListAsync();
                 return (true, list);
             }
             catch (Exception ex)
@@ -54,15 +54,16 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public (bool Success, Inventory? Inventory) GetById(int inventoryId)
+        public async Task<(bool Success, Inventory? Inventory)> GetByIdAsync(int inventoryId)
         {
             try
             {
-                var inv = _context.inventories
-                                  .Include(i => i.Company)
-                                  .Include(i => i.Items)
-                                    .ThenInclude(item => item.Game)
-                                  .FirstOrDefault(i => i.CompanyId == inventoryId);
+                var inv = await _context.inventories
+                                        .Include(i => i.Company)
+                                        .Include(i => i.Items)
+                                            .ThenInclude(item => item.Game)
+                                        .FirstOrDefaultAsync(i => i.CompanyId == inventoryId);
+
                 return (inv != null, inv);
             }
             catch (Exception ex)
@@ -72,15 +73,16 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public (bool Success, Inventory? Inventory) GetByCompany(int companyId)
+        public async Task<(bool Success, Inventory? Inventory)> GetByCompanyAsync(int companyId)
         {
             try
             {
-                var inv = _context.inventories
-                                  .Include(i => i.Company)
-                                  .Include(i => i.Items)
-                                    .ThenInclude(item => item.Game)
-                                  .FirstOrDefault(i => i.CompanyId == companyId);
+                var inv = await _context.inventories
+                                        .Include(i => i.Company)
+                                        .Include(i => i.Items)
+                                            .ThenInclude(item => item.Game)
+                                        .FirstOrDefaultAsync(i => i.CompanyId == companyId);
+
                 return (inv != null, inv);
             }
             catch (Exception ex)
@@ -90,12 +92,12 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public bool Update(Inventory inventory)
+        public async Task<bool> UpdateAsync(Inventory inventory)
         {
             try
             {
                 _context.inventories.Update(inventory);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
@@ -105,20 +107,20 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public bool Delete(int companyId, int inventoryItemId)
+        public async Task<bool> DeleteAsync(int companyId, int inventoryItemId)
         {
             try
             {
-                var itemToRemove = _context.inventoryItems
+                var itemToRemove = await _context.inventoryItems
                     .Include(i => i.Inventory)
-                    .FirstOrDefault(i => i.InventoryItemId == inventoryItemId
-                                     && i.Inventory.CompanyId == companyId);
+                    .FirstOrDefaultAsync(i => i.InventoryItemId == inventoryItemId &&
+                                              i.Inventory.CompanyId == companyId);
 
                 if (itemToRemove == null)
                     return false;
 
                 _context.inventoryItems.Remove(itemToRemove);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)

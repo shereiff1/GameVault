@@ -1,117 +1,122 @@
-﻿using GameVault.DAL.Database;
-using GameVault.DAL.Entites;
-using GameVault.DAL.Repository.Abstraction;
+﻿    using GameVault.DAL.Database;
+    using GameVault.DAL.Entites;
+    using GameVault.DAL.Repository.Abstraction;
+    using Microsoft.EntityFrameworkCore;
 
-namespace GameVault.DAL.Repository.Implementation
-{
-    public class GameRepo : IGameRepo
+    namespace GameVault.DAL.Repository.Implementation
     {
-        private readonly ApplicationDbContext _context;
-
-        public GameRepo(ApplicationDbContext context)
+        public class GameRepo : IGameRepo
         {
-            _context = context;
-        }
+            private readonly ApplicationDbContext _context;
 
-        public bool Add(Game game, int companyId)
-        {
-            try
+            public GameRepo(ApplicationDbContext context)
             {
-                var company = _context.companies.Find(companyId);
-                if (company == null)
+                _context = context;
+            }
+
+            public async Task<bool> AddAsync(Game game, int companyId)
+            {
+                try
                 {
-                    // we should edit this and add new company.
-                    Console.WriteLine("Company not found");
+                    var company = await _context.companies.FindAsync(companyId);
+                    if (company == null)
+                    {
+                        // TODO: Consider creating a new company instead of returning false
+                        return false;
+                    }
+                    await _context.games.AddAsync(game);
+                    await _context.SaveChangesAsync();
+
+                    return true;
+                }
+                catch (Exception ex)
+                {
+          
+                    Console.WriteLine(ex.Message);
                     return false;
                 }
+            }
 
-                game.CompanyId = companyId;
+            public async Task<bool> DeleteAsync(int gameId)
+            {
+                try
+                {
+                    var game = await _context.games.FirstOrDefaultAsync(g => g.GameId == gameId);
+                    if (game == null) return false;
 
-                _context.games.Add(game);
-                _context.SaveChanges();
+                    game.MarkAsDeleted();
+                    _context.games.Update(game);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
+            }
 
-                return true;
-            }
-            catch (Exception ex)
+            public async Task<(bool, List<Game>?)> GetAllAsync(bool includeDeleted = false)
             {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
+                try
+                {
+                    var result = includeDeleted
+                        ? await _context.games.ToListAsync()
+                        : await _context.games.Where(g => !g.IsDeleted).ToListAsync();
 
-        public bool Delete(int gameId)
-        {
-            try
-            {
-                var game = _context.games.FirstOrDefault(g => g.GameId == gameId);
-                if (game == null) return false;
-                game.MarkAsDeleted();
-                _context.games.Update(game);
-                _context.SaveChanges();
-                return true;
+                    return (true, result);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return (false, null);
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
-            }
-        }
 
-        public (bool, List<Game>?) GetAll(bool includeDeleted = false)
-        {
-            try
+            public async Task<(bool, Game?)> GetByIdAsync(int gameId)
             {
-                var result = includeDeleted ? _context.games.ToList() : _context.games.Where(g => !g.IsDeleted).ToList();
-                return (true, result);
+                try
+                {
+                    var game = await _context.games.FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
+                    return (game != null, game);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return (false, null);
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return (false, null);
-            }
-        }
 
-        public (bool, Game?) GetById(int gameId)
-        {
-            try
+            public async Task<(bool, List<Game>)> GetByCompanyAsync(int companyId)
             {
-                var game = _context.games.FirstOrDefault(g => g.GameId == gameId && !g.IsDeleted);
-                return (game != null, game);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return (false, null);
-            }
-        }
+                try
+                {
+                    var games = await _context.games
+                        .Where(g => g.CompanyId == companyId && !g.IsDeleted)
+                        .ToListAsync();
 
-        public (bool, List<Game>) GetByCompany(int companyId)
-        {
-            try
-            {
-                var games = _context.games.Where(g => g.CompanyId == companyId && !g.IsDeleted).ToList();
-                return (true, games);
+                    return (true, games);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return (false, new List<Game>());
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return (false, new List<Game>());
-            }
-        }
 
-        public bool Update(Game game)
-        {
-            try
+            public async Task<bool> UpdateAsync(Game game)
             {
-                _context.games.Update(game);
-                _context.SaveChanges();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return false;
+                try
+                {
+                    _context.games.Update(game);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    return false;
+                }
             }
         }
     }
-}

@@ -1,4 +1,4 @@
-﻿
+
 namespace GameVault.BLL.ModelVM
 {
     public class GameVM

@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+
+using AutoMapper;
+
 using GameVault.BLL.ModelVM.User;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Database;
@@ -74,7 +76,9 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-
+                // fix this here too
+                return (true, "Login failed");
+\
             }
             catch (Exception ex)
             {

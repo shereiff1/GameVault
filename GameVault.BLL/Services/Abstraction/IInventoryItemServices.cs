@@ -1,15 +1,13 @@
-﻿
-
-using GameVault.BLL.ModelVM;
+﻿using GameVault.BLL.ModelVM;
 
 namespace GameVault.BLL.Services.Abstraction
 {
     public interface IInventoryItemServices
     {
-        (bool, List<InventoryItemVM>?) GetAll();
-        (bool, InventoryItemVM?) GetById(int inventoryItemId);
-        (bool, List<InventoryItemVM>?) GetByGame(int gameId);
-        (bool, List<InventoryItemVM>?) GetByCompany(int companyid);
-        bool Delete(int inventoryItemId);
+        Task<(bool, List<InventoryItemVM>?)> GetAllAsync();
+        Task<(bool, InventoryItemVM?)> GetByIdAsync(int inventoryItemId);
+        Task<(bool, List<InventoryItemVM>?)> GetByGameAsync(int gameId);
+        Task<(bool, List<InventoryItemVM>?)> GetByCompanyAsync(int companyId);
+        Task<bool> DeleteAsync(int inventoryItemId);
     }
 }

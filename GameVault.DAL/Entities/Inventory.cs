@@ -1,8 +1,7 @@
-﻿
-/*
- created by sherif 
-*/
-using GameVault.DAL.Entites;
+
+﻿using GameVault.DAL.Entites;
+
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,8 +14,7 @@ namespace GameVault.DAL.Entities
 
         public virtual Company Company { get; private set; }
 
-        public virtual ICollection<InventoryItem> Items { get; private set; }
-            = new List<InventoryItem>();
+        public virtual ICollection<InventoryItem> Items { get; private set; } = new List<InventoryItem>();
 
         private Inventory() { }
 
@@ -24,7 +22,6 @@ namespace GameVault.DAL.Entities
         {
             CompanyId = companyId;
         }
-
 
         public void AddOrUpdateItem(int gameId, int quantity, decimal price)
         {

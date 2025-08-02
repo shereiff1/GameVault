@@ -1,6 +1,4 @@
-﻿
-
-using AutoMapper;
+﻿using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entities;
@@ -21,46 +19,46 @@ namespace GameVault.BLL.Services.Implementation
             _mapper = mapper;
         }
 
-        public (bool, List<InventoryVM>?) GetAll()
+        public async Task<(bool, List<InventoryVM>?)> GetAllAsync()
         {
-            var (success, inventories) = _inventoryRepo.GetAll();
+            var (success, inventories) = await _inventoryRepo.GetAllAsync();
             if (!success || inventories == null) return (false, null);
 
             var vmList = _mapper.Map<List<InventoryVM>>(inventories);
             return (true, vmList);
         }
 
-        public (bool, InventoryVM?) GetByCompany(int companyId)
+        public async Task<(bool, InventoryVM?)> GetByCompanyAsync(int companyId)
         {
-            var (success, inventory) = _inventoryRepo.GetByCompany(companyId);
+            var (success, inventory) = await _inventoryRepo.GetByCompanyAsync(companyId);
             if (!success || inventory == null) return (false, null);
 
             var vm = _mapper.Map<InventoryVM>(inventory);
             return (true, vm);
         }
 
-        public bool AddItem(int companyId, int gameId, int quantity, decimal price)
+        public async Task<bool> AddItemAsync(int companyId, int gameId, int quantity, decimal price)
         {
-            var (success, inventory) = _inventoryRepo.GetByCompany(companyId);
+            var (success, inventory) = await _inventoryRepo.GetByCompanyAsync(companyId);
             if (!success || inventory == null) return false;
 
             var item = new InventoryItem(inventory, gameId, quantity, price);
-            return _inventoryRepo.AddItem(companyId, item);
+            return await _inventoryRepo.AddItemAsync(companyId, item);
         }
 
-        public bool UpdateItem(int inventoryItemId, int quantity, decimal price)
+        public async Task<bool> UpdateItemAsync(int inventoryItemId, int quantity, decimal price)
         {
-            var (success, item) = _inventoryItemRepo.GetById(inventoryItemId);
+            var (success, item) = await _inventoryItemRepo.GetByIdAsync(inventoryItemId);
             if (!success || item == null) return false;
 
             item.SetQuantity(quantity);
             item.SetPrice(price);
-            return _inventoryItemRepo.Update(item);
+            return await _inventoryItemRepo.UpdateAsync(item);
         }
 
-        public bool DeleteInventoryItem(int companyId,int inventoryItemId)
+        public async Task<bool> DeleteInventoryItemAsync(int companyId, int inventoryItemId)
         {
-            return _inventoryRepo.Delete(companyId, inventoryItemId);
+            return await _inventoryRepo.DeleteAsync(companyId, inventoryItemId);
         }
     }
 }

@@ -26,10 +26,6 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
-
-
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -59,7 +55,6 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
 }).AddEntityFrameworkStores<ApplicationDbContext>();
-
 
 
 app.MapControllerRoute(

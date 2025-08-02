@@ -1,4 +1,4 @@
-﻿
+
 namespace GameVault.BLL.ModelVM.User
 {
     public class UserPublicProfile

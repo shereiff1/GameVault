@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.Services.Abstraction;
-using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 
 namespace GameVault.BLL.Services.Implementation
@@ -17,43 +16,41 @@ namespace GameVault.BLL.Services.Implementation
             _mapper = mapper;
         }
 
-        public (bool, List<InventoryItemVM>?) GetAll()
+        public async Task<(bool, List<InventoryItemVM>?)> GetAllAsync()
         {
-            var (success, items) = _inventoryItemRepo.GetAll();
+            var (success, items) = await _inventoryItemRepo.GetAllAsync();
             if (!success || items == null) return (false, null);
 
             return (true, _mapper.Map<List<InventoryItemVM>>(items));
         }
 
-        public (bool, InventoryItemVM?) GetById(int inventoryItemId)
+        public async Task<(bool, InventoryItemVM?)> GetByIdAsync(int inventoryItemId)
         {
-            var (success, item) = _inventoryItemRepo.GetById(inventoryItemId);
+            var (success, item) = await _inventoryItemRepo.GetByIdAsync(inventoryItemId);
             if (!success || item == null) return (false, null);
 
             return (true, _mapper.Map<InventoryItemVM>(item));
         }
 
-        public (bool, List<InventoryItemVM>?) GetByGame(int gameId)
+        public async Task<(bool, List<InventoryItemVM>?)> GetByGameAsync(int gameId)
         {
-            var (success, items) = _inventoryItemRepo.GetByGame(gameId);
+            var (success, items) = await _inventoryItemRepo.GetByGameAsync(gameId);
             if (!success || items == null) return (false, null);
 
             return (true, _mapper.Map<List<InventoryItemVM>>(items));
         }
 
-        public (bool, List<InventoryItemVM>?) GetByCompany(int companyid)
+        public async Task<(bool, List<InventoryItemVM>?)> GetByCompanyAsync(int companyId)
         {
-            var (success, items) = _inventoryItemRepo.GetByCompany(companyid);
+            var (success, items) = await _inventoryItemRepo.GetByCompanyAsync(companyId);
             if (!success || items == null) return (false, null);
 
             return (true, _mapper.Map<List<InventoryItemVM>>(items));
         }
 
-        public bool Delete(int inventoryItemId)
+        public async Task<bool> DeleteAsync(int inventoryItemId)
         {
-            return _inventoryItemRepo.Delete(inventoryItemId);
+            return await _inventoryItemRepo.DeleteAsync(inventoryItemId);
         }
-
-
     }
 }
