@@ -1,9 +1,18 @@
+
+
 using GameVault.BLL.ModelVM.User;
+using GameVault.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
 
-public interface IAccountServices
+namespace GameVault.BLL.Services.Abstraction
 {
-    Task<IdentityResult> Login(UserLogin user); 
-    Task<IdentityResult> SignUp(UserSignUp user);
-    Task Logout();
+    public interface IAccountServices
+    {
+         Task<IdentityResult> Login(UserLogin user);
+
+         Task<IdentityResult> SignUp(UserSignUp user);
+
+        Task Logout();
+
+    }
 }

@@ -1,0 +1,10 @@
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.csproj.AssemblyReference.cache
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\rpswa.dswa.cache.json
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.AssemblyInfoInputs.cache
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.AssemblyInfo.cs
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.csproj.CoreCompileInputs.cache
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.MvcApplicationPartsAssemblyInfo.cache
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.RazorAssemblyInfo.cache
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.RazorAssemblyInfo.cs
+D:\CMP\.NET\GameVault\GameVault.PLL\obj\Debug\net8.0\GameVault.PLL.sourcelink.json

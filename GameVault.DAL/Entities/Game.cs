@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GameVault.DAL.Entities;
+using GameVault_DAL.Entities;
 
 
 namespace GameVault.DAL.Entites

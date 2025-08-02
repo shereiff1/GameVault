@@ -10,6 +10,7 @@ namespace GameVault.DAL.Repository.Implementation
     {
         private readonly ApplicationDbContext db;
 
+
         public UserRepo(ApplicationDbContext db)
         {
             this.db = db;
@@ -45,6 +46,7 @@ namespace GameVault.DAL.Repository.Implementation
             try
             {
                 var user = db.Users.Where(a => a.Id == id).FirstOrDefault();
+
                 if (user == null)
                     return null;
                 return user;

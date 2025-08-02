@@ -1,4 +1,4 @@
-﻿using GameVault.DAL.Entites;
+
 using GameVault.DAL.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 namespace GameVault.DAL.Database
 {
     public class ApplicationDbContext : IdentityDbContext<User>
+
     {
         public DbSet<Category> Categories { get; set; }
         public DbSet<Company> companies { get; set; }
@@ -21,7 +22,7 @@ namespace GameVault.DAL.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=SHERIF\\SQLEXPRESS;Database=GameVault;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
+            optionsBuilder.UseSqlServer("Server=LAPTOP-3VHOG7KD\\SQLEXPRESS;Database=GameVault;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=true");
         }
 
         protected override void OnModelCreating(ModelBuilder model)
@@ -39,5 +40,7 @@ namespace GameVault.DAL.Database
                 .OnDelete(DeleteBehavior.NoAction);
             base.OnModelCreating(model);
         }
+
+        DbSet<User> Users { get; set; }
     }
 }
