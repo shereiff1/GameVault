@@ -18,7 +18,7 @@ namespace GameVault.DAL.Entities
         public List<Game>? Library {get; private set;} = new List<Game>();
 
         //public List<User>? Friends { get; private set; } = new List<User>();
-
+        public User() { }
         public User(string Email, string Username, string Password) : base()
         {
             this.Email = Email;

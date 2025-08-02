@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GameVault.DAL.Entities;
 
+
 namespace GameVault.DAL.Entites
 {
     public class Game
@@ -22,19 +23,11 @@ namespace GameVault.DAL.Entites
 
         public bool IsDeleted { get; private set; }
 
-<<<<<<< HEAD
-        // FK & Navigation
-        [ForeignKey(nameof(Company))]
-        public int CompanyId { get; private set; }
-        public virtual Company Company { get; private set; }
 
-        // Collections
-=======
         [ForeignKey("Company")]
         public int CompanyId { get; private set; }
         public virtual Company Company { get; private set; }
 
->>>>>>> 1eec798162b433728e42a4f4174d18e467d634ca
         public virtual List<Review>? Reviews { get; private set; } = new();
         public virtual List<Category>? Categories { get; private set; } = new();
         public virtual List<User>? Users { get; private set; } = new();

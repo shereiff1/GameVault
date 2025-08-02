@@ -10,7 +10,7 @@ namespace GameVault.DAL.Repository.Implementation
     {
         private readonly ApplicationDbContext db;
 
-        public UserRepo(ApplicationDbContext db) 
+        public UserRepo(ApplicationDbContext db)
         {
             this.db = db;
         }
@@ -27,7 +27,7 @@ namespace GameVault.DAL.Repository.Implementation
                 return false;
             }
         }
-        public List<User>?GetAll()
+        public List<User>? GetAll()
         {
             try
             {
@@ -44,7 +44,7 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-               var user = db.Users.Where(a => a.Id == id).FirstOrDefault();
+                var user = db.Users.Where(a => a.Id == id).FirstOrDefault();
                 if (user == null)
                     return null;
                 return user;
@@ -85,7 +85,7 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-               user.RemoveGameFromLibrary(game);
+                user.RemoveGameFromLibrary(game);
                 db.Users.Update(user);
                 db.SaveChanges();
                 return true;

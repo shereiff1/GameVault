@@ -1,11 +1,12 @@
-using GameVault_BLL.ModelVM.Category;
-using GameVault_BLL.Services.Abstraction;
-using GameVault_DAL.Entities;
-using GameVault_DAL.Repository.Abstraction;
+using GameVault.BLL.ModelVM.Category;
+using GameVault.BLL.Services.Abstraction;
+using GameVault.DAL.Entities;
+using GameVault.DAL.Repository.Abstraction;
 using AutoMapper;
+using GameVault.DAL.Repo.Abstraction;
 
 
-namespace GameVault_BLL.Services.Implementation
+namespace GameVault.BLL.Services.Implementation
 {
     public class CategoryServices : ICategoryServices
     {
@@ -43,17 +44,18 @@ namespace GameVault_BLL.Services.Implementation
               }
         }
 
-        public async Task<List<CategoryDTO>> GetAllAsync()
+        public async Task<(bool,List<CategoryDTO>?)> GetAllAsync()
         {
               try
               {
                   var categories = await _categoryRepo.GetAllAsync();
                   var mappedCategories = _mapper.Map<List<CategoryDTO>>(categories);
-                  return (mappedCategories, null);
+                  return (true, mappedCategories);
               }
               catch (Exception ex)
               {
-                  return (null, ex.Message);
+                Console.WriteLine(ex.Message);
+                  return (false,null);
              }
         }
 

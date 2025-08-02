@@ -1,5 +1,6 @@
+using GameVault.DAL.Entites;
 using System.ComponentModel.DataAnnotations;
-namespace GameVault_DAL.Entities
+namespace GameVault.DAL.Entities
 {
     public class Category
     {

@@ -1,4 +1,3 @@
-
 using GameVault.BLL.ModelVM.User;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entities;
@@ -20,26 +19,32 @@ namespace GameVault.BLL.Services.Implementation
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
+
         public async Task<IdentityResult> Login(UserLogin login)
         {
-            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, true, false);
+            var result = await signInManager.PasswordSignInAsync(
+                login.Email,
+                login.Password,
+                isPersistent: true,
+                lockoutOnFailure: false);
 
-            return result;
+            return result.Succeeded
+                ? IdentityResult.Success
+                : IdentityResult.Failed(new IdentityError { Description = "Invalid login attempt" });
         }
-        
+
         public async Task<IdentityResult> SignUp(UserSignUp register)
         {
             var user = new User(register.Email, register.Username, register.Password);
             var result = await userManager.CreateAsync(user, register.Password);
-            if (result.Succeeded) 
+            if (result.Succeeded)
                 repo.AddUser(user);
             return result;
         }
 
-        public async void Logout()  
+        public async Task Logout()
         {
             await signInManager.SignOutAsync();
         }
-
     }
 }

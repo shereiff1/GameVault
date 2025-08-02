@@ -2,7 +2,6 @@ using GameVault.BLL.ModelVM.User;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
 using GameVault.DAL.Entities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
