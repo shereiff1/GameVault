@@ -1,32 +1,31 @@
 using GameVault.DAL.Entites;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GameVault.DAL.Entities
 {
     public class Company
     {
         [Key]
-        public int CompanyId { get; private set; }
+        public int CompanyId { get; set; }
 
         [Required]
         [MaxLength(200)]
-        public string CompanyName { get; private set; }
+        public string CompanyName { get; set; }
 
         [MaxLength(500)]
-        public string? CompanyInfo { get; private set; }
+        public string? CompanyInfo { get; set; }
 
-        public DateTime CreatedOn { get; private set; }
-        public DateTime? ModifiedOn { get; private set; }
-        public bool IsDeleted { get; private set; }
+        public DateTime CreatedOn { get; set; }
+        public DateTime? ModifiedOn { get; set; }
+        public bool IsDeleted { get; set; }
 
         [Required]
         [MaxLength(100)]
-        public string CreatedBy { get; private set; }
+        public string CreatedBy { get; set; }
 
         // Navigation Properties
-        public virtual ICollection<Game> Games { get; private set; } = new List<Game>();
-        public virtual Inventory Inventory { get; private set; }
+        public virtual ICollection<Game> Games { get; set; } = new List<Game>();
+        public virtual ICollection<InventoryItem> InventoryItems { get; set; } = new List<InventoryItem>();
 
         private Company() { }
 
