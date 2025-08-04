@@ -1,0 +1,34 @@
+@model GameVault.BLL.ModelVM.CompanyVM
+
+@{
+    ViewData["Title"] = "Delete Company";
+}
+
+<h2>Delete Company</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this company?</h4>
+</div>
+
+<div class="mb-3">
+    <strong>Company Name:</strong> @Model.CompanyName
+</div>
+<div class="mb-3">
+    <strong>Company Info:</strong> @Model.CompanyInfo
+</div>
+<div class="mb-3">
+    <strong>Created By:</strong> @Model.CreatedBy
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="CompanyId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
