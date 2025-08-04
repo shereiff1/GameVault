@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using GameVault.BLL.Services.Abstraction;
 using GameVault.PLL.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,15 +8,35 @@ namespace GameVault.PLL.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IGameServices gameServices;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IGameServices gameServices)
         {
             _logger = logger;
+            this.gameServices = gameServices;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            try
+            {
+                var (success, gameDetails) = await gameServices.GetAllGameDetailsAsync();
+
+                if (success && gameDetails != null)
+                {
+                    return View(gameDetails);
+                }
+                else
+                {
+                    _logger.LogWarning("Failed to retrieve game details for home page");
+                    return View(new List<GameVault.BLL.ModelVM.Game.GameDetails>());
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while loading home page");
+                return View(new List<GameVault.BLL.ModelVM.Game.GameDetails>());
+            }
         }
 
         public IActionResult Privacy()
