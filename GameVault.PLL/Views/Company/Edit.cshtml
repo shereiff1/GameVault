@@ -1,0 +1,43 @@
+@model GameVault.BLL.ModelVM.CompanyVM
+
+@{
+    ViewData["Title"] = "Edit Company";
+}
+
+<h2>Edit Company</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="CompanyId" />
+
+    <div class="mb-3">
+        <label asp-for="CompanyName" class="form-label"></label>
+        <input asp-for="CompanyName" class="form-control" />
+        <span asp-validation-for="CompanyName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CompanyInfo" class="form-label"></label>
+        <textarea asp-for="CompanyInfo" class="form-control"></textarea>
+        <span asp-validation-for="CompanyInfo" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CreatedBy" class="form-label"></label>
+        <input asp-for="CreatedBy" class="form-control" />
+        <span asp-validation-for="CreatedBy" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
