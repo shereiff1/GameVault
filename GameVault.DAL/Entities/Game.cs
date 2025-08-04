@@ -14,6 +14,7 @@ namespace GameVault.DAL.Entites
         [Required]
         [MaxLength(200)]
         public string Title { get; private set; }
+        public string ImagePath { get; private set; }
 
         public DateTime CreatedOn { get; private set; }
         public DateTime? ModifiedOn { get; private set; }
@@ -35,11 +36,12 @@ namespace GameVault.DAL.Entites
 
         private Game() { }
 
-        public Game(string title, int companyId, string createdBy)
+        public Game(string title, int companyId, string createdBy, string imagePath)
         {
             Title = title;
             CompanyId = companyId;
             CreatedBy = createdBy;
+            ImagePath = imagePath;
             CreatedOn = DateTime.Now;
             IsDeleted = false;
         }
@@ -49,7 +51,11 @@ namespace GameVault.DAL.Entites
             Title = title;
             ModifiedOn = DateTime.Now;
         }
-
+        public void UpdatePhoto(string imagePath)
+        {
+            ImagePath = imagePath;
+            ModifiedOn = DateTime.Now;
+        }
         public void UpdateCompany(int companyId)
         {
             CompanyId = companyId;
