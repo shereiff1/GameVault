@@ -1,8 +1,225 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@using GameVault.BLL.ModelVM.Game
+@model List<GameDetails>
+@{
+    ViewData["Title"] = "Home Page - GameVault";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white text-center py-5 rounded">
+                <h1 class="display-4 fw-bold">Welcome to GameVault</h1>
+                <p class="lead">Discover amazing games from top developers around the world</p>
+                <hr class="my-4 bg-white">
+                <p class="mb-4">Your ultimate destination for the latest and greatest games</p>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="text-center mb-4">Featured Games</h2>
+                <p class="text-center text-muted mb-5">Browse our collection of @Model.Count amazing games</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var game in Model)
+            {
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                    <div class="card h-100 shadow-sm game-card">
+                        <div class="position-relative">
+                            <img src="@game.ImagePath" class="card-img-top" alt="@game.Title" style="height: 200px; object-fit: cover;">
+                            @if (game.Price > 0)
+                            {
+                                <span class="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
+                                    $@game.Price.ToString("F2")
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info position-absolute top-0 end-0 m-2">
+                                    Free
+                                </span>
+                            }
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+
+                            <h5 class="card-title text-truncate" title="@game.Title">@game.Title</h5>
+
+
+                            <p class="card-text text-muted small mb-2">
+                                <i class="fas fa-building"></i> @game.CompanyName
+                            </p>
+
+                            <p class="card-text flex-grow-1 text-truncate-3" title="@game.Description">
+                                @game.Description
+                            </p>
+
+                            @if (game.Categories != null && game.Categories.Any())
+                            {
+                                <div class="mb-3">
+                                    @foreach (var category in game.Categories.Take(3))
+                                    {
+                                        <span class="badge bg-secondary me-1 mb-1">@category</span>
+                                    }
+                                    @if (game.Categories.Count > 3)
+                                    {
+                                        <span class="badge bg-light text-dark">+@(game.Categories.Count - 3) more</span>
+                                    }
+                                </div>
+                            }
+
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    @if (game.Rating > 0)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <span class="text-warning me-1">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= Math.Floor(game.Rating))
+                                                    {
+                                                        <i class="fas fa-star"></i>
+                                                    }
+                                                    else if (i <= Math.Ceiling(game.Rating))
+                                                    {
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="far fa-star"></i>
+                                                    }
+                                                }
+                                            </span>
+                                            <small class="text-muted">@game.Rating.ToString("F1")</small>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">No ratings yet</small>
+                                    }
+                                </div>
+
+                                @if (game.Reviews != null && game.Reviews.Any())
+                                {
+                                    <small class="text-muted">
+                                        <i class="fas fa-comment"></i> @game.Reviews.Count review@(game.Reviews.Count != 1 ? "s" : "")
+                                    </small>
+                                }
+                            </div>
+
+                            @if (game.Reviews != null && game.Reviews.Any())
+                            {
+                                <div class="mb-3">
+                                    <small class="text-muted fst-italic">
+                                        <i class="fas fa-quote-left"></i>
+                                        "@(game.Reviews.FirstOrDefault()?.Length > 60 ? game.Reviews.FirstOrDefault()?.Substring(0, 60) + "..." : game.Reviews.FirstOrDefault())"
+                                        <i class="fas fa-quote-right"></i>
+                                    </small>
+                                </div>
+                            }
+
+                            <div class="mt-auto">
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-primary" data-game-id="@game.GameId">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </button>
+                                    <button class="btn btn-outline-success btn-sm" data-game-id="@game.GameId">
+                                        <i class="fas fa-cart-plus"></i> Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="alert alert-info py-5" role="alert">
+                    <i class="fas fa-gamepad fa-3x mb-3 text-muted"></i>
+                    <h4 class="alert-heading">No Games Available</h4>
+                    <p class="mb-0">There are currently no games to display. Check back later for new releases!</p>
+                    <hr>
+                    <p class="mb-0">
+                        <a href="#" class="btn btn-primary">Browse Categories</a>
+                        <a href="#" class="btn btn-outline-primary ms-2">Contact Us</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
 </div>
+
+<style>
+    .game-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+
+    .game-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+    }
+
+    .jumbotron {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px;
+    }
+
+    .text-truncate-3 {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.4;
+        height: calc(1.4em * 3);
+    }
+
+    .badge {
+        font-size: 0.75em;
+    }
+
+    .card-img-top {
+        transition: transform 0.3s ease;
+    }
+
+    .game-card:hover .card-img-top {
+        transform: scale(1.05);
+    }
+
+    .fas, .far {
+        font-family: "Font Awesome 5 Free";
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('[data-game-id]').forEach(button => {
+            if (button.textContent.includes('View Details')) {
+                button.addEventListener('click', function() {
+                    const gameId = this.getAttribute('data-game-id');
+                    console.log('View details for game:', gameId);
+                });
+            }
+
+            if (button.textContent.includes('Add to Cart')) {
+                button.addEventListener('click', function() {
+                    const gameId = this.getAttribute('data-game-id');
+                    console.log('Add to cart game:', gameId);
+                });
+            }
+        });
+    });
+</script>
