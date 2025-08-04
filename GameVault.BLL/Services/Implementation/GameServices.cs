@@ -1,5 +1,6 @@
 using AutoMapper;
 using GameVault.BLL.ModelVM;
+using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entites;
 using GameVault.DAL.Repository.Abstraction;
@@ -17,15 +18,16 @@ namespace GameVault.BLL.Services.Implementation
             _mapper = mapper;
         }
 
-        public async Task<bool> AddAsync(int companyId, GameVM gameDto)
+        public async Task<bool> AddAsync(GameVM gameDto)
         {
             try
             {
-                var game = _mapper.Map<Game>(gameDto);
-                return await _gameRepo.AddAsync(game, companyId);
+                Game game = new Game(gameDto.Title, gameDto.CompanyId, gameDto.CreatedBy, gameDto.Description);
+                return await _gameRepo.AddAsync(game, gameDto.Price);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -34,37 +36,68 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                var (success, games) = await _gameRepo.GetAllAsync(includeDeleted);
+                var result = await _gameRepo.GetAllAsync(includeDeleted);
+                bool success = result.Item1;
+                List<Game>? games = result.Item2;
+
                 return (success, games != null ? _mapper.Map<List<GameVM>>(games) : null);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return (false, null);
             }
         }
 
-        public async Task<(bool, GameVM?)> GetByIdAsync(int gameId)
+        public async Task<(bool, EditGame?)> GetByIdAsync(int gameId)
         {
             try
             {
-                var (success, game) = await _gameRepo.GetByIdAsync(gameId);
-                return (success, game != null ? _mapper.Map<GameVM>(game) : null);
+                var result = await _gameRepo.GetByIdWithPriceAsync(gameId);
+                bool success = result.Item1;
+                Game? game = result.Item2;
+                decimal price = result.Item3;
+
+                if (!success || game == null)
+                    return (false, null);
+
+                var editGame = new EditGame
+                {
+                    GameId = game.GameId,
+                    Title = game.Title,
+                    Description = game.Description,
+                    CompanyId = game.CompanyId,
+                    CreatedBy = game.CreatedBy,
+                    Price = price
+                };
+
+                return (true, editGame);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return (false, null);
             }
         }
 
-        public async Task<bool> UpdateAsync(GameVM gameDto)
+        public async Task<bool> UpdateAsync(EditGame editGame)
         {
             try
             {
-                var game = _mapper.Map<Game>(gameDto);
-                return await _gameRepo.UpdateAsync(game);
+                var result = await _gameRepo.GetByIdAsync(editGame.GameId);
+                bool success = result.Item1;
+                Game? existingGame = result.Item2;
+                if (!success || existingGame == null)
+                    return false;
+                var updatedGame = new Game(editGame.Title, editGame.CompanyId, existingGame.CreatedBy, editGame.Description)
+                existingGame.Update(editGame.Title, editGame.Description);
+                existingGame.UpdateCompany(editGame.CompanyId);
+
+                return await _gameRepo.UpdateAsync(existingGame, editGame.Price);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -77,6 +110,7 @@ namespace GameVault.BLL.Services.Implementation
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return false;
             }
         }
@@ -85,13 +119,36 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                var (success, games) = await _gameRepo.GetByCompanyAsync(companyId);
+                var result = await _gameRepo.GetByCompanyAsync(companyId);
+                bool success = result.Item1;
+                List<Game> games = result.Item2;
+
                 return (success, _mapper.Map<List<GameVM>>(games));
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex.Message);
                 return (false, new List<GameVM>());
             }
         }
+        public async Task<(bool, List<GameDetails>?)> GetAllGameDetailsAsync()
+        {
+            try
+            {
+                var (success, gameDetailsDTOs) = await _gameRepo.GetAllGameDetailsAsync();
+
+                if (!success || gameDetailsDTOs == null)
+                    return (false, null);
+
+                var gameDetails = _mapper.Map<List<GameDetails>>(gameDetailsDTOs);
+                return (true, gameDetails);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error getting game details: {ex.Message}");
+                return (false, null);
+            }
+        }
+       
     }
 }
