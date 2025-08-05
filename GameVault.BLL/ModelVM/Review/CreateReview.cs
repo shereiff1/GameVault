@@ -1,4 +1,4 @@
-namespace GameVault_BLL.ModelVM.Review
+namespace GameVault.BLL.ModelVM.Review
 {
     public class CreateReview
     {

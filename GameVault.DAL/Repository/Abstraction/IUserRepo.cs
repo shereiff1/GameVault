@@ -3,6 +3,9 @@
 using GameVault.DAL.Entites;
 using GameVault.DAL.Entities;
 
+using GameVault.DAL.Entites;
+using GameVault.DAL.Entities;
+
 namespace GameVault.DAL.Repository.Abstraction
 {
     public interface IUserRepo

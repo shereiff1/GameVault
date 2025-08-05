@@ -1,10 +1,11 @@
-using GameVault_BLL.ModelVM.Review;
-using GameVault_BLL.Services.Abstraction;
-using GameVault_DAL.Entities;
-using GameVault_DAL.Repository.Abstraction;
+using GameVault.BLL.ModelVM.Review;
+using GameVault.BLL.Services.Abstraction;
+using GameVault.DAL.Entities;
+using GameVault.DAL.Repository.Abstraction;
 using AutoMapper;
+using GameVault.DAL.Repo.Abstraction;
 
-namespace GameVault_BLL.Services.Implementation
+namespace GameVault.BLL.Services.Implementation
 {
     public class ReviewServices : IReviewServices
     {
@@ -18,57 +19,58 @@ namespace GameVault_BLL.Services.Implementation
 
         public async Task<(bool, string?)> CreateAsync(CreateReview review)
         {
-              try
-              {
-                  var rev = _mapper.Map<Review>(review);
-                  var result = await _reviewRepo.CreateAsync(rev);
-                  return result;
-              }
-              catch (Exception ex)
-              {
-                  return (false, $"Error creating review: {ex.Message}");
-              }
+            try
+            {
+                var rev = _mapper.Map<Review>(review);
+                var result = await _reviewRepo.CreateAsync(rev);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error creating review: {ex.Message}");
+            }
         }
 
         public async Task<(bool, string?)> DeleteAsync(int id)
         {
-              try
-              {
-                  var result = await _reviewRepo.DeleteAsync(id);
-                  return result;
-              }
-              catch (Exception ex)
-              {
-                  return (false, $"Error deleting review: {ex.Message}");
-              }
+            try
+            {
+                var result = await _reviewRepo.DeleteAsync(id);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error deleting review: {ex.Message}");
+            }
         }
 
-        public async Task<List<ReviewDTO>> GetAllAsync()
+        public async Task<(bool, List<ReviewDTO>?)> GetAllAsync()
         {
-              try
-              {
-                  var reviews = await _reviewRepo.GetAllAsync();
-                  var mappedReviews = _mapper.Map<List<ReviewDTO>>(reviews);
-                  return (mappedReviews, null);
-              }
-              catch (Exception ex)
-              {
-                  return (null, ex.Message);
-              }
+            try
+            {
+                var reviews = await _reviewRepo.GetAllAsync();
+                var mappedReviews = _mapper.Map<List<ReviewDTO>>(reviews);
+                return (true, mappedReviews);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return (false, null);
+            }
         }
 
         public async Task<(bool, string?)> UpdateAsync(UpdateReview review)
         {
-              try
-              {
-                  var rev = _mapper.Map<Review>(review);
-                  var result = await _reviewRepo.UpdateAsync(rev);
-                  return result;
-              }
-              catch (Exception ex)
-              {
-                  return (false, $"Error updating review: {ex.Message}");
-              }
+            try
+            {
+                var rev = _mapper.Map<Review>(review);
+                var result = await _reviewRepo.UpdateAsync(rev);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating review: {ex.Message}");
+            }
         }
     }
 }

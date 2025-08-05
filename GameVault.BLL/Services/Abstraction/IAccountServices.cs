@@ -12,7 +12,7 @@ namespace GameVault.BLL.Services.Abstraction
 
          Task<IdentityResult> SignUp(UserSignUp user);
 
-        void Logout();
+        Task Logout();
 
     }
 }

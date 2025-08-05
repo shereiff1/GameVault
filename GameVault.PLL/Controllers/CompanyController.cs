@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.ModelVM;
 
@@ -27,23 +27,44 @@ namespace GameVault.PLL.Controllers
             return View(companies);
         }
 
-        public IActionResult Add()
+        public IActionResult Add(bool returnToGame = false)
         {
+            ViewBag.ReturnToGame = returnToGame;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(CompanyVM company)
+        public async Task<IActionResult> Add(CompanyVM company, bool returnToGame = false)
         {
+            ModelState.Remove("returnToGame");
+
+            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+
             if (ModelState.IsValid)
             {
-                if (await _companyServices.AddAsync(company))
+                var result = await _companyServices.AddAsync(company);
+                if (result)
+                {
+                    if (returnToGame)
+                    {
+                        var (success, companies) = await _companyServices.GetAllAsync();
+                        if (success && companies != null)
+                        {
+                            var newCompany = companies.FirstOrDefault(c => c.CompanyName == company.CompanyName);
+                            if (newCompany != null)
+                                return RedirectToAction("Add", "Game", new { companyId = newCompany.CompanyId });
+                        }
+                        return RedirectToAction("Add", "Game");
+                    }
                     return RedirectToAction("Index");
+                }
             }
 
             ViewBag.Error = "Failed to add company!";
+            ViewBag.ReturnToGame = returnToGame;
             return View(company);
         }
+
 
         public async Task<IActionResult> Edit(int id)
         {

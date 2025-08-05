@@ -1,4 +1,4 @@
-namespace GameVault_BLL.ModelVM.Category
+namespace GameVault.BLL.ModelVM.Category
 {
     public class UpdateCategory
     {

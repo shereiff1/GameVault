@@ -1,6 +1,6 @@
-using GameVault_DAL.Entities;
+using GameVault.DAL.Entities;
 
-namespace GameVault_DAL.Repo.Abstraction
+namespace GameVault.DAL.Repo.Abstraction
 {
     public interface IReviewRepo
     {

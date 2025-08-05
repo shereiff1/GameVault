@@ -1,6 +1,8 @@
+using GameVault.DAL.Entites;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GameVault_DAL.Entities
+namespace GameVault.DAL.Entities
 {
     public class Review
     {
@@ -23,7 +25,7 @@ namespace GameVault_DAL.Entities
         [Required]
         [MaxLength(50)]
         public string CreatedBy { get; private set; }
-        [ForeignKey(Game)]
+        [ForeignKey("Game")]
         public int Game_Id { get; private set; }
         public virtual Game? Game { get; private set; } 
         public Review()

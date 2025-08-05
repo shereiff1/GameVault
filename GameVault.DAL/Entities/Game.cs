@@ -1,6 +1,8 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GameVault.DAL.Entities;
+using GameVault_DAL.Entities;
+
 
 namespace GameVault.DAL.Entites
 {
@@ -12,6 +14,7 @@ namespace GameVault.DAL.Entites
         [Required]
         [MaxLength(200)]
         public string Title { get; private set; }
+        public string ImagePath { get; private set; }
 
         public DateTime CreatedOn { get; private set; }
         public DateTime? ModifiedOn { get; private set; }
@@ -22,30 +25,23 @@ namespace GameVault.DAL.Entites
 
         public bool IsDeleted { get; private set; }
 
-<<<<<<< HEAD
-        // FK & Navigation
-        [ForeignKey(nameof(Company))]
-        public int CompanyId { get; private set; }
-        public virtual Company Company { get; private set; }
 
-        // Collections
-=======
         [ForeignKey("Company")]
         public int CompanyId { get; private set; }
         public virtual Company Company { get; private set; }
 
->>>>>>> 1eec798162b433728e42a4f4174d18e467d634ca
         public virtual List<Review>? Reviews { get; private set; } = new();
         public virtual List<Category>? Categories { get; private set; } = new();
         public virtual List<User>? Users { get; private set; } = new();
 
         private Game() { }
 
-        public Game(string title, int companyId, string createdBy)
+        public Game(string title, int companyId, string createdBy, string imagePath)
         {
             Title = title;
             CompanyId = companyId;
             CreatedBy = createdBy;
+            ImagePath = imagePath;
             CreatedOn = DateTime.Now;
             IsDeleted = false;
         }
@@ -55,7 +51,11 @@ namespace GameVault.DAL.Entites
             Title = title;
             ModifiedOn = DateTime.Now;
         }
-
+        public void UpdatePhoto(string imagePath)
+        {
+            ImagePath = imagePath;
+            ModifiedOn = DateTime.Now;
+        }
         public void UpdateCompany(int companyId)
         {
             CompanyId = companyId;
