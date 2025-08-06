@@ -30,7 +30,7 @@ namespace GameVault.DAL.Repository.Implementation
                 await _context.SaveChangesAsync();
 
                 var inventoryItem = new InventoryItem(company, game.GameId, price);
-                await _context.InventoryItems.AddAsync(inventoryItem);
+                await _context.inventoryItems.AddAsync(inventoryItem);
                 await _context.SaveChangesAsync();
 
                 await transaction.CommitAsync();
@@ -101,7 +101,7 @@ namespace GameVault.DAL.Repository.Implementation
                 if (game == null)
                     return (false, null, 0);
 
-                var inventoryItem = await _context.InventoryItems
+                var inventoryItem = await _context.inventoryItems
                     .FirstOrDefaultAsync(i => i.GameId == gameId);
 
                 decimal price = inventoryItem?.Price ?? 0;
@@ -143,7 +143,7 @@ namespace GameVault.DAL.Repository.Implementation
 
                 existingGame.Update(game.Title, game.Description);
 
-                var inventoryItem = await _context.InventoryItems
+                var inventoryItem = await _context.inventoryItems
                     .FirstOrDefaultAsync(i => i.GameId == game.GameId);
 
                 if (inventoryItem != null)
@@ -182,11 +182,11 @@ namespace GameVault.DAL.Repository.Implementation
                         Rating = g.Reviews.Where(r => !r.IsDeleted).Any()
                             ? g.Reviews.Where(r => !r.IsDeleted).Average(r => r.Rating)
                             : 0,
-                        Price = _context.InventoryItems
+                        Price = _context.inventoryItems
                             .Where(i => i.GameId == g.GameId)
                             .Select(i => i.Price)
                             .FirstOrDefault(),
-                        // ImagePath =  
+                        ImagePath =  g.ImagePath
                     })
                     .ToListAsync();
 

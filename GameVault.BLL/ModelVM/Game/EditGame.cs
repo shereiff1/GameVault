@@ -19,7 +19,7 @@ namespace GameVault.BLL.ModelVM.Game
         [Required(ErrorMessage = "Price is required.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
-
+        public string ImagePath { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
     }
 }

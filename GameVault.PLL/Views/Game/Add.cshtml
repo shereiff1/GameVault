@@ -22,7 +22,7 @@
                         </div>
                     }
 
-                    <form asp-action="Add" method="post">
+                    <form asp-action="Add" method="post" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label asp-for="Title" class="form-label">
                                 <i class="fas fa-heading me-1"></i>Game Title
@@ -72,7 +72,10 @@
                             <input asp-for="CreatedBy" class="form-control" placeholder="Enter creator name" />
                             <span asp-validation-for="CreatedBy" class="text-danger"></span>
                         </div>
-
+                        <div class="mb-3">
+                            <label asp-for="formFile" class="form-label fw-semibold"></label>
+                            <input asp-for="formFile" class="form-control" placeholder="Enter Image" />
+                        </div>
                         <div class="d-flex justify-content-between">
                             <a asp-action="Index" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left me-1"></i>Back to Games

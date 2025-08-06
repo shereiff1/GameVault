@@ -11,7 +11,7 @@ namespace GameVault.DAL.Entities
         public List<string>? Reviews { get; set; }
         public List<string>? Categories { get; set; }
         public float Rating { get; set; }
-        public string? ImagePath { get; set; }
+        public string ImagePath { get; set; }
         public decimal Price { get; set; }
     }
 }

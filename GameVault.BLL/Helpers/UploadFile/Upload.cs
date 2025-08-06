@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 
-namespace GameVault.BLL.Helpers.UploadFile
+namespace GameVault.BLL.Helpers.UploadFile.Images
 {
     public static class Upload
     {

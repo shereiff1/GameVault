@@ -18,7 +18,7 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                await _context.companies.AddAsync(company);
+                await _context.Companies.AddAsync(company);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -33,11 +33,11 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                var company = await _context.companies.FirstOrDefaultAsync(c => c.CompanyId == companyId);
+                var company = await _context.Companies.FirstOrDefaultAsync(c => c.CompanyId == companyId);
                 if (company == null) return false;
 
                 company.MarkAsDeleted();
-                _context.companies.Update(company);
+                _context.Companies.Update(company);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -53,14 +53,14 @@ namespace GameVault.DAL.Repository.Implementation
             try
             {
                 var companies = includeDeleted
-                    ? await _context.companies
+                    ? await _context.Companies
                         .Include(c => c.Games)
-                        .Include(c => c.Inventory)
+                        .Include(c => c.InventoryItems)
                         .ToListAsync()
-                    : await _context.companies
+                    : await _context.Companies
                         .Where(c => !c.IsDeleted)
                         .Include(c => c.Games)
-                        .Include(c => c.Inventory)
+                        .Include(c => c.InventoryItems)
                         .ToListAsync();
 
                 return (true, companies);
@@ -76,9 +76,9 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                var company = await _context.companies
+                var company = await _context.Companies
                     .Include(c => c.Games)
-                    .Include(c => c.Inventory)
+                    .Include(c => c.InventoryItems)
                     .FirstOrDefaultAsync(c => c.CompanyId == companyId && !c.IsDeleted);
 
                 return (company != null, company);
@@ -94,7 +94,7 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                _context.companies.Update(company);
+                _context.Companies.Update(company);
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -109,7 +109,7 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                return await _context.companies.AnyAsync(c => c.CompanyId == companyId);
+                return await _context.Companies.AnyAsync(c => c.CompanyId == companyId);
             }
             catch (Exception ex)
             {

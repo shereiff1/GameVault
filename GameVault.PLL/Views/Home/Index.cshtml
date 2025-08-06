@@ -125,9 +125,9 @@
 
                             <div class="mt-auto">
                                 <div class="d-grid gap-2">
-                                    <button class="btn btn-primary" data-game-id="@game.GameId">
+                                    <a asp-controller="Game" asp-action="Edit" asp-route-id="@game.GameId" class="btn btn-primary">
                                         <i class="fas fa-eye"></i> View Details
-                                    </button>
+                                    </a>
                                     <button class="btn btn-outline-success btn-sm" data-game-id="@game.GameId">
                                         <i class="fas fa-cart-plus"></i> Add to Cart
                                     </button>
@@ -166,10 +166,10 @@
         overflow: hidden;
     }
 
-    .game-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
-    }
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+        }
 
     .jumbotron {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -206,18 +206,13 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Only handle Add to Cart buttons since View Details is now a direct link
         document.querySelectorAll('[data-game-id]').forEach(button => {
-            if (button.textContent.includes('View Details')) {
-                button.addEventListener('click', function() {
-                    const gameId = this.getAttribute('data-game-id');
-                    console.log('View details for game:', gameId);
-                });
-            }
-
             if (button.textContent.includes('Add to Cart')) {
                 button.addEventListener('click', function() {
                     const gameId = this.getAttribute('data-game-id');
                     console.log('Add to cart game:', gameId);
+                    // Add your cart logic here
                 });
             }
         });

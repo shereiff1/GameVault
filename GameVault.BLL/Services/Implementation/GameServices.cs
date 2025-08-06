@@ -1,4 +1,5 @@
 using AutoMapper;
+using GameVault.BLL.Helpers.UploadFile;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.Services.Abstraction;
@@ -22,7 +23,8 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                Game game = new Game(gameDto.Title, gameDto.CompanyId, gameDto.CreatedBy, gameDto.Description);
+                string Path = Upload.UploadFile("Files",gameDto.formFile);
+                Game game = new Game(gameDto.Title, gameDto.CompanyId, gameDto.CreatedBy, gameDto.Description ,Path);
                 return await _gameRepo.AddAsync(game, gameDto.Price);
             }
             catch (Exception ex)
@@ -89,7 +91,7 @@ namespace GameVault.BLL.Services.Implementation
                 Game? existingGame = result.Item2;
                 if (!success || existingGame == null)
                     return false;
-                var updatedGame = new Game(editGame.Title, editGame.CompanyId, existingGame.CreatedBy, editGame.Description)
+                var updatedGame = new Game(editGame.Title, editGame.CompanyId, existingGame.CreatedBy, editGame.Description, editGame.ImagePath);
                 existingGame.Update(editGame.Title, editGame.Description);
                 existingGame.UpdateCompany(editGame.CompanyId);
 

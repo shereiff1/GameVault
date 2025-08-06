@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using GameVault.DAL.Entities;
-using GameVault_DAL.Entities;
+
 
 
 namespace GameVault.DAL.Entites
@@ -18,7 +18,7 @@ namespace GameVault.DAL.Entites
 
         public DateTime CreatedOn { get; private set; }
         public DateTime? ModifiedOn { get; private set; }
-
+        public string Description { get; private set; }
         [Required]
         [MaxLength(100)]
         public string CreatedBy { get; private set; }
@@ -36,13 +36,14 @@ namespace GameVault.DAL.Entites
 
         private Game() { }
 
-        public Game(string title, int companyId, string createdBy, string imagePath)
+        public Game(string title, int companyId, string createdBy, string description,string imagePath)
         {
             Title = title;
             CompanyId = companyId;
             CreatedBy = createdBy;
             ImagePath = imagePath;
             CreatedOn = DateTime.Now;
+            Description = description;
             IsDeleted = false;
         }
 
@@ -72,6 +73,12 @@ namespace GameVault.DAL.Entites
         {
             IsDeleted = false;
             ModifiedOn = DateTime.Now;
+        }
+
+        public void Update(string title, string description)
+        {
+            this.Title = title;
+            this.Description = description;
         }
     }
 }
