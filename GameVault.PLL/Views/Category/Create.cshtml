@@ -1,0 +1,44 @@
+@model GameVault.BLL.ModelVM.Category.CreateCategory
+@{
+}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Create a new category</h1>
+        <form asp-controller="Category" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="exampleInputName">Name</label>
+                <input asp-for="Category_Name" type="text" class="form-control" id="exampleInputName" placeholder="Enter Category Name">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputDescription">Salary</label>
+                <input asp-for="Description" type="text" class="form-control" id="exampleInputDescription" placeholder="Enter the discription ">
+            </div>
+            <button type="submit" class="btn btn-primary" id="formSubmit">Submit</button>
+        </form>
+    </div>
+
+</div>
+ <script>
+    document.getElementById('formSubmit').addEventListener('click',async function(e){
+        e.preventDefault()
+          try {
+      const response = await fetch('http://localhost:44341/Category/CreateCategory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Category_Name: document.getElementById('exampleInputName').value,
+          Description: document.getElementById('exampleInputDescription').value,
+        }),
+      });
+
+      if (!response.ok) throw new Error("Failed to create Category");
+
+      const newPost = await response.json();
+      console.log("New Category:", newPost);
+    } catch (error) {
+      console.error("Create Error:", error);
+    }
+    })
+</script> 
