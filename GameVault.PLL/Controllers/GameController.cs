@@ -30,7 +30,16 @@ namespace GameVault.PLL.Controllers
             ViewBag.Error = errorMessage;
             return View(games);
         }
+        public async Task<IActionResult> GameDetails(int id)
+        {
+            var (success, gameDetails) = await _gameServices.GetGameDetails(id);
+            if (!success || gameDetails == null)
+            {
+                ViewBag.Error = "Failed to load Game Details.";
 
+            }
+            return View(gameDetails);
+        }
         public async Task<IActionResult> Add(int? companyId = null)
         {
             var (success, companies) = await _companyServices.GetAllAsync();
