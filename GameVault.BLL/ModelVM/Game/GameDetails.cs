@@ -14,6 +14,5 @@ namespace GameVault.BLL.ModelVM.Game
         public float Rating { get; set; }
         public string ImagePath { get; set; }
         public decimal Price { get; set; }
-        public IFormFile? formFile { get; set; }
     }
 }
