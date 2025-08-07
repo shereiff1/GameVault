@@ -10,6 +10,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using AutoMapper;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -41,6 +43,7 @@ builder.Services.AddScoped<IGameRepo, GameRepo>();
 builder.Services.AddScoped<IGameServices, GameServices>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IInventoryItemRepo, InventoryItemRepo>();
 
 // Configure Identity cookies (AddIdentity sets up cookies automatically, but you can customize)
 builder.Services.ConfigureApplicationCookie(options =>
@@ -49,8 +52,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/Login";
 });
 
+builder.Services.AddAuthentication().AddFacebook(opt =>
+{
+    opt.ClientId = "1704467360230786";
+    opt.ClientSecret = "9425cb2c8f4fdaca6ba754a7dea28d14";
+});
 // Build the app AFTER adding all services
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
