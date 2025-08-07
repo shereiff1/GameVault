@@ -31,7 +31,17 @@
                 <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
                     <div class="card h-100 shadow-sm game-card">
                         <div class="position-relative">
-                            <img src="~/Files/@game.ImagePath" class="card-img-top" alt="@game.Title" style="height: 200px; object-fit: cover;">
+                            @if (!string.IsNullOrEmpty(game.ImagePath))
+                            {
+                                <img src="~/Files/@game.ImagePath" class="card-img-top" alt="@game.Title" style="height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-gamepad text-muted" style="font-size: 3rem;"></i>
+                                </div>
+                            }
+
                             @if (game.Price > 0)
                             {
                                 <span class="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
@@ -47,16 +57,14 @@
                         </div>
 
                         <div class="card-body d-flex flex-column">
-
                             <h5 class="card-title text-truncate" title="@game.Title">@game.Title</h5>
-
 
                             <p class="card-text text-muted small mb-2">
                                 <i class="fas fa-building"></i> @game.CompanyName
                             </p>
 
                             <p class="card-text flex-grow-1 text-truncate-3" title="@game.Description">
-                                @game.Description
+                                @(string.IsNullOrEmpty(game.Description) ? "No description available." : game.Description)
                             </p>
 
                             @if (game.Categories != null && game.Categories.Any())
@@ -64,7 +72,7 @@
                                 <div class="mb-3">
                                     @foreach (var category in game.Categories.Take(3))
                                     {
-                                        <span class="badge bg-secondary me-1 mb-1">@category</span>
+                                        <span class="badge bg-secondary me-1 mb-1">@category.Category_Name</span>
                                     }
                                     @if (game.Categories.Count > 3)
                                     {
@@ -85,7 +93,7 @@
                                                     {
                                                         <i class="fas fa-star"></i>
                                                     }
-                                                    else if (i <= Math.Ceiling(game.Rating))
+                                                    else if (i <= game.Rating)
                                                     {
                                                         <i class="fas fa-star-half-alt"></i>
                                                     }
@@ -114,18 +122,22 @@
 
                             @if (game.Reviews != null && game.Reviews.Any())
                             {
-                                <div class="mb-3">
-                                    <small class="text-muted fst-italic">
-                                        <i class="fas fa-quote-left"></i>
-                                        "@(game.Reviews.FirstOrDefault()?.Length > 60 ? game.Reviews.FirstOrDefault()?.Substring(0, 60) + "..." : game.Reviews.FirstOrDefault())"
-                                        <i class="fas fa-quote-right"></i>
-                                    </small>
-                                </div>
+                                var firstReview = game.Reviews.FirstOrDefault();
+                                @if (firstReview != null && !string.IsNullOrEmpty(firstReview.Comment))
+                                {
+                                    <div class="mb-3">
+                                        <small class="text-muted fst-italic">
+                                            <i class="fas fa-quote-left"></i>
+                                            "@(firstReview.Comment.Length > 60 ? firstReview.Comment.Substring(0, 60) + "..." : firstReview.Comment)"
+                                            <i class="fas fa-quote-right"></i>
+                                        </small>
+                                    </div>
+                                }
                             }
 
                             <div class="mt-auto">
                                 <div class="d-grid gap-2">
-                                    <a asp-controller="Game" asp-action="Edit" asp-route-id="@game.GameId" class="btn btn-primary">
+                                    <a asp-controller="Game" asp-action="GameDetails" asp-route-id="@game.GameId" class="btn btn-primary">
                                         <i class="fas fa-eye"></i> View Details
                                     </a>
                                     <button class="btn btn-outline-success btn-sm" data-game-id="@game.GameId">
@@ -138,6 +150,15 @@
                 </div>
             }
         </div>
+
+        <!-- Pagination or Load More section (optional) -->
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <a href="@Url.Action("Index", "Game")" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-gamepad"></i> View All Games
+                </a>
+            </div>
+        </div>
     }
     else
     {
@@ -149,8 +170,8 @@
                     <p class="mb-0">There are currently no games to display. Check back later for new releases!</p>
                     <hr>
                     <p class="mb-0">
-                        <a href="#" class="btn btn-primary">Browse Categories</a>
-                        <a href="#" class="btn btn-outline-primary ms-2">Contact Us</a>
+                        <a href="@Url.Action("Add", "Game")" class="btn btn-primary">Add New Game</a>
+                        <a href="@Url.Action("Add", "Company")" class="btn btn-outline-primary ms-2">Add Company</a>
                     </p>
                 </div>
             </div>
@@ -200,21 +221,57 @@
     .fas, .far {
         font-family: "Font Awesome 5 Free";
     }
+
+    /* Ensure consistent card heights */
+    .card {
+        min-height: 500px;
+    }
+
+
+    }
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Only handle Add to Cart buttons since View Details is now a direct link
+        // Handle Add to Cart buttons
         document.querySelectorAll('[data-game-id]').forEach(button => {
             if (button.textContent.includes('Add to Cart')) {
                 button.addEventListener('click', function() {
                     const gameId = this.getAttribute('data-game-id');
+
+                    // Visual feedback
+                    const originalText = this.innerHTML;
+                    this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Adding...';
+                    this.disabled = true;
+
+                    // Simulate cart addition (replace with actual cart logic)
+                    setTimeout(() => {
+                        this.innerHTML = '<i class="fas fa-check"></i> Added!';
+                        this.classList.remove('btn-outline-success');
+                        this.classList.add('btn-success');
+
+                        // Reset after 2 seconds
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.disabled = false;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-outline-success');
+                        }, 2000);
+                    }, 1000);
+
                     console.log('Add to cart game:', gameId);
-                    // Add your cart logic here
+                    // Add your actual cart logic here
                 });
             }
+        });
+
+        // Add loading animation for View Details buttons
+        document.querySelectorAll('a[asp-action="GameDetails"]').forEach(link => {
+            link.addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            });
         });
     });
 </script>
