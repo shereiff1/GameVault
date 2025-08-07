@@ -1,10 +1,13 @@
 using AutoMapper;
 using GameVault.BLL.Helpers.UploadFile;
 using GameVault.BLL.ModelVM;
+using GameVault.BLL.ModelVM.Category;
 using GameVault.BLL.ModelVM.Game;
+using GameVault.BLL.ModelVM.Review;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entites;
 using GameVault.DAL.Repository.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameVault.BLL.Services.Implementation
 {
@@ -12,19 +15,21 @@ namespace GameVault.BLL.Services.Implementation
     {
         private readonly IGameRepo _gameRepo;
         private readonly IMapper _mapper;
+        private readonly IInventoryItemRepo _inventoryItemRepo;
 
-        public GameServices(IGameRepo gameRepo, IMapper mapper)
+        public GameServices(IGameRepo gameRepo, IMapper mapper, IInventoryItemRepo inventoryItem)
         {
             _gameRepo = gameRepo;
             _mapper = mapper;
+            _inventoryItemRepo = inventoryItem;
         }
 
         public async Task<bool> AddAsync(GameVM gameDto)
         {
             try
             {
-                string Path = Upload.UploadFile("Files",gameDto.formFile);
-                Game game = new Game(gameDto.Title, gameDto.CompanyId, gameDto.CreatedBy, gameDto.Description ,Path);
+                string Path = Upload.UploadFile("Files", gameDto.formFile);
+                Game game = new Game(gameDto.Title, gameDto.CompanyId, gameDto.CreatedBy, gameDto.Description, Path);
                 return await _gameRepo.AddAsync(game, gameDto.Price);
             }
             catch (Exception ex)
@@ -70,7 +75,8 @@ namespace GameVault.BLL.Services.Implementation
                     Description = game.Description,
                     CompanyId = game.CompanyId,
                     CreatedBy = game.CreatedBy,
-                    Price = price
+                    Price = price,
+                    ImagePath = game.ImagePath
                 };
 
                 return (true, editGame);
@@ -91,9 +97,17 @@ namespace GameVault.BLL.Services.Implementation
                 Game? existingGame = result.Item2;
                 if (!success || existingGame == null)
                     return false;
-                var updatedGame = new Game(editGame.Title, editGame.CompanyId, existingGame.CreatedBy, editGame.Description, editGame.ImagePath);
+
+                string imagePath = existingGame.ImagePath;
+                if (editGame.formFile != null && editGame.formFile.Length > 0)
+                {
+                    imagePath = Upload.UploadFile("Files", editGame.formFile);
+                }
+
+                // Update the existing game properties
                 existingGame.Update(editGame.Title, editGame.Description);
                 existingGame.UpdateCompany(editGame.CompanyId);
+                existingGame.UpdatePhoto(imagePath);
 
                 return await _gameRepo.UpdateAsync(existingGame, editGame.Price);
             }
@@ -133,6 +147,7 @@ namespace GameVault.BLL.Services.Implementation
                 return (false, new List<GameVM>());
             }
         }
+
         public async Task<(bool, List<GameDetails>?)> GetAllGameDetailsAsync()
         {
             try
@@ -151,6 +166,56 @@ namespace GameVault.BLL.Services.Implementation
                 return (false, null);
             }
         }
-       
+
+        public async Task<(bool success, GameDetails?)> GetGameDetails(int gameId)
+        {
+            try
+            {
+                var (success, game) = await _gameRepo.GetGameDetails(gameId);
+
+                if (!success || game == null)
+                    return (false, null);
+
+                // Get price from inventory
+                var (inventorySuccess, inventoryItems) = await _inventoryItemRepo.GetByGameAsync(gameId);
+                var inventoryItem = inventoryItems?.FirstOrDefault();
+
+                var details = new GameDetails
+                {
+                    GameId = game.GameId,
+                    Title = game.Title,
+                    Description = game.Description,
+                    CompanyName = game.Company?.CompanyName ?? "Unknown",
+                    ImagePath = game.ImagePath,
+                    Rating = game.Reviews != null && game.Reviews.Any()
+                        ? game.Reviews.Average(r => r.Rating)
+                        : 0,
+                    Price = inventoryItem?.Price ?? 0,
+                    Reviews = game.Reviews?.Select(r => new ReviewDTO
+                    {
+                        Review_Id = r.Review_Id,
+                        Player_Id = r.Player_Id,
+                        Game_Id = r.Game_Id,
+                        Comment = r.Comment,
+                        Rating = r.Rating,
+                        CreatedOn = r.CreatedOn
+                    }).ToList() ?? new List<ReviewDTO>(),
+                    Categories = game.Categories?.Select(c => new CategoryDTO
+                    {
+                        Category_Id = c.Category_Id,
+                        Category_Name = c.Category_Name,
+                        Description = c.Description,
+                        CreatedOn = c.CreatedOn
+                    }).ToList() ?? new List<CategoryDTO>()
+                };
+
+                return (true, details);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching game details: {ex.Message}");
+                return (false, null);
+            }
+        }
     }
 }

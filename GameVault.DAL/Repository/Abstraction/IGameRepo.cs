@@ -13,5 +13,6 @@ namespace GameVault.DAL.Repository.Abstraction
         Task<(bool, List<Game>)> GetByCompanyAsync(int companyId);
         Task<bool> UpdateAsync(Game game, decimal price);
         Task<(bool, List<GameDTO>?)> GetAllGameDetailsAsync();
+        Task<(bool success, Game? game)> GetGameDetails(int id);
     }
 }

@@ -9,10 +9,11 @@ namespace GameVault.DAL.Repository.Implementation
     public class GameRepo : IGameRepo
     {
         private readonly ApplicationDbContext _context;
-
-        public GameRepo(ApplicationDbContext context)
+        private readonly IInventoryItemRepo _inventoryItemRepo;
+        public GameRepo(ApplicationDbContext context, IInventoryItemRepo inventoryItemRepo)
         {
             _context = context;
+            _inventoryItemRepo = inventoryItemRepo;
         }
 
         public async Task<bool> AddAsync(Game game, decimal price)
@@ -195,6 +196,25 @@ namespace GameVault.DAL.Repository.Implementation
             catch (Exception ex)
             {
                 Console.WriteLine($"Error getting game details: {ex.Message}");
+                return (false, null);
+            }
+        }
+
+        public async Task<(bool success, Game? game)> GetGameDetails(int id)
+        {
+            try
+            {
+                var game = await _context.games
+                    .Include(g => g.Company)
+                    .Include(g => g.Reviews.Where(r => !r.IsDeleted))
+                    .Include(g => g.Categories.Where(c => !c.IsDeleted))
+                    .FirstOrDefaultAsync(g => g.GameId == id && !g.IsDeleted);
+
+                return (game != null, game);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching game details: {ex.Message}");
                 return (false, null);
             }
         }
