@@ -1,0 +1,75 @@
+@model GameVault.BLL.ModelVM.Category.CategoryDTO
+@*
+*@
+@{
+    ViewData["Title"] = "Update Category";
+}
+<h2>Update Category</h2>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+
+
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Ubdate a category</h1>
+        <form asp-controller="Category"  enctype="multipart/form-data">
+            <input type="hidden" asp-for="Category_Id" />
+
+            <div class="mb-3">
+                <label asp-for="Category_Name" class="form-label"></label>
+                <input asp-for="Category_Name" class="form-control" />
+                <span asp-validation-for="Category_Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Update</button>
+            <a asp-action="GetAllCategories" class="btn btn-secondary">Go to List</a>
+            @* <input type="hidden" asp-for="Category_Id" />
+
+            <div class="form-group">
+            <label for="exampleInputName">Name</label>
+            <input asp-for="Category_Name" type="text" class="form-control" id="exampleInputName" placeholder="Enter Category Name">
+            </div>
+            <div class="form-group">
+            <label for="exampleInputDescription">Salary</label>
+            <input asp-for="Description" type="text" class="form-control" id="exampleInputDescription" placeholder="Enter the discription ">
+            </div>
+            <button type="submit" class="btn btn-primary" id="formSubmit">Submit</button> *@
+        </form>
+    </div>
+
+</div>
+<script>
+    document.getElementById('formSubmit').addEventListener('click', async function (e) {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:44341/Category/UpdateCategory', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+					// Assuming Category_Id is a hidden input field in the form
+                    Category_Id: document.getElementById('Category_Id').value,
+                    Category_Name: document.getElementById('exampleInputName').value,
+                    Description: document.getElementById('exampleInputDescription').value,
+                }),
+            });
+            if (!response.ok) throw new Error("Failed to update Category");
+            const updatedCategory = await response.json();
+            console.log("Updated Category:", updatedCategory);
+        } catch (error) {
+            console.error("Update Error:", error);
+        }
+	});
+</script>
