@@ -7,7 +7,8 @@ namespace GameVault.BLL.Services.Abstraction
     {
         Task<(bool, string?)> CreateAsync(CreateCategory category);
         Task<(bool, string?)> DeleteAsync(int id);
-        Task<(bool,List<CategoryDTO>?)> GetAllAsync();
+        Task<(bool, List<CategoryDTO>?)> GetAllAsync();
         Task<(bool, string?)> UpdateAsync(UpdateCategory category);
+        Task<(bool, CategoryDTO?)> GetByIdAsync(int id);
     }
 }
