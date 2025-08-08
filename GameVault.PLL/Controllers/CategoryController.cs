@@ -28,15 +28,15 @@ namespace GameVault_PLL.Controllers
             var result = await _categoryServices.CreateAsync(category);
             if (result.Item1)
             {
-                //return RedirectToAction("GetAllCategories");
-                return Json(new { success = true, redirectUrl = Url.Action("GetAllCategories") });
+                return RedirectToAction("GetAllCategories");
+                //return Json(new { success = true, redirectUrl = Url.Action("GetAllCategories") });
 
             }
             else
             {
-                //ViewBag.ErrorMessage = result.Item2;
-                //return View("ERROR");
-                return Json(new { success = false, errorMessage = result.Item2, data = category });
+                ViewBag.ErrorMessage = result.Item2;
+                return View("ERROR");
+                //return Json(new { success = false, errorMessage = result.Item2, data = category });
 
             }
         }
