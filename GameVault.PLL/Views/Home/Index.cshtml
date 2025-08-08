@@ -2,6 +2,7 @@
 @model List<GameDetails>
 @{
     ViewData["Title"] = "Home Page - GameVault";
+    var featuredGame = ViewBag.FeaturedGame as GameDetails;
 }
 
 <div class="container-fluid">
@@ -15,12 +16,135 @@
             </div>
         </div>
     </div>
+    @if (featuredGame != null)
+    {
+        <div class="row mb-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">
+                    <i class="fas fa-star text-warning"></i>
+                    Game of the Moment
+                    <i class="fas fa-star text-warning"></i>
+                </h2>
+                <p class="text-center text-muted mb-4">
+                    <i class="fas fa-clock"></i> Updates every 10 seconds
+                </p>
+                <div class="featured-game-card mx-auto">
+                    <div class="card border-0 shadow-lg" style="max-width: 800px;">
+                        <div class="row g-0">
+                            <div class="col-md-5">
+                                <div class="position-relative h-100">
+                                    @if (!string.IsNullOrEmpty(featuredGame.ImagePath))
+                                    {
+                                        <img src="~/Files/@featuredGame.ImagePath" class="img-fluid h-100 w-100 rounded-start" alt="@featuredGame.Title" style="object-fit: cover; min-height: 300px;">
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start" style="min-height: 300px;">
+                                            <i class="fas fa-gamepad text-muted" style="font-size: 4rem;"></i>
+                                        </div>
+                                    }
+
+                                    @if (featuredGame.Price > 0)
+                                    {
+                                        <span class="badge bg-success position-absolute top-0 end-0 m-3 fs-5">
+                                            $@featuredGame.Price.ToString("F2")
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info position-absolute top-0 end-0 m-3 fs-5">
+                                            Free
+                                        </span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+                                <div class="card-body p-4 d-flex flex-column h-100">
+                                    <div>
+                                        <h3 class="card-title fw-bold text-primary mb-2">@featuredGame.Title</h3>
+
+                                        <p class="text-muted mb-3">
+                                            <i class="fas fa-building"></i> @featuredGame.CompanyName
+                                        </p>
+
+                                        @if (featuredGame.Categories != null && featuredGame.Categories.Any())
+                                        {
+                                            <div class="mb-3">
+                                                @foreach (var category in featuredGame.Categories.Take(4))
+                                                {
+                                                    <span class="badge bg-secondary me-1 mb-1">@category.Category_Name</span>
+                                                }
+                                                @if (featuredGame.Categories.Count > 4)
+                                                {
+                                                    <span class="badge bg-light text-dark">+@(featuredGame.Categories.Count - 4) more</span>
+                                                }
+                                            </div>
+                                        }
+
+                                        <p class="card-text mb-3" style="max-height: 100px; overflow-y: auto;">
+                                            @(string.IsNullOrEmpty(featuredGame.Description) ? "No description available." : featuredGame.Description)
+                                        </p>
+
+                                        @if (featuredGame.Rating > 0)
+                                        {
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="text-warning me-2">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= Math.Floor(featuredGame.Rating))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i <= featuredGame.Rating)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </span>
+                                                <span class="fw-bold me-3">@featuredGame.Rating.ToString("F1")</span>
+                                                @if (featuredGame.Reviews != null && featuredGame.Reviews.Any())
+                                                {
+                                                    <small class="text-muted">
+                                                        (@featuredGame.Reviews.Count review@(featuredGame.Reviews.Count != 1 ? "s" : ""))
+                                                    </small>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <div class="mt-auto">
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <a asp-controller="Game" asp-action="GameDetails" asp-route-id="@featuredGame.GameId"
+                                                   class="btn btn-primary w-100">
+                                                    <i class="fas fa-eye"></i> View Details
+                                                </a>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button class="btn btn-success w-100" data-game-id="@featuredGame.GameId">
+                                                    <i class="fas fa-cart-plus"></i> Add to Cart
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
     @if (Model != null && Model.Any())
     {
         <div class="row mb-4">
             <div class="col-12">
-                <h2 class="text-center mb-4">Featured Games</h2>
+                <h2 class="text-center mb-4">All Games</h2>
                 <p class="text-center text-muted mb-5">Browse our collection of @Model.Count amazing games</p>
             </div>
         </div>
@@ -151,7 +275,6 @@
             }
         </div>
 
-        <!-- Pagination or Load More section (optional) -->
         <div class="row mt-5">
             <div class="col-12 text-center">
                 <a href="@Url.Action("Index", "Game")" class="btn btn-outline-primary btn-lg">
@@ -192,6 +315,18 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
         }
 
+    .featured-game-card .card {
+        background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+        border-radius: 20px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 3px solid #667eea;
+    }
+
+        .featured-game-card .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
+        }
+
     .jumbotron {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         border-radius: 20px;
@@ -225,9 +360,6 @@
     /* Ensure consistent card heights */
     .card {
         min-height: 500px;
-    }
-
-
     }
 </style>
 
@@ -273,5 +405,10 @@
                 this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
             });
         });
+
+        // Auto-refresh the page every 10 seconds to show the new featured game
+        setInterval(function() {
+            window.location.reload();
+        }, 10000); // 10000 ms = 10 seconds
     });
 </script>

@@ -1,3 +1,4 @@
+using AutoMapper;
 using GameVault.BLL.Mappers;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
@@ -5,38 +6,41 @@ using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
+using GameVault.PLL.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using AutoMapper;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("TemplateConnection");
+var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
-// If you have AutoMapper profile classes
+
+
+// AutoMapper
 builder.Services.AddAutoMapper(typeof(DomainProfile).Assembly);
+
+// Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
-    // Password settings
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireNonAlphanumeric = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
-    // Sign-in settings
     options.SignIn.RequireConfirmedAccount = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
 
+// Custom services
 builder.Services.AddScoped<ICompanyServices, CompanyServices>();
 builder.Services.AddScoped<ICompanyRepo, CompanyRepo>();
 builder.Services.AddScoped<IGameRepo, GameRepo>();
@@ -44,8 +48,9 @@ builder.Services.AddScoped<IGameServices, GameServices>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IInventoryItemRepo, InventoryItemRepo>();
-
-// Configure Identity cookies (AddIdentity sets up cookies automatically, but you can customize)
+builder.Services.AddHostedService<FeaturedGameBackgroundService>();
+builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
+// Cookie settings
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
@@ -57,11 +62,12 @@ builder.Services.AddAuthentication().AddFacebook(opt =>
     opt.ClientId = "1704467360230786";
     opt.ClientSecret = "9425cb2c8f4fdaca6ba754a7dea28d14";
 });
-// Build the app AFTER adding all services
+
+builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
+builder.Services.AddHangfireServer();
 var app = builder.Build();
 
-
-// Configure the HTTP request pipeline.
+// HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -70,12 +76,16 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
+app.UseHangfireDashboard("/Hangfire");
 app.Run();

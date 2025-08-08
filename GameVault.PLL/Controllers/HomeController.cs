@@ -1,6 +1,8 @@
 using System.Diagnostics;
+using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.PLL.Models;
+using GameVault.PLL.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameVault.PLL.Controllers
@@ -9,11 +11,13 @@ namespace GameVault.PLL.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGameServices gameServices;
+        private readonly IFeaturedGameService featuredGameService;
 
-        public HomeController(ILogger<HomeController> logger, IGameServices gameServices)
+        public HomeController(ILogger<HomeController> logger, IGameServices gameServices, IFeaturedGameService featuredGameService)
         {
             _logger = logger;
             this.gameServices = gameServices;
+            this.featuredGameService = featuredGameService;
         }
 
         public async Task<IActionResult> Index()
@@ -21,21 +25,16 @@ namespace GameVault.PLL.Controllers
             try
             {
                 var (success, gameDetails) = await gameServices.GetAllGameDetailsAsync();
-
-                if (success && gameDetails != null)
-                {
-                    return View(gameDetails);
-                }
-                else
-                {
-                    _logger.LogWarning("Failed to retrieve game details for home page");
-                    return View(new List<GameVault.BLL.ModelVM.Game.GameDetails>());
-                }
+                var games = success && gameDetails != null ? gameDetails : new List<GameDetails>();
+                var featuredGame = await featuredGameService.GetCurrentFeaturedGameAsync();
+                ViewBag.FeaturedGame = featuredGame;
+                return View(games);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while loading home page");
-                return View(new List<GameVault.BLL.ModelVM.Game.GameDetails>());
+                ViewBag.FeaturedGame = null;
+                return View(new List<GameDetails>());
             }
         }
 
