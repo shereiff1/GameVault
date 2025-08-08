@@ -3,7 +3,6 @@ using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using AutoMapper;
-using GameVault.DAL.Repo.Abstraction;
 
 namespace GameVault.BLL.Services.Implementation
 {
@@ -70,6 +69,24 @@ namespace GameVault.BLL.Services.Implementation
             catch (Exception ex)
             {
                 return (false, $"Error updating review: {ex.Message}");
+            }
+        }
+        public async Task<(bool, ReviewDTO?)> GetByIdAsync(int id)
+        {
+            try
+            {
+                var review = await _reviewRepo.GetByIdAsync(id);
+                if (review.Item2 == null)
+                {
+                    return (false, null);
+                }
+                var mappedReview = _mapper.Map<ReviewDTO>(review.Item2);
+                return (true, mappedReview);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return (false, null);
             }
         }
     }
