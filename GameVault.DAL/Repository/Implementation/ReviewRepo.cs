@@ -1,9 +1,9 @@
 using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
-using GameVault.DAL.Repo.Abstraction;
+using GameVault.DAL.Repository.Abstraction;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameVault.DAL.Repo.Implementation
+namespace GameVault.DAL.Repository.Implementation
 {
     public class ReviewRepo : IReviewRepo
     {
@@ -18,7 +18,7 @@ namespace GameVault.DAL.Repo.Implementation
         {
             try
             {
-                await _context.Reviews.AddAsync(review);
+                 _context.Reviews.Add(review);
                 await _context.SaveChangesAsync();
                 return (true, "Review created successfully.");
             }
@@ -81,6 +81,22 @@ namespace GameVault.DAL.Repo.Implementation
             catch (Exception ex)
             {
                 return (false, $"Error updating review: {ex.Message}");
+            }
+        }
+        public async Task<(bool, Review?)> GetByIdAsync(int id)
+        {
+            try
+            {
+                var review = await _context.Reviews.FindAsync(id);
+                if (review == null || review.IsDeleted)
+                {
+                    return (false, null);
+                }
+                return (true, review);
+            }
+            catch (Exception ex)
+            {
+                return (false,null );
             }
         }
     }
