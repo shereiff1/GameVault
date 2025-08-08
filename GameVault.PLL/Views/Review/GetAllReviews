@@ -1,0 +1,58 @@
+@model List<GameVault.BLL.ModelVM.Review.ReviewDTO>
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h2>Review List</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<div class="mb-3">
+    <a asp-controller="Review" asp-action="Create" class="btn btn-primary">Add New Review</a>
+</div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        No reviews found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Player ID</th>
+                <th>Game ID</th>
+                <th>Rating</th>
+                <th>Comment</th>
+                <th style="width: 180px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rev in Model)
+            {
+                <tr>
+                    <td>@rev.Player_Id</td>
+                    <td>@rev.Game_Id</td>
+                    <td>@rev.Rating</td>
+                    <td>@rev.Comment</td>
+                    <td>
+                        <a asp-action="Update" asp-route-id="@rev.Review_Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@rev.Review_Id" class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this category?');">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
