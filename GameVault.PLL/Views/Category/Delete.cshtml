@@ -15,18 +15,19 @@
     <h4>Are you sure you want to delete this categry?</h4>
 </div>
 
-<div class="mb-3"><strong>Name:</strong> @Model.Category_Id</div>
+<div class="mb-3"><strong>Name:</strong> @Model.Category_Name</div>
 
-<form asp-action="DeleteConfirmed" method="DELETE">
+<form>
     <input type="hidden" asp-for="Category_Id" />
     <button type="submit" id="formSubmit" class="btn btn-danger">Delete</button>
     <a asp-action="GetAllCategories" class="btn btn-secondary">Cancel</a>
 </form>
+@*
 <script>
     document.getElementById('formSubmit').addEventListener('click', async function (e) {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:44341/Category/DeleteConfirmed', {
+            const response = await fetch('http://localhost:44341/Category/Delete', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,4 +47,4 @@
             alert('An unexpected error occurred.');
         }
 	});
-</script>
+</script>*@

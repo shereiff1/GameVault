@@ -8,6 +8,7 @@ namespace GameVault.BLL.Services.Abstraction
         Task<(bool, string?)> UpdateAsync(UpdateReview review);
         Task<(bool, string?)> DeleteAsync(int id);
         Task<(bool, List<ReviewDTO>?)> GetAllAsync();
+        Task<(bool, ReviewDTO?)> GetByIdAsync(int id);
 
     }
 }

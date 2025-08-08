@@ -1,6 +1,6 @@
 using GameVault.DAL.Entities;
 
-namespace GameVault.DAL.Repo.Abstraction
+namespace GameVault.DAL.Repository.Abstraction
 {
     public interface IReviewRepo
     {
@@ -8,5 +8,7 @@ namespace GameVault.DAL.Repo.Abstraction
         Task<List<Review>> GetAllAsync();
         Task<(bool, string?)> DeleteAsync(int id);
         Task<(bool, string?)> UpdateAsync(Review review);
+        Task<(bool, Review?)> GetByIdAsync(int id);
+
     }
 }

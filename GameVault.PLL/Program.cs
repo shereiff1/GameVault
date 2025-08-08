@@ -48,6 +48,12 @@ builder.Services.AddScoped<IGameServices, GameServices>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IInventoryItemRepo, InventoryItemRepo>();
+builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
+builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
+builder.Services.AddScoped<ICategoryServices, CategoryServices>();
+builder.Services.AddScoped<IReviewServices, ReviewServices>();
+
+// Configure Identity cookies (AddIdentity sets up cookies automatically, but you can customize)
 builder.Services.AddHostedService<FeaturedGameBackgroundService>();
 builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
 // Cookie settings

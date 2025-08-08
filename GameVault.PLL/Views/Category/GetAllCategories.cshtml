@@ -1,93 +1,56 @@
 @model List<GameVault.BLL.ModelVM.Category.CategoryDTO>
 
 @{
-	ViewData["Title"] = "Categories";
+    ViewData["Title"] = "Categories";
 }
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2><i class="fas fa-Categoriepad me-2"></i>Categories Management</h2>
-        <a asp-action="Create" class="btn btn-primary">
-            <i class="fas fa-plus me-1"></i>Create New Category
-        </a>
+
+<h2>Category List</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
     </div>
+}
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
-
-    @if (Model != null && Model.Any())
-    {
-        <div class="card">
-            <div class="card-header bg-light">
-                <h5 class="mb-0">Categories List (@Model.Count)</h5>
-            </div>
-            <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0">
-                        <thead class="table-dark">
-                            <tr>
-                                <th><i class="fas fa-hashtag me-1"></i>ID</th>
-                                <th><i class="fas fa-heading me-1"></i>Name</th>
-                                <th><i class="fas fa-file-text me-1"></i>Description</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var Categorie in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <span class="badge bg-secondary">#@Categorie.Category_Id</span>
-                                    </td>
-                                    <td>
-                                        <strong>@Categorie.Category_Name</strong>
-                                    </td>
-                                    <td>
-                                        <span class="text-muted">
-                                            @(Categorie.Description.Length > 50 ? Categorie.Description.Substring(0, 50) + "..." : Categorie.Description)
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-info">Category ID: @Categorie.Category_Id</span>
-                                    </td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a asp-action="UpdateCategory" asp-route-id="@Categorie.Category_Id"
-                                               class="btn btn-warning btn-sm"
-                                               title="Edit Categorie">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
-                                            <a asp-action="Delete" asp-route-id="@Categorie.Category_Id"
-                                               class="btn btn-danger btn-sm"
-                                               title="Delete Categorie"
-                                               onclick="return confirm('Are you sure you want to delete this Categorie?')">
-                                                <i class="fas fa-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="text-center py-5">
-            <div class="mb-4">
-                <i class="fas fa-Categoriepad fa-4x text-muted"></i>
-            </div>
-            <h4 class="text-muted">No Categories found</h4>
-            <p class="text-muted">Start by Createing your first Category to the system.</p>
-            <a asp-action="Create" class="btn btn-primary">
-                <i class="fas fa-plus me-1"></i>Create First Category
-            </a>
-        </div>
-    }
+<div class="mb-3">
+    <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
 </div>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info">
+        No categories found.
+    </div>
+}
+else
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>Category Name</th>
+                <th>Description</th>
+                <th>Created By</th>
+                <th style="width: 180px;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model)
+            {
+                <tr>
+                    <td>@cat.Category_Name</td>
+                    <td>@cat.Description</td>
+                    <td>@cat.CreatedBy</td>
+                    <td>
+                        <a asp-action="UpdateCategory" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@cat.Category_Id"class="btn btn-sm btn-danger"
+                           onclick="return confirm('Are you sure you want to delete this category?');">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
 
