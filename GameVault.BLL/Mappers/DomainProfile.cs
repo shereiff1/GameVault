@@ -15,6 +15,11 @@ namespace GameVault.BLL.Mappers
             CreateMap<Game, GameVM>().ReverseMap();
             CreateMap<GameDTO, GameDetails>().ReverseMap();
             CreateMap<Category, UpdateCategory>().ReverseMap();
+            CreateMap<Category, CreateCategory>().ReverseMap();
+            CreateMap<Category, CategoryDTO>().ReverseMap();
+            CreateMap<Review, ReviewDTO>().ReverseMap();
+            CreateMap<Review, CreateReview>().ReverseMap();
+            CreateMap<Review, UpdateReview>().ReverseMap();
             CreateMap<Game, EditGame>().ReverseMap();
             CreateMap<CompanyVM, Company>()
                 .ConstructUsing(src => new Company(src.CompanyName, src.CompanyInfo, src.CreatedBy))
