@@ -1,9 +1,9 @@
 using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
-using GameVault.DAL.Repo.Abstraction;
+using GameVault.DAL.Repository.Abstraction;
 using Microsoft.EntityFrameworkCore;
 
-namespace GameVault.DAL.Repo.Implementation
+namespace GameVault.DAL.Repository.Implementation
 {
     public class CategoryRepo : ICategoryRepo
     {
@@ -80,6 +80,23 @@ namespace GameVault.DAL.Repo.Implementation
             catch (Exception ex)
             {
                 return (false, $"Error updating category: {ex.Message}");
+            }
+        }
+        public async Task<(bool, Category?)> GetByIdAsync(int id)
+        {
+            try
+            {
+                var category = await _context.Categories.FindAsync(id);
+                if (category == null || category.IsDeleted)
+                {
+                    return (false, null);
+                }
+                return (true, category);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving category by ID: {ex.Message}");
+                return (false, null);
             }
         }
     }
