@@ -1,44 +1,121 @@
 @model GameVault.BLL.ModelVM.Category.CreateCategory
 @{
+    ViewData["Title"] = "Create Category ";
 }
-<div class="card">
-    <div class="card-body">
-        <h1 class="card-title">Create a new category</h1>
-        <form asp-controller="Category" enctype="multipart/form-data">
-            <div class="form-group">
-                <label for="exampleInputName">Name</label>
-                <input asp-for="Category_Name" type="text" class="form-control" id="exampleInputName" placeholder="Enter Category Name">
-            </div>
-            <div class="form-group">
-                <label for="exampleInputDescription">Salary</label>
-                <input asp-for="Description" type="text" class="form-control" id="exampleInputDescription" placeholder="Enter the discription ">
-            </div>
-            <button type="submit" class="btn btn-primary" id="formSubmit">Submit</button>
-        </form>
-    </div>
 
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-gamepad me-2"></i>Add New Category
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form method="post" action="CreateCategory">
+                        <div class="mb-3">
+                            <label asp-for="Category_Name" class="form-label">
+                                <i class="fas fa-heading me-1"></i>Category name
+                            </label>
+                            <input asp-for="Category_Name" id="Category_Name" class="form-control" placeholder="Enter category name" required />
+                            <span asp-validation-for="Category_Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">
+                                <i class="fas fa-file-text me-1"></i>Description
+                            </label>
+                            <input asp-for="Description" id="Description" class="form-control" rows="4" placeholder="Enter game description" required>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreatedBy" class="form-label">
+                                <i class="fas fa-user me-1"></i>Created By
+                            </label>
+                            <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="Enter creator name" required />
+                            <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="GetAllCategories" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Categories
+                            </a>
+                            <button type="submit" id="formSubmit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Create Category
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
- <script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+@* <script>
     document.getElementById('formSubmit').addEventListener('click',async function(e){
         e.preventDefault()
           try {
-      const response = await fetch('http://localhost:44341/Category/CreateCategory', {
+      const response = await fetch('/Category/CreateCategory', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          Category_Name: document.getElementById('exampleInputName').value,
-          Description: document.getElementById('exampleInputDescription').value,
+          Category_Name: document.getElementById('Category_Name').value,
+          Description: document.getElementById('Description').value,
+          CreatedBy: document.getElementById('CreatedBy').value,
         }),
       });
+        const newPost = await response.json();
+      if (!response.ok) throw new Error("Failed to create post");
 
-      if (!response.ok) throw new Error("Failed to create Category");
-
-      const newPost = await response.json();
-      console.log("New Category:", newPost);
+    
+      console.log("New Post:", newPost);
+      
     } catch (error) {
-      console.error("Create Error:", error);
+               console.WriteLine(error.InnerException.Message);
+
     }
-    })
-</script> 
+    }
+    ) *@
+    @*
+  //       $( document ).ready(function() {
+  //      $("#formSubmit").click(function(e) {
+  //           e.preventDefault();
+  //           var formData = {
+  //               Category_Name: "ewew",
+  //               Description: "ewew",
+  //               CreatedBy:"ww",
+
+  //           };
+  //           $.ajax({
+  //               type: "POST",
+  //               url: "/Category/CreateCategory",
+  //               data: JSON.stringify(formData),
+  //               contentType: "application/json; charset=utf-8",
+  //               dataType: "json",
+  //               success: function (response) {
+  //                   if (response.success) {
+  //                       window.location.href = "/Category/GetAllCategories";
+  //                   } else {
+  //                       alert(response.errorMessage);
+		// 				console.log(response.data);
+  //                   }
+  //               },
+  //               error: function (xhr, status, error) {
+  //                   alert("Error creating category: " + error);
+  //               }
+  //           });
+		// });
+  //   });
+</script>  *@
