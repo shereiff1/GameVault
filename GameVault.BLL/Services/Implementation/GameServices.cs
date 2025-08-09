@@ -6,6 +6,7 @@ using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.ModelVM.Review;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entites;
+using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,21 +17,49 @@ namespace GameVault.BLL.Services.Implementation
         private readonly IGameRepo _gameRepo;
         private readonly IMapper _mapper;
         private readonly IInventoryItemRepo _inventoryItemRepo;
+        private readonly ICategoryServices _categoryServices;
 
-        public GameServices(IGameRepo gameRepo, IMapper mapper, IInventoryItemRepo inventoryItem)
+        public GameServices(IGameRepo gameRepo, IMapper mapper, IInventoryItemRepo inventoryItem, ICategoryServices categoryServices)
         {
             _gameRepo = gameRepo;
             _mapper = mapper;
             _inventoryItemRepo = inventoryItem;
+            _categoryServices = categoryServices;
         }
 
         public async Task<bool> AddAsync(GameVM gameDto)
         {
             try
             {
+                // Handle new category creation if provided
+                if (!string.IsNullOrWhiteSpace(gameDto.NewCategoryName))
+                {
+                    var newCategory = new CreateCategory
+                    {
+                        Category_Name = gameDto.NewCategoryName,
+                        Description = gameDto.NewCategoryDescription ?? string.Empty
+                    };
+
+                    var (categoryCreated, categoryMessage) = await _categoryServices.CreateAsync(newCategory);
+                    if (categoryCreated)
+                    {
+                        // Get the newly created category and add its ID to selected categories
+                        var (success, categories) = await _categoryServices.GetAllAsync();
+                        if (success && categories != null)
+                        {
+                            var createdCategory = categories.LastOrDefault(c => c.Category_Name == gameDto.NewCategoryName);
+                            if (createdCategory != null)
+                            {
+                                gameDto.SelectedCategoryIds.Add(createdCategory.Category_Id);
+                            }
+                        }
+                    }
+                }
+
                 string Path = Upload.UploadFile("Files", gameDto.formFile);
                 Game game = new Game(gameDto.Title, gameDto.CompanyId, gameDto.CreatedBy, gameDto.Description, Path);
-                return await _gameRepo.AddAsync(game, gameDto.Price);
+
+                return await _gameRepo.AddAsync(game, gameDto.Price, gameDto.SelectedCategoryIds);
             }
             catch (Exception ex)
             {
@@ -68,6 +97,9 @@ namespace GameVault.BLL.Services.Implementation
                 if (!success || game == null)
                     return (false, null);
 
+                // Get selected category IDs
+                var categoryIds = await _gameRepo.GetGameCategoryIdsAsync(gameId);
+
                 var editGame = new EditGame
                 {
                     GameId = game.GameId,
@@ -76,7 +108,8 @@ namespace GameVault.BLL.Services.Implementation
                     CompanyId = game.CompanyId,
                     CreatedBy = game.CreatedBy,
                     Price = price,
-                    ImagePath = game.ImagePath
+                    ImagePath = game.ImagePath,
+                    SelectedCategoryIds = categoryIds
                 };
 
                 return (true, editGame);
@@ -98,6 +131,31 @@ namespace GameVault.BLL.Services.Implementation
                 if (!success || existingGame == null)
                     return false;
 
+                // Handle new category creation if provided
+                if (!string.IsNullOrWhiteSpace(editGame.NewCategoryName))
+                {
+                    var newCategory = new CreateCategory
+                    {
+                        Category_Name = editGame.NewCategoryName,
+                        Description = editGame.NewCategoryDescription ?? string.Empty
+                    };
+
+                    var (categoryCreated, categoryMessage) = await _categoryServices.CreateAsync(newCategory);
+                    if (categoryCreated)
+                    {
+                        // Get the newly created category and add its ID to selected categories
+                        var (categorySuccess, categories) = await _categoryServices.GetAllAsync();
+                        if (categorySuccess && categories != null)
+                        {
+                            var createdCategory = categories.LastOrDefault(c => c.Category_Name == editGame.NewCategoryName);
+                            if (createdCategory != null)
+                            {
+                                editGame.SelectedCategoryIds.Add(createdCategory.Category_Id);
+                            }
+                        }
+                    }
+                }
+
                 string imagePath = existingGame.ImagePath;
                 if (editGame.formFile != null && editGame.formFile.Length > 0)
                 {
@@ -109,7 +167,7 @@ namespace GameVault.BLL.Services.Implementation
                 existingGame.UpdateCompany(editGame.CompanyId);
                 existingGame.UpdatePhoto(imagePath);
 
-                return await _gameRepo.UpdateAsync(existingGame, editGame.Price);
+                return await _gameRepo.UpdateAsync(existingGame, editGame.Price, editGame.SelectedCategoryIds);
             }
             catch (Exception ex)
             {
