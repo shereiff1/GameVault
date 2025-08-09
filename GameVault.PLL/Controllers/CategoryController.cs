@@ -1,8 +1,5 @@
 using GameVault.BLL.ModelVM.Category;
 using GameVault.BLL.Services.Abstraction;
-using GameVault.BLL.Services.Implementation;
-using GameVault.DAL.Entities;
-using GameVault.DAL.Repository.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameVault_PLL.Controllers
@@ -16,34 +13,56 @@ namespace GameVault_PLL.Controllers
             _categoryServices = categoryservices;
         }
 
-        public IActionResult Create(bool returnToGame = false)
+        public IActionResult Create()
         {
-            ViewBag.ReturnToGame = returnToGame;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategory category, bool returnToGame = false)
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategory category)
         {
-            var result = await _categoryServices.CreateAsync(category);
-            if (result.Item1)
+            try
             {
-                if (returnToGame)
+                if (category == null)
                 {
-                    return RedirectToAction("Add", "Game");
+                    return BadRequest(new
+                    {
+                        success = false,
+                        errorMessage = "No data received",
+                        receivedData = Request.Body
+                    });
                 }
-                return RedirectToAction("GetAllCategories");
-                //return Json(new { success = true, redirectUrl = Url.Action("GetAllCategories") });
+
+                var result = await _categoryServices.CreateAsync(category);
+
+                if (result.Item1)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        redirectUrl = Url.Action("GetAllCategories")
+                    });
+                }
+
+                return BadRequest(new
+                {
+                    success = false,
+                    errorMessage = result.Item2,
+                    data = category
+                });
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.ErrorMessage = result.Item2;
-                ViewBag.ReturnToGame = returnToGame;
-                return View("Create", category);
-                //return Json(new { success = false, errorMessage = result.Item2, data = category });
+                return StatusCode(500, new
+                {
+                    success = false,
+                    errorMessage = "Internal server error",
+                    detailedError = ex.Message,
+                    innerException = ex.InnerException?.Message,
+                    stackTrace = ex.StackTrace
+                });
             }
         }
-
         public async Task<IActionResult> GetAllCategories()
         {
             var result = await _categoryServices.GetAllAsync();
@@ -58,7 +77,6 @@ namespace GameVault_PLL.Controllers
             }
         }
 
-        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _categoryServices.DeleteAsync(id);
@@ -82,23 +100,32 @@ namespace GameVault_PLL.Controllers
             else
             {
                 return RedirectToAction("GetAllCategories", new { errorMessage = "Category not found!" });
+
             }
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(UpdateCategory category)
+        public async Task<IActionResult> Update([FromBody] CategoryDTO category)
         {
+          
             var result = await _categoryServices.UpdateAsync(category);
 
             if (result.Item1)
             {
-                return RedirectToAction("GetAllCategories");
+                return Json(new
+                {
+                    success = true,
+                    message =category,
+                    redirectUrl = Url.Action("GetAllCategories")
+                });
             }
-            else
+            return BadRequest(new
             {
-                ViewBag.ErrorMessage = result.Item2;
-                return View("ERROR");
-            }
-        }
+                success = false,
+                errorMessage = result.Item2,
+                data = category
+            });
+
     }
+}
 }
