@@ -9,5 +9,6 @@ namespace GameVault.BLL.ModelVM.Review
         public float Ratinga { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
+        public float Rating { get;  set; }
     }
 }
