@@ -2,6 +2,7 @@ using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.ModelVM.Category;
 using GameVault.BLL.ModelVM.Game;
+using GameVault.BLL.ModelVM.Review;
 using GameVault.BLL.ModelVM.User;
 using GameVault.DAL.Entites;
 using GameVault.DAL.Entities;
