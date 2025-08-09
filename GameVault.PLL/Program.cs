@@ -8,7 +8,6 @@ using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
 using GameVault.PLL.Services;
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

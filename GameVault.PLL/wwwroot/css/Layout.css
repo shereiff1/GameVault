@@ -1,0 +1,212 @@
+﻿/* Custom GameVault Styles */
+:root {
+    --gamevault-primary: #667eea;
+    --gamevault-secondary: #764ba2;
+    --gamevault-accent: #f093fb;
+    --gamevault-dark: #1a1a2e;
+    --gamevault-darker: #16213e;
+    --gamevault-text-light: #e94560;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+/* Navbar Styles */
+.gamevault-navbar {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+    backdrop-filter: blur(10px);
+    border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+    padding: 1rem 0;
+}
+
+.navbar-scrolled {
+    background: linear-gradient(135deg, rgba(26, 26, 46, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%);
+    padding: 0.5rem 0;
+}
+
+.gamevault-logo {
+    font-family: 'Orbitron', monospace;
+    font-size: 1.8rem;
+    color: var(--gamevault-primary) !important;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+    .gamevault-logo:hover {
+        color: var(--gamevault-accent) !important;
+        transform: scale(1.05);
+    }
+
+.logo-text {
+    background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-accent));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-link-custom {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-weight: 500;
+    margin: 0 0.5rem;
+    padding: 0.5rem 1rem !important;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+    .nav-link-custom:hover, .nav-link-custom.active {
+        color: white !important;
+        background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
+        transform: translateY(-2px);
+    }
+
+.gamevault-dropdown {
+    background: rgba(26, 26, 46, 0.95);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 15px;
+}
+
+    .gamevault-dropdown .dropdown-item {
+        color: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s ease;
+    }
+
+        .gamevault-dropdown .dropdown-item:hover {
+            background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
+            color: white;
+        }
+
+.main-content {
+    min-height: calc(100vh - 200px);
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px 20px 0 0;
+    margin-top: 2rem;
+    padding: 2rem 0;
+}
+
+/* Footer Styles */
+.gamevault-footer {
+    background: linear-gradient(135deg, var(--gamevault-dark) 0%, var(--gamevault-darker) 100%);
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-title {
+    font-family: 'Orbitron', monospace;
+    color: var(--gamevault-primary);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-subtitle {
+    color: var(--gamevault-accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.footer-text {
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+    .footer-links li {
+        margin-bottom: 0.5rem;
+    }
+
+    .footer-links a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+        .footer-links a:hover {
+            color: var(--gamevault-accent);
+            padding-left: 0.5rem;
+        }
+
+.social-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+    .social-link:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+.newsletter-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    color: white;
+    border-radius: 25px 0 0 25px;
+}
+
+    .newsletter-input::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+.newsletter-btn {
+    background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
+    border: none;
+    border-radius: 0 25px 25px 0;
+}
+
+.footer-copyright {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.9rem;
+}
+
+
+.main-content {
+    margin-top: 1rem;
+    border-radius: 15px 15px 0 0;
+    padding: 1rem 0;
+}
+
+.social-links {
+    justify-content: center;
+}
+
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gamevault-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, var(--gamevault-primary), var(--gamevault-secondary));
+    border-radius: 4px;
+}
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, var(--gamevault-secondary), var(--gamevault-accent));
+    }
