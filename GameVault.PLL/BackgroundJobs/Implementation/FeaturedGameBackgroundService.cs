@@ -8,7 +8,6 @@ namespace GameVault.PLL.Services
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<FeaturedGameBackgroundService> _logger;
 
-        // Static fields to maintain state across the application
         public static GameDetails? CurrentFeaturedGame { get; private set; }
         public static DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
@@ -25,7 +24,6 @@ namespace GameVault.PLL.Services
         {
             _logger.LogInformation("Featured Game Background Service started");
 
-            // Load games immediately when service starts
             await LoadGames();
 
             while (!stoppingToken.IsCancellationRequested)
@@ -38,13 +36,11 @@ namespace GameVault.PLL.Services
                 }
                 catch (OperationCanceledException)
                 {
-                    // Expected when cancellation is requested
                     break;
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error in Featured Game Background Service");
-                    // Wait 30 seconds before retrying on error
                     await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
                 }
             }
@@ -65,7 +61,6 @@ namespace GameVault.PLL.Services
                     _allGames = gameDetails.ToList();
                     _logger.LogInformation($"Loaded {_allGames.Count} games for featured rotation");
 
-                    // Set the first game as current if we don't have one yet
                     if (CurrentFeaturedGame == null && _allGames.Any())
                     {
                         CurrentFeaturedGame = _allGames[0];
@@ -85,7 +80,6 @@ namespace GameVault.PLL.Services
 
         private async Task UpdateFeaturedGame()
         {
-            // Reload games every hour
             if (DateTime.UtcNow - LastUpdate > TimeSpan.FromHours(1))
             {
                 await LoadGames();
@@ -97,15 +91,12 @@ namespace GameVault.PLL.Services
                 return;
             }
 
-            // Move to next game
             _currentGameIndex = (_currentGameIndex + 1) % _allGames.Count;
             CurrentFeaturedGame = _allGames[_currentGameIndex];
             LastUpdate = DateTime.UtcNow;
 
             _logger.LogInformation($"Updated featured game to: {CurrentFeaturedGame.Title}");
         }
-
-        // Static method to get current featured game from anywhere in the application
         public static GameDetails? GetCurrentFeaturedGame()
         {
             return CurrentFeaturedGame;

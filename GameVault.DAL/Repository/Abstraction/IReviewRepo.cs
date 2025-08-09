@@ -5,7 +5,7 @@ namespace GameVault.DAL.Repository.Abstraction
     public interface IReviewRepo
     {
         Task<(bool, string?)> CreateAsync(Review review);
-        Task<List<Review>> GetAllAsync();
+        Task<(bool, List<Review>?)> GetAllAsync();
         Task<(bool, string?)> DeleteAsync(int id);
         Task<(bool, string?)> UpdateAsync(Review review);
         Task<(bool, Review?)> GetByIdAsync(int id);

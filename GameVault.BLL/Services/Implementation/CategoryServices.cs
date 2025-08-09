@@ -57,7 +57,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool, string?)> UpdateAsync(UpdateCategory category)
+        public async Task<(bool, string?)> UpdateAsync(CategoryDTO category)
         {
             try
             {

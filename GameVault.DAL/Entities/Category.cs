@@ -21,13 +21,13 @@ namespace GameVault.DAL.Entities
         [MaxLength(50)]
         public string CreatedBy { get; private set; }
         public virtual List<Game>? Games { get; set; } = new List<Game>();
-    public Category()
+        public Category()
         {
             CreatedOn = DateTime.Now;
             IsDeleted = false;
             ModifiedOn = DateTime.Now;
         }
-        public Category( string name, string discription, string createdBy ="Admin")
+        public Category(string name, string discription, string createdBy = "Admin")
         {
             Category_Name = name;
             Description = discription;
@@ -51,11 +51,12 @@ namespace GameVault.DAL.Entities
             IsDeleted = true;
             ModifiedOn = DateTime.Now;
         }
-        public void Update(int id, string name, string discription)
+        public void Update(int id, string name, string discription, string createdby)
         {
             Category_Id = id;
             Category_Name = name;
             Description = discription;
+            CreatedBy = createdby;
             ModifiedOn = DateTime.Now;
         }
 

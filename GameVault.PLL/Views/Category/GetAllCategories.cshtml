@@ -37,13 +37,13 @@ else
         <tbody>
             @foreach (var cat in Model)
             {
-                <tr>
+                <tr class="@cat.Category_Id">
                     <td>@cat.Category_Name</td>
                     <td>@cat.Description</td>
                     <td>@cat.CreatedBy</td>
                     <td>
                         <a asp-action="UpdateCategory" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@cat.Category_Id"class="btn btn-sm btn-danger"
+                        <a asp-action="Delete" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-danger del" data-id="@cat.Category_Id"
                            onclick="return confirm('Are you sure you want to delete this category?');">
                             Delete
                         </a>
@@ -53,4 +53,36 @@ else
         </tbody>
     </table>
 }
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
 
+<script>
+    document.querySelector('.del').addEventListener('click', async function (e) {
+        e.preventDefault();
+        try {
+             let id=   this.getAttribute('data-id')
+             console.log(id)
+            const response = await fetch('http:localhost:44341/Category/Delete', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    Category_Id:id
+                })
+            });
+            if (response.ok)
+         $( document ).ready(function() {
+       $('.del').click(function(e){
+                e.preventDefault()
+               let id=   $(this).attr('data-id')
+               $('.'+id).fadeOut()
+       })
+    });
+        }
+          catch (error) {
+        console.error('Error:', error);
+        alert('An unexpected error occurred.');
+    }
+    })
+  
+</script>

@@ -24,7 +24,6 @@ namespace GameVault.PLL.Services
 
         public async Task<GameDetails?> GetCurrentFeaturedGameAsync()
         {
-            // For now, this is synchronous, but you could add async logic if needed
             return await Task.FromResult(GetCurrentFeaturedGame());
         }
     }

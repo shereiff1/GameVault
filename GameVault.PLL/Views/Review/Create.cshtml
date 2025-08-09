@@ -25,15 +25,15 @@
                         <div class="mb-3">
                             <div class="mb-3">
                                 <label asp-for="CreatedBy" class="form-label">
-                                    <i class="fas fa-user me-1"></i>Rating
+                                    <i class="fas fa-user me-1"></i>The reviewer name
                                 </label>
-                                <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="The reviewer name" />
+                                <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="The reviewer name" required/>
                                 <span asp-validation-for="CreatedBy" class="text-danger"></span>
                             </div>
                             <label asp-for="Player_Id" class="form-label">
                                 <i class="fas fa-heading me-1"></i>The reviewer id
                             </label>
-                            <input asp-for="Player_Id" id="Player_Id" class="form-control" placeholder="Enter the reviewer id" />
+                            <input asp-for="Player_Id" id="Player_Id" class="form-control" placeholder="Enter the reviewer id" required />
                             <span asp-validation-for="Player_Id" class="text-danger"></span>
                         </div>
 
@@ -41,7 +41,7 @@
                             <label asp-for="Game_Id" class="form-label">
 								<i class="fas fa-user me-1"></i>The game id
                             </label>
-                            <input asp-for="Game_Id" id="Game_Id" class="form-control" placeholder="Enter game id" />
+                            <input asp-for="Game_Id" id="Game_Id" class="form-control" placeholder="Enter game id" required />
                             <span asp-validation-for="Game_Id" class="text-danger"></span>
                         </div>
 
@@ -49,7 +49,7 @@
                             <label asp-for="Rating" class="form-label">
                                 <i class="fas fa-user me-1"></i>Rating
                             </label>
-                            <input asp-for="Rating" id="Rating" class="form-control" placeholder="Enter the rate" />
+                            <input asp-for="Rating" id="Rating" class="form-control" placeholder="Enter the rate" required />
                             <span asp-validation-for="Rating" class="text-danger"></span>
                         </div>
 
@@ -60,8 +60,6 @@
                             <textarea asp-for="Comment" id=" Comment" class="form-control" rows="4" placeholder="Enter any comment please"></textarea>
                             <span asp-validation-for="Comment" class="text-danger"></span>
                         </div>
-
-
 
                         <div class="d-flex justify-content-between">
                             <a asp-action="GetAllReviews" class="btn btn-secondary">
@@ -77,12 +75,12 @@
         </div>
     </div>
 </div>
-@*
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
     document.getElementById('formSubmit').addEventListener('click',async function(e){
         e.preventDefault()
           try {
-      const response = await fetch('http:localhost:44341/Review/CreateReview', {
+      const response = await fetch('/Review/CreateReview', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -95,13 +93,13 @@
 	      CreatedBy: document.getElementById('CreatedBy').value,
         }),
       });
-
+            const newPost = await response.json();
       if (!response.ok) throw new Error("Failed to create Review");
 
-      const newPost = await response.json();
       console.log("New Review:", newPost);
+	  window.location.href = '/Review/GetAllReviews';
     } catch (error) {
       console.error("Create Error:", error);
     }
     })
-</script> *@
+</script> 

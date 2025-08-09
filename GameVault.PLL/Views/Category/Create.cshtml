@@ -21,7 +21,7 @@
                         </div>
                     }
 
-                    <form method="post" action="CreateCategory">
+                    <form >
                         <div class="mb-3">
                             <label asp-for="Category_Name" class="form-label">
                                 <i class="fas fa-heading me-1"></i>Category name
@@ -61,7 +61,7 @@
     </div>
 </div>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-@* <script>
+<script>
     document.getElementById('formSubmit').addEventListener('click',async function(e){
         e.preventDefault()
           try {
@@ -74,6 +74,8 @@
           Category_Name: document.getElementById('Category_Name').value,
           Description: document.getElementById('Description').value,
           CreatedBy: document.getElementById('CreatedBy').value,
+          // CreatedOn: new Date().toISOString() Add current date
+
         }),
       });
         const newPost = await response.json();
@@ -81,41 +83,11 @@
 
     
       console.log("New Post:", newPost);
+      window.location.href = "/Category/GetAllCategories";
       
     } catch (error) {
-               console.WriteLine(error.InnerException.Message);
-
+               console.log(error.errorMessage);
     }
     }
-    ) *@
-    @*
-  //       $( document ).ready(function() {
-  //      $("#formSubmit").click(function(e) {
-  //           e.preventDefault();
-  //           var formData = {
-  //               Category_Name: "ewew",
-  //               Description: "ewew",
-  //               CreatedBy:"ww",
-
-  //           };
-  //           $.ajax({
-  //               type: "POST",
-  //               url: "/Category/CreateCategory",
-  //               data: JSON.stringify(formData),
-  //               contentType: "application/json; charset=utf-8",
-  //               dataType: "json",
-  //               success: function (response) {
-  //                   if (response.success) {
-  //                       window.location.href = "/Category/GetAllCategories";
-  //                   } else {
-  //                       alert(response.errorMessage);
-		// 				console.log(response.data);
-  //                   }
-  //               },
-  //               error: function (xhr, status, error) {
-  //                   alert("Error creating category: " + error);
-  //               }
-  //           });
-		// });
-  //   });
-</script>  *@
+    )
+</script> 

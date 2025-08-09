@@ -27,7 +27,7 @@ namespace GameVault.DAL.Entities
         public string CreatedBy { get; private set; }
         [ForeignKey("Game")]
         public int Game_Id { get; private set; }
-        public virtual Game? Game { get; private set; } 
+        public virtual Game? Game { get; private set; }
         public Review()
         {
             CreatedOn = DateTime.Now;
@@ -50,12 +50,13 @@ namespace GameVault.DAL.Entities
             IsDeleted = true;
             ModifiedOn = DateTime.Now;
         }
-        public void Update(int review_id, int player_id , string comment, float rating)
+        public void Update(int review_id, int player_id, string comment, float rating, string createdby)
         {
-            Review_Id= review_id;
+            Review_Id = review_id;
             Player_Id = player_id;
             Comment = comment;
             Rating = rating;
+            CreatedBy = createdby;
             ModifiedOn = DateTime.Now;
         }
     }

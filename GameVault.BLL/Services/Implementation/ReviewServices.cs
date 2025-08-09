@@ -48,7 +48,7 @@ namespace GameVault.BLL.Services.Implementation
             try
             {
                 var reviews = await _reviewRepo.GetAllAsync();
-                var mappedReviews = _mapper.Map<List<ReviewDTO>>(reviews);
+                var mappedReviews = _mapper.Map<List<ReviewDTO>>(reviews.Item2);
                 return (true, mappedReviews);
             }
             catch (Exception ex)
@@ -58,7 +58,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool, string?)> UpdateAsync(UpdateReview review)
+        public async Task<(bool, string?)> UpdateAsync(ReviewDTO review)
         {
             try
             {

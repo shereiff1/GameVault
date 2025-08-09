@@ -12,12 +12,12 @@
     </div>
 }
 
-<form>
+<form >
     <input type="hidden" asp-for="Category_Id" />
 
     <div class="mb-3">
         <label asp-for="Category_Name" class="form-label"></label>
-        <input asp-for="Category_Name" id="Category_Name" class="form-control" />
+        <input asp-for="Category_Name" id="Category_Name" class="form-control" required/>
         <span asp-validation-for="Category_Name" class="text-danger"></span>
     </div>
 
@@ -29,7 +29,7 @@
 
     <div class="mb-3">
         <label asp-for="CreatedBy" class="form-label"></label>
-        <input asp-for="CreatedBy" class="form-control" />
+        <input asp-for="CreatedBy" id="CreatedBy" class="form-control" required />
         <span asp-validation-for="CreatedBy" class="text-danger"></span>
     </div>
 
@@ -40,27 +40,55 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-@*
+<script>
+ //    document.getElementById('formSubmit').addEventListener('click', async function (e) {
+ //        e.preventDefault();
+ //        try {
+ //            const response = await fetch('http:localhost:44341/Category/Update', {
+ //                method: 'PUT',
+ //                headers: {
+ //                    'Content-Type': 'application/json',
+ //                },
+ //                body: JSON.stringify({
+ //                    Category_Name: document.getElementById('Category_Name').value,
+ //                    Description: document.getElementById('Description').value,
+	// 				CreatedBy: document.getElementById('CreatedBy').value,
+ //                }),
+ //            });
+ //            if (!response.ok) throw new Error("Failed to update Category");
+ //            const updatedCategory = await response.json();
+ //            console.log("Updated Category:", updatedCategory);
+ //        } catch (error) {
+ //            console.error("Update Error:", error);
+ //        }
+	// });
+</script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 <script>
     document.getElementById('formSubmit').addEventListener('click', async function (e) {
-        e.preventDefault();
+        e.preventDefault()
         try {
-            const response = await fetch('http://localhost:44341/Category/Update', {
-                method: 'PUT',
+            const response = await fetch('https://localhost:44341/Category/Update', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+					// Category_Id: document.querySelector('input[name="Category_Id"]').value,
+					Category_Id: @Model.Category_Id,
                     Category_Name: document.getElementById('Category_Name').value,
                     Description: document.getElementById('Description').value,
-					CreatedBy: document.getElementById('CreatedBy').value,
+                    CreatedBy: document.getElementById('CreatedBy').value,
                 }),
             });
-            if (!response.ok) throw new Error("Failed to update Category");
+
             const updatedCategory = await response.json();
+            if (!response.ok) throw new Error("Failed to update category");
             console.log("Updated Category:", updatedCategory);
+            window.location.href = '/Category/GetAllCategories';
         } catch (error) {
             console.error("Update Error:", error);
         }
 	});
-</script>    *@
+</script> 

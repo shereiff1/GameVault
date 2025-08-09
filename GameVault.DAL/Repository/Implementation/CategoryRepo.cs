@@ -73,7 +73,7 @@ namespace GameVault.DAL.Repository.Implementation
                 {
                     return (false, "Category not found.");
                 }
-                existingCategory.Update(category.Category_Id, category.Category_Name, category.Description);
+                existingCategory.Update(category.Category_Id, category.Category_Name, category.Description,category.CreatedBy);
                 await _context.SaveChangesAsync();
                 return (true, "Category updated successfully.");
             }
