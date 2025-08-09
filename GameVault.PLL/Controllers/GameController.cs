@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.ModelVM.Game;
+using GameVault.BLL.ModelVM.Category;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace GameVault.PLL.Controllers
@@ -10,11 +11,13 @@ namespace GameVault.PLL.Controllers
     {
         private readonly IGameServices _gameServices;
         private readonly ICompanyServices _companyServices;
+        private readonly ICategoryServices _categoryServices;
 
-        public GameController(IGameServices gameServices, ICompanyServices companyServices)
+        public GameController(IGameServices gameServices, ICompanyServices companyServices, ICategoryServices categoryServices)
         {
             _gameServices = gameServices;
             _companyServices = companyServices;
+            _categoryServices = categoryServices;
         }
 
         public async Task<IActionResult> Index(string? errorMessage = null)
@@ -30,28 +33,20 @@ namespace GameVault.PLL.Controllers
             ViewBag.Error = errorMessage;
             return View(games);
         }
+
         public async Task<IActionResult> GameDetails(int id)
         {
             var (success, gameDetails) = await _gameServices.GetGameDetails(id);
             if (!success || gameDetails == null)
             {
                 ViewBag.Error = "Failed to load Game Details.";
-
             }
             return View(gameDetails);
         }
+
         public async Task<IActionResult> Add(int? companyId = null)
         {
-            var (success, companies) = await _companyServices.GetAllAsync();
-            if (!success || companies == null)
-            {
-                ViewBag.Error = "Failed to load companies.";
-                ViewBag.Companies = new SelectList(new List<CompanyVM>(), "CompanyId", "CompanyName");
-            }
-            else
-            {
-                ViewBag.Companies = new SelectList(companies, "CompanyId", "CompanyName", companyId);
-            }
+            await LoadViewBagData(companyId);
 
             var gameVm = new GameVM();
             if (companyId.HasValue)
@@ -71,11 +66,7 @@ namespace GameVault.PLL.Controllers
                     return RedirectToAction("Index");
             }
 
-            var (success, companies) = await _companyServices.GetAllAsync();
-            ViewBag.Companies = success && companies != null
-                ? new SelectList(companies, "CompanyId", "CompanyName", game.CompanyId)
-                : new SelectList(new List<CompanyVM>(), "CompanyId", "CompanyName");
-
+            await LoadViewBagData(game.CompanyId);
             ViewBag.Error = "Failed to add game!";
             return View(game);
         }
@@ -86,11 +77,7 @@ namespace GameVault.PLL.Controllers
             if (!success || game == null)
                 return RedirectToAction("Index", new { errorMessage = "Game not found!" });
 
-            var (companySuccess, companies) = await _companyServices.GetAllAsync();
-            ViewBag.Companies = companySuccess && companies != null
-                ? new SelectList(companies, "CompanyId", "CompanyName", game.CompanyId)
-                : new SelectList(new List<CompanyVM>(), "CompanyId", "CompanyName");
-
+            await LoadViewBagData(game.CompanyId);
             return View(game);
         }
 
@@ -103,11 +90,7 @@ namespace GameVault.PLL.Controllers
                     return RedirectToAction("Index");
             }
 
-            var (success, companies) = await _companyServices.GetAllAsync();
-            ViewBag.Companies = success && companies != null
-                ? new SelectList(companies, "CompanyId", "CompanyName", game.CompanyId)
-                : new SelectList(new List<CompanyVM>(), "CompanyId", "CompanyName");
-
+            await LoadViewBagData(game.CompanyId);
             ViewBag.Error = "Update failed!";
             return View(game);
         }
@@ -137,6 +120,26 @@ namespace GameVault.PLL.Controllers
         public IActionResult CreateCompany()
         {
             return RedirectToAction("Add", "Company", new { returnToGame = true });
+        }
+
+        public IActionResult CreateCategory()
+        {
+            return RedirectToAction("Create", "Category", new { returnToGame = true });
+        }
+
+        private async Task LoadViewBagData(int? selectedCompanyId = null)
+        {
+            // Load companies
+            var (companySuccess, companies) = await _companyServices.GetAllAsync();
+            ViewBag.Companies = companySuccess && companies != null
+                ? new SelectList(companies, "CompanyId", "CompanyName", selectedCompanyId)
+                : new SelectList(new List<CompanyVM>(), "CompanyId", "CompanyName");
+
+            // Load categories
+            var (categorySuccess, categories) = await _categoryServices.GetAllAsync();
+            ViewBag.Categories = categorySuccess && categories != null
+                ? new MultiSelectList(categories, "Category_Id", "Category_Name")
+                : new MultiSelectList(new List<CategoryDTO>(), "Category_Id", "Category_Name");
         }
     }
 }

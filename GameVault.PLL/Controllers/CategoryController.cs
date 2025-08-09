@@ -16,28 +16,31 @@ namespace GameVault_PLL.Controllers
             _categoryServices = categoryservices;
         }
 
-        public IActionResult Create()
+        public IActionResult Create(bool returnToGame = false)
         {
+            ViewBag.ReturnToGame = returnToGame;
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategory category)
+        public async Task<IActionResult> CreateCategory(CreateCategory category, bool returnToGame = false)
         {
-            //check
             var result = await _categoryServices.CreateAsync(category);
             if (result.Item1)
             {
+                if (returnToGame)
+                {
+                    return RedirectToAction("Add", "Game");
+                }
                 return RedirectToAction("GetAllCategories");
                 //return Json(new { success = true, redirectUrl = Url.Action("GetAllCategories") });
-
             }
             else
             {
                 ViewBag.ErrorMessage = result.Item2;
-                return View("ERROR");
+                ViewBag.ReturnToGame = returnToGame;
+                return View("Create", category);
                 //return Json(new { success = false, errorMessage = result.Item2, data = category });
-
             }
         }
 
@@ -72,23 +75,20 @@ namespace GameVault_PLL.Controllers
         public async Task<IActionResult> UpdateCategory(int id)
         {
             var result = await _categoryServices.GetByIdAsync(id);
-            if (result.Item2!=null)
+            if (result.Item2 != null)
             {
                 return View(result.Item2);
             }
             else
             {
                 return RedirectToAction("GetAllCategories", new { errorMessage = "Category not found!" });
-
             }
         }
 
         [HttpPost]
         public async Task<IActionResult> Update(UpdateCategory category)
         {
-
             var result = await _categoryServices.UpdateAsync(category);
-
 
             if (result.Item1)
             {
@@ -100,6 +100,5 @@ namespace GameVault_PLL.Controllers
                 return View("ERROR");
             }
         }
-
     }
 }
