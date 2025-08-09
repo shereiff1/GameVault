@@ -49,17 +49,19 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public async Task<List<Review>> GetAllAsync()
+        public async Task<(bool,List<Review>?)> GetAllAsync()
         {
             try
             {
-                return await _context.Reviews
-                                     .Where(r => !r.IsDeleted)
-                                     .ToListAsync();
+                var reviews = await _context.Reviews
+                                          .Where(r => !r.IsDeleted)
+                                          .ToListAsync();
+                return (true, reviews);
             }
             catch (Exception ex)
             {
-                throw new Exception($"Error retrieving reviews: {ex.Message}");
+                Console.WriteLine($"Error retrieving reviews: {ex.Message}");
+                return (false, null);
             }
         }
 
@@ -73,7 +75,7 @@ namespace GameVault.DAL.Repository.Implementation
                     return (false, "Review not found.");
                 }
 
-                rev.Update(review.Review_Id, review.Player_Id, review.Comment, review.Rating);
+                rev.Update(review.Review_Id, review.Player_Id, review.Comment, review.Rating,review.CreatedBy);
                 await _context.SaveChangesAsync();
 
                 return (true, "Review updated successfully.");
