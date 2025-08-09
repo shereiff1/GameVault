@@ -1,4 +1,3 @@
-using GameVault.DAL.Entites;
 using System.ComponentModel.DataAnnotations;
 namespace GameVault.DAL.Entities
 {

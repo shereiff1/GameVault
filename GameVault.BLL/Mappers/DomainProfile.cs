@@ -2,7 +2,6 @@ using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.ModelVM.Category;
 using GameVault.BLL.ModelVM.User;
-using GameVault.DAL.Entites;
 using GameVault.DAL.Entities;
 
 namespace GameVault.BLL.Mappers
@@ -26,6 +25,7 @@ namespace GameVault.BLL.Mappers
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash)).ReverseMap();
             CreateMap<User, UserPrivateProfile>().ReverseMap();
             CreateMap<User, UserPublicProfile>().ReverseMap();
+
 
             CreateMap<CreateCategory, Category>()
     .ForMember(dest => dest.Category_Name, opt => opt.MapFrom(src => src.Category_Name));

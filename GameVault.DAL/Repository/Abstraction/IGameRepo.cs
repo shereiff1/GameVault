@@ -1,4 +1,5 @@
-﻿using GameVault.DAL.Entites;
+﻿
+using GameVault.DAL.Entities;
 
 namespace GameVault.DAL.Repository.Abstraction
 {

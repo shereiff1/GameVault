@@ -1,4 +1,4 @@
-﻿@model GameVault.BLL.ModelVM.User.UserLogin
+﻿@model GameVault.BLL.ModelVM.Account.UserLogin
 
 
 
@@ -8,13 +8,12 @@
         <!--begin::Wrapper-->
         <div class="w-lg-500px p-10">
 
-            <!--begin::Form-->
-            <form asp-controller="Account"  asp-action="Login" class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="/metronic8/demo1/index.html" action="#">
+            
                 <!--begin::Heading-->
                 <div class="text-center mb-11">
                     <!--begin::Title-->
                     <h1 class="text-gray-900 fw-bolder mb-3">
-                        Sign In
+                        Log In 
                     </h1>
                     <!--end::Title-->
                     <!--begin::Subtitle-->
@@ -24,40 +23,50 @@
                     <!--end::Subtitle--->
                 </div>
                 <!--begin::Heading-->
-                <!--begin::Login options-->
-                <div class="row g-3 mb-9">
-                    <!--begin::Col-->
-                    <div class="col-md-6">
-                        <!--begin::Google link--->
-                        <a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                            <img alt="Logo" src="/metronic8/demo1/assets/media/svg/brand-logos/google-icon.svg" class="h-15px me-3">
+            <!--begin::login options-->
+            <div class="row g-3 mb-9">
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <!--begin::Google link--->
+                    <form asp-controller="Account" asp-action="ExternalLogin" method="post" style="display: inline;">
+                        <input type="hidden" name="provider" value="Google" />
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        <button type="submit" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+                            <img alt="Logo" src="https://img.icons8.com/?size=100&id=17949&format=png&color=000000" class="h-15px me-3">
                             Sign in with Google
-                        </a>
-                        <!--end::Google link--->
-                    </div>
-                    <!--end::Col-->
-                    <!--begin::Col-->
-                    <div class="col-md-6">
-                        <!--begin::Google link--->
-                        <a href="#" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
-                            <img alt="Logo" src="/metronic8/demo1/assets/media/svg/brand-logos/apple-black.svg" class="theme-light-show h-15px me-3">
-                            <img alt="Logo" src="/metronic8/demo1/assets/media/svg/brand-logos/apple-black-dark.svg" class="theme-dark-show h-15px me-3">
-                            Sign in with Apple
-                        </a>
-                        <!--end::Google link--->
-                    </div>
-                    <!--end::Col-->
+                        </button>
+                    </form>
+                    <!--end::Google link--->
                 </div>
-                <!--end::Login options-->
+                <!--end::Col-->
+                <!--begin::Col-->
+                <div class="col-md-6">
+                    <!--begin::Facebook link--->
+                    <form asp-controller="Account" asp-action="ExternalLogin" method="post" style="display: inline;">
+                        <input type="hidden" name="provider" value="Facebook" />
+                        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+                        <button type="submit" class="btn btn-flex btn-outline btn-text-gray-700 btn-active-color-primary bg-state-light flex-center text-nowrap w-100">
+                            <img alt="Logo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Facebook_Logo_2023.png/1200px-Facebook_Logo_2023.png?20231011121526" class="h-15px me-3">
+                            Sign in with Facebook
+                        </button>
+                    </form>
+                    <!--end::Facebook link--->
+                </div>
+                <!--end::Col-->
+            </div>
+               <!--end::login options-->
                 <!--begin::Separator-->
                 <div class="separator separator-content my-14">
                     <span class="w-125px text-gray-500 fw-semibold fs-7">Or with email</span>
                 </div>
                 <!--end::Separator-->
+            <!--begin::Form-->
+            <form asp-controller="Account" asp-action="Login" class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="/metronic8/demo1/index.html">
                 <!--begin::Input group--->
                 <div class="fv-row mb-8 fv-plugins-icon-container">
                     <!--begin::Email-->
                     <input asp-for="Email" type="text" placeholder="Email" name="email" autocomplete="off" class="form-control bg-transparent">
+                    <span asp-validation-for="Email" class="text-danger"></span>
                     <!--end::Email-->
                     <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                 </div>
@@ -66,6 +75,7 @@
                 <div class="fv-row mb-3 fv-plugins-icon-container">
                     <!--begin::Password-->
                     <input asp-for="Password" type="password" placeholder="Password" name="password" autocomplete="off" class="form-control bg-transparent">
+                    <span asp-validation-for="Password" class="text-danger"></span>
                     <!--end::Password-->
                     <div class="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback"></div>
                 </div>
@@ -75,7 +85,7 @@
                     <div></div>
 
                     <!--begin::Link-->
-                    <a href="/metronic8/demo1/authentication/layouts/corporate/reset-password.html" class="link-primary">
+                    <a href="/Account/ForgetPassword" class="link-primary">
                         Forgot Password ?
                     </a>
                     <!--end::Link-->
@@ -102,15 +112,25 @@
                 <div class="text-gray-500 text-center fw-semibold fs-6">
                     Not a Member yet?
 
-                    <a href="/metronic8/demo1/authentication/layouts/corporate/sign-up.html" class="link-primary">
+                    <a href="/Account/SignUp" class="link-primary">
                         Sign up
                     </a>
                 </div>
                 <!--end::Sign up-->
             </form>
-            <!--end::Form-->
+            <!--end::Form--> 
         </div>
         <!--end::Wrapper-->
     </div>
     <!--end::Form-->
 </div>
+
+@section Scripts
+{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/additional-methods.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/validation-styling.js"></script>
+
+}

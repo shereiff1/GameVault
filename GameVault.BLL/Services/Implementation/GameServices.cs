@@ -1,7 +1,7 @@
 using AutoMapper;
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.Services.Abstraction;
-using GameVault.DAL.Entites;
+using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 
 namespace GameVault.BLL.Services.Implementation

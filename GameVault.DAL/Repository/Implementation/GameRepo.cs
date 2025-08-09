@@ -1,5 +1,5 @@
 ﻿    using GameVault.DAL.Database;
-    using GameVault.DAL.Entites;
+    using GameVault.DAL.Entities;
     using GameVault.DAL.Repository.Abstraction;
     using Microsoft.EntityFrameworkCore;
 
