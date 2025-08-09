@@ -10,13 +10,14 @@ namespace GameVault.DAL.Repository.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly IInventoryItemRepo _inventoryItemRepo;
+
         public GameRepo(ApplicationDbContext context, IInventoryItemRepo inventoryItemRepo)
         {
             _context = context;
             _inventoryItemRepo = inventoryItemRepo;
         }
 
-        public async Task<bool> AddAsync(Game game, decimal price)
+        public async Task<bool> AddAsync(Game game, decimal price, List<int>? categoryIds = null)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -29,6 +30,17 @@ namespace GameVault.DAL.Repository.Implementation
                 // Add the Game
                 await _context.games.AddAsync(game);
                 await _context.SaveChangesAsync();
+
+                // Add categories if provided
+                if (categoryIds != null && categoryIds.Any())
+                {
+                    var categories = await _context.Categories
+                        .Where(c => categoryIds.Contains(c.Category_Id) && !c.IsDeleted)
+                        .ToListAsync();
+
+                    game.Categories.AddRange(categories);
+                    await _context.SaveChangesAsync();
+                }
 
                 var inventoryItem = new InventoryItem(company, game.GameId, price);
                 await _context.inventoryItems.AddAsync(inventoryItem);
@@ -68,8 +80,8 @@ namespace GameVault.DAL.Repository.Implementation
             try
             {
                 var result = includeDeleted
-                    ? await _context.games.ToListAsync()
-                    : await _context.games.Where(g => !g.IsDeleted).ToListAsync();
+                    ? await _context.games.Include(g => g.Categories).ToListAsync()
+                    : await _context.games.Include(g => g.Categories).Where(g => !g.IsDeleted).ToListAsync();
 
                 return (true, result);
             }
@@ -84,7 +96,9 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                var game = await _context.games.FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
+                var game = await _context.games
+                    .Include(g => g.Categories)
+                    .FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
                 return (game != null, game);
             }
             catch (Exception ex)
@@ -98,7 +112,9 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                var game = await _context.games.FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
+                var game = await _context.games
+                    .Include(g => g.Categories)
+                    .FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
                 if (game == null)
                     return (false, null, 0);
 
@@ -115,11 +131,29 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
+        public async Task<List<int>> GetGameCategoryIdsAsync(int gameId)
+        {
+            try
+            {
+                var game = await _context.games
+                    .Include(g => g.Categories)
+                    .FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
+
+                return game?.Categories?.Where(c => !c.IsDeleted).Select(c => c.Category_Id).ToList() ?? new List<int>();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return new List<int>();
+            }
+        }
+
         public async Task<(bool, List<Game>)> GetByCompanyAsync(int companyId)
         {
             try
             {
                 var games = await _context.games
+                    .Include(g => g.Categories)
                     .Where(g => g.CompanyId == companyId && !g.IsDeleted)
                     .ToListAsync();
 
@@ -132,17 +166,34 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public async Task<bool> UpdateAsync(Game game, decimal price)
+        public async Task<bool> UpdateAsync(Game game, decimal price, List<int>? categoryIds = null)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var existingGame = await _context.games
+                    .Include(g => g.Categories)
                     .FirstOrDefaultAsync(g => g.GameId == game.GameId && !g.IsDeleted);
                 if (existingGame == null)
                     return false;
 
                 existingGame.Update(game.Title, game.Description);
+                existingGame.UpdateCompany(game.CompanyId);
+                existingGame.UpdatePhoto(game.ImagePath);
+
+                // Update categories
+                if (categoryIds != null)
+                {
+                    // Clear existing categories
+                    existingGame.Categories.Clear();
+
+                    // Add new categories
+                    var newCategories = await _context.Categories
+                        .Where(c => categoryIds.Contains(c.Category_Id) && !c.IsDeleted)
+                        .ToListAsync();
+
+                    existingGame.Categories.AddRange(newCategories);
+                }
 
                 var inventoryItem = await _context.inventoryItems
                     .FirstOrDefaultAsync(i => i.GameId == game.GameId);
@@ -153,7 +204,6 @@ namespace GameVault.DAL.Repository.Implementation
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
                 return true;
-
             }
             catch (Exception ex)
             {
@@ -178,16 +228,40 @@ namespace GameVault.DAL.Repository.Implementation
                         Title = g.Title,
                         Description = g.Description,
                         CompanyName = g.Company.CompanyName,
-                        Reviews = g.Reviews.Where(r => !r.IsDeleted).Select(r => r.Comment).ToList(),
-                        Categories = g.Categories.Where(c => !c.IsDeleted).Select(c => c.Category_Name).ToList(),
-                        Rating = g.Reviews.Where(r => !r.IsDeleted).Any()
-                            ? g.Reviews.Where(r => !r.IsDeleted).Average(r => r.Rating)
-                            : 0,
+
+                        Reviews = g.Reviews
+                            .Where(r => !r.IsDeleted)
+                            .Select(r => new Review(
+                                r.Player_Id,
+                                r.Comment,
+                                r.Rating,
+                                r.Game_Id,
+                                r.CreatedBy
+                            ))
+                            .ToList(),
+
+                        Categories = g.Categories
+                            .Where(c => !c.IsDeleted)
+                            .Select(c => new Category(
+                                c.Category_Id,
+                                c.Category_Name,
+                                c.Description,
+                                c.CreatedBy
+                            ))
+                            .ToList(),
+
+                        Rating = g.Reviews
+                            .Where(r => !r.IsDeleted)
+                            .Any()
+                                ? g.Reviews.Where(r => !r.IsDeleted).Average(r => r.Rating)
+                                : 0,
+
                         Price = _context.inventoryItems
                             .Where(i => i.GameId == g.GameId)
                             .Select(i => i.Price)
                             .FirstOrDefault(),
-                        ImagePath =  g.ImagePath
+
+                        ImagePath = g.ImagePath
                     })
                     .ToListAsync();
 
@@ -199,6 +273,7 @@ namespace GameVault.DAL.Repository.Implementation
                 return (false, null);
             }
         }
+
 
         public async Task<(bool success, Game? game)> GetGameDetails(int id)
         {
@@ -217,6 +292,17 @@ namespace GameVault.DAL.Repository.Implementation
                 Console.WriteLine($"Error fetching game details: {ex.Message}");
                 return (false, null);
             }
+        }
+
+        // Legacy methods for backward compatibility (if needed by existing code)
+        public async Task<bool> AddAsync(Game game, decimal price)
+        {
+            return await AddAsync(game, price, null);
+        }
+
+        public async Task<bool> UpdateAsync(Game game, decimal price)
+        {
+            return await UpdateAsync(game, price, null);
         }
     }
 }
