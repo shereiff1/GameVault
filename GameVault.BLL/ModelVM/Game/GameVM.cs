@@ -14,6 +14,8 @@ namespace GameVault.BLL.ModelVM
         public IFormFile formFile { get; set; }
         //public string ImagePath { get; set; }
         public decimal Price { get; set; }
-
+        public List<int> SelectedCategoryIds { get; set; } = new List<int>();
+        public string? NewCategoryName { get; set; }
+        public string? NewCategoryDescription { get; set; }
     }
 }

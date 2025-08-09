@@ -23,5 +23,8 @@ namespace GameVault.BLL.ModelVM.Game
         public IFormFile formFile { get; set; }
         public string? ImagePath { get; set; }
         public string CreatedBy { get; set; } = string.Empty;
+        public List<int> SelectedCategoryIds { get; set; } = new List<int>();
+        public string? NewCategoryName { get; set; }
+        public string? NewCategoryDescription { get; set; }
     }
 }
