@@ -1,6 +1,7 @@
 using GameVault.BLL.ModelVM;
 using GameVault.BLL.ModelVM.Review;
 using GameVault.BLL.Services.Abstraction;
+using GameVault.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameVault_PLL.Controllers
@@ -12,17 +13,57 @@ namespace GameVault_PLL.Controllers
         {
             _reviewServices = reviewServices;
         }
-        public async Task<IActionResult> CreateReview(CreateReview review)
+        [HttpPost]
+        public async Task<IActionResult> CreateReview([FromBody] CreateReview review)
         {
-            var result = await _reviewServices.CreateAsync(review);
-            if (result.Item1)
+            //var result = await _reviewServices.CreateAsync(review);
+            //if (result.Item1)
+            //{
+            //    return RedirectToAction("GetAllReviews");
+            //}
+            //else
+            //{
+            //    ViewBag.ErrorMessage = result.Item2;
+            //    return View("ERROR in createreview");
+            //}
+            try
             {
-                return RedirectToAction("GetAllReviews");
+                if (review == null)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        errorMessage = "No data received",
+                        receivedData = Request.Body
+                    });
+                }
+                var result = await _reviewServices.CreateAsync(review);
+                if (result.Item1)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        redirectUrl = Url.Action("GetAllReviews")
+                    });
+                }
+                return BadRequest(new
+                {
+                    success = false,
+                    errorMessage = result.Item2,
+                    data = review
+                });
             }
-            else
+            catch (Exception ex)
             {
-                ViewBag.ErrorMessage = result.Item2;
-                return View("ERROR in createreview");
+                return StatusCode(500, new
+                {
+                    success = false,
+                    errorMessage = "Internal server error",
+                    detailedError = ex.Message,
+                    innerException = ex.InnerException?.Message,
+                    stackTrace = ex.StackTrace
+                }
+                );
             }
         }
         public async Task<IActionResult> GetAllReviews()
@@ -44,38 +85,44 @@ namespace GameVault_PLL.Controllers
             }
             else
             {
-                ViewBag.ErrorMessage = result.Item2;
-                return View("ERROR delete");
+                return RedirectToAction("GetAllReviews", new { errorMessage = "Review deletion failed!" });
             }
         }
         public IActionResult Create()
         {
             return View();
         }
-        public async Task<IActionResult> UpdateReview (UpdateReview review)
+        [HttpPost]
+        public async Task<IActionResult> UpdateReview ([FromBody]ReviewDTO review)
         {
             var result = await _reviewServices.UpdateAsync(review);
             if (result.Item1)
             {
-                return RedirectToAction("GetAllReviews");
+                return Json(new
+                {
+                    success = true,
+                    message = review,
+                    redirectUrl = Url.Action("GetAllReviewss")
+                });
             }
-            else
+            return BadRequest(new
             {
-                ViewBag.ErrorMessage = result.Item2;
-                return View("ERROR in updatereview");
-            }
+                success = false,
+                errorMessage = result.Item2,
+                data = review
+            });
         }
         public async Task<IActionResult> Update(int id)
         {
             var result = await _reviewServices.GetByIdAsync(id);
-            if (result.Item1)
+            if (result.Item2 !=null)
             {
                 return View(result.Item2);
             }
             else
             {
-                ViewBag.ErrorMessage = result.Item2;
-                return View("ERROR in update");
+                return RedirectToAction("GetAllReviews", new { errorMessage = "Review not found!" });
+
             }
         }
 
