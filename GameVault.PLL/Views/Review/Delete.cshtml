@@ -1,107 +1,57 @@
-@model GameVault.BLL.ModelVM.Review.CreateReview
+@model GameVault.BLL.ModelVM.Review.ReviewDTO
+
 @{
-    ViewData["Title"] = "Create Review ";
+    ViewData["Title"] = "Delete Review";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h3 class="mb-0">
-                        <i class="fas fa-gamepad me-2"></i>Add New Review
-                    </h3>
-                </div>
-                <div class="card-body">
-                    @if (ViewBag.Error != null)
-                    {
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                        </div>
-                    }
+<h2>Delete Review</h2>
 
-                    <form >
-                        <div class="mb-3">
-                            <div class="mb-3">
-                                <label asp-for="CreatedBy" class="form-label">
-                                    <i class="fas fa-user me-1"></i>Rating
-                                </label>
-                                <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="The reviewer name" />
-                                <span asp-validation-for="CreatedBy" class="text-danger"></span>
-                            </div>
-                            <label asp-for="Player_Id" class="form-label">
-                                <i class="fas fa-heading me-1"></i>The reviewer id
-                            </label>
-                            <input asp-for="Player_Id" id="Player_Id" class="form-control" placeholder="Enter the reviewer id" />
-                            <span asp-validation-for="Player_Id" class="text-danger"></span>
-                        </div>
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
 
-                        <div class="mb-3">
-                            <label asp-for="Game_Id" class="form-label">
-								<i class="fas fa-user me-1"></i>The game id
-                            </label>
-                            <input asp-for="Game_Id" id="Game_Id" class="form-control" placeholder="Enter game id" />
-                            <span asp-validation-for="Game_Id" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Rating" class="form-label">
-                                <i class="fas fa-user me-1"></i>Rating
-                            </label>
-                            <input asp-for="Rating" id="Rating" class="form-control" placeholder="Enter the rate" />
-                            <span asp-validation-for="Rating" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Comment" class="form-label">
-                                <i class="fas fa-file-text me-1"></i>Comment here
-                            </label>
-                            <textarea asp-for="Comment" id=" Comment" class="form-control" rows="4" placeholder="Enter any comment please"></textarea>
-                            <span asp-validation-for="Comment" class="text-danger"></span>
-                        </div>
-
-
-
-                        <div class="d-flex justify-content-between">
-                            <a asp-action="GetAllReviews" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-1"></i>Back to Reviews
-                            </a>
-                            <button type="submit" id="formSubmit " class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i>Create Review
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this review?</h4>
 </div>
-@*
+
+<div class="mb-3">
+	<strong>Review ID:</strong> @Model.Review_Id
+</div>
+<div class="mb-3">
+	<strong>Review Rating:</strong> @Model.Rating
+</div>
+<div class="mb-3">
+    <strong>Reviewer Name:</strong> @Model.CreatedBy
+</div>
+
+<form method="post" asp-action="GetAllReviews">
+    <input type="hidden" asp-for="Review_Id" />
+    <button id="formSubmit" type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="GetAllCategories" class="btn btn-secondary">Cancel</a>
+</form>
 <script>
-    document.getElementById('formSubmit').addEventListener('click',async function(e){
-        e.preventDefault()
-          try {
-      const response = await fetch('http:localhost:44341/Review/CreateReview', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Player_Id: document.getElementById('Player_Id').value,
-          Game_Id: document.getElementById('Game_Id').value,
-          Rating: document.getElementById('Rating').value,
-	 	   Comment: document.getElementById('Comment').value,
-	      CreatedBy: document.getElementById('CreatedBy').value,
-        }),
-      });
-
-      if (!response.ok) throw new Error("Failed to create Review");
-
-      const newPost = await response.json();
-      console.log("New Review:", newPost);
-    } catch (error) {
-      console.error("Create Error:", error);
-    }
-    })
-</script> *@
+    // document.getElementById('formSubmit').addEventListener('click', async function (e) {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await fetch('http:localhost:44341/Review/Delete', {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 Category_Id: @Model.Review_Id
+    //             })
+    //         });
+    //         if (response.ok) {
+    //             window.location.href = '/Review/GetAllReviews';
+    //         } else {
+    //             const errorData = await response.json();
+    //             alert(errorData.message || 'An error occurred while deleting the review.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         alert('An unexpected error occurred.');
+    //     }
+    // });
+</script>
