@@ -1,0 +1,93 @@
+@model GameVault.BLL.ModelVM.Category.CreateCategory
+@{
+    ViewData["Title"] = "Create Category ";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-gamepad me-2"></i>Add New Category
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form >
+                        <div class="mb-3">
+                            <label asp-for="Category_Name" class="form-label">
+                                <i class="fas fa-heading me-1"></i>Category name
+                            </label>
+                            <input asp-for="Category_Name" id="Category_Name" class="form-control" placeholder="Enter category name" required />
+                            <span asp-validation-for="Category_Name" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">
+                                <i class="fas fa-file-text me-1"></i>Description
+                            </label>
+                            <input asp-for="Description" id="Description" class="form-control" rows="4" placeholder="Enter game description" required>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="CreatedBy" class="form-label">
+                                <i class="fas fa-user me-1"></i>Created By
+                            </label>
+                            <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="Enter creator name" required />
+                            <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="GetAllCategories" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Categories
+                            </a>
+                            <button type="submit" id="formSubmit" class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Create Category
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.getElementById('formSubmit').addEventListener('click',async function(e){
+        e.preventDefault()
+          try {
+      const response = await fetch('/Category/CreateCategory', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          Category_Name: document.getElementById('Category_Name').value,
+          Description: document.getElementById('Description').value,
+          CreatedBy: document.getElementById('CreatedBy').value,
+          // CreatedOn: new Date().toISOString() Add current date
+
+        }),
+      });
+        const newPost = await response.json();
+      if (!response.ok) throw new Error("Failed to create post");
+
+    
+      console.log("New Post:", newPost);
+      window.location.href = "/Category/GetAllCategories";
+      
+    } catch (error) {
+               console.log(error.errorMessage);
+    }
+    }
+    )
+</script> 

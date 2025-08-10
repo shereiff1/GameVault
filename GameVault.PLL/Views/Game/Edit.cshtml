@@ -1,0 +1,221 @@
+@model GameVault.BLL.ModelVM.Game.EditGame
+
+@{
+    ViewData["Title"] = "Edit Game";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid py-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="@Url.Action("Index")">Games</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Edit Game</li>
+        </ol>
+    </nav>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h4 class="mb-0">
+                        <i class="fas fa-edit me-2"></i>Edit Game: @Model.Title
+                    </h4>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(ViewBag.Error))
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>
+                            @ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data" id="editGameForm">
+                        @Html.HiddenFor(model => model.GameId)
+                        @Html.HiddenFor(model => model.CreatedBy)
+                        @Html.HiddenFor(model => model.ImagePath)
+
+                        <div class="row">
+                            <!-- Current Image Display -->
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Current Image</h6>
+                                    </div>
+                                    <div class="card-body text-center p-2">
+                                        @if (!string.IsNullOrEmpty(Model.ImagePath))
+                                        {
+                                            <img src="~/Files/@Model.ImagePath" alt="Current game image" class="img-fluid rounded" style="max-height: 200px; object-fit: cover;" id="currentImage">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light rounded d-flex align-items-center justify-content-center" style="height: 200px;">
+                                                <i class="fas fa-gamepad text-muted" style="font-size: 3rem;"></i>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Form Fields -->
+                            <div class="col-md-8">
+                                <!-- Title -->
+                                <div class="mb-3">
+                                    <label asp-for="Title" class="form-label">
+                                        <i class="fas fa-heading me-1"></i>Game Title <span class="text-danger">*</span>
+                                    </label>
+                                    <input asp-for="Title" class="form-control" placeholder="Enter game title">
+                                    <span asp-validation-for="Title" class="text-danger"></span>
+                                </div>
+
+                                <!-- Description -->
+                                <div class="mb-3">
+                                    <label asp-for="Description" class="form-label">
+                                        <i class="fas fa-align-left me-1"></i>Description <span class="text-danger">*</span>
+                                    </label>
+                                    <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter game description"></textarea>
+                                    <span asp-validation-for="Description" class="text-danger"></span>
+                                </div>
+
+                                <!-- Company -->
+                                <div class="mb-3">
+                                    <label asp-for="CompanyId" class="form-label">
+                                        <i class="fas fa-building me-1"></i>Company <span class="text-danger">*</span>
+                                    </label>
+                                    <select asp-for="CompanyId" class="form-select" asp-items="ViewBag.Companies">
+                                        <option value="">Select a company</option>
+                                    </select>
+                                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                                </div>
+
+                                <!-- Price -->
+                                <div class="mb-3">
+                                    <label asp-for="Price" class="form-label">
+                                        <i class="fas fa-tag me-1"></i>Price ($) <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="0.00">
+                                    </div>
+                                    <span asp-validation-for="Price" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Image Upload -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-4">
+                                    <label asp-for="formFile" class="form-label">
+                                        <i class="fas fa-image me-1"></i>Update Game Image (Optional)
+                                    </label>
+                                    <input asp-for="formFile" type="file" class="form-control" accept="image/*" id="imageInput">
+                                    <div class="form-text">
+                                        <i class="fas fa-info-circle"></i>
+                                        Leave empty to keep current image. Accepted formats: JPG, PNG, GIF
+                                    </div>
+                                    <span asp-validation-for="formFile" class="text-danger"></span>
+                                </div>
+
+                                <!-- Image Preview -->
+                                <div class="mb-3" id="imagePreview" style="display: none;">
+                                    <label class="form-label">New Image Preview:</label>
+                                    <div class="text-center">
+                                        <img id="previewImage" class="img-fluid rounded border" style="max-height: 200px; object-fit: cover;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-flex justify-content-between">
+                                    <a href="@Url.Action("Index")" class="btn btn-secondary">
+                                        <i class="fas fa-arrow-left me-2"></i>Cancel
+                                    </a>
+                                    <div>
+                                        <a href="@Url.Action("GameDetails", new { id = Model.GameId })" class="btn btn-info me-2">
+                                            <i class="fas fa-eye me-2"></i>View Details
+                                        </a>
+                                        <button type="submit" class="btn btn-warning" id="submitBtn">
+                                            <i class="fas fa-save me-2"></i>Update Game
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
+            const submitBtn = document.getElementById('submitBtn');
+            const form = document.getElementById('editGameForm');
+
+            // Image preview functionality
+            imageInput.addEventListener('change', function(event) {
+                const file = event.target.files[0];
+
+                if (file) {
+                    // Validate file type
+                    const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+                    if (!validTypes.includes(file.type)) {
+                        alert('Please select a valid image file (JPG, PNG, GIF)');
+                        imageInput.value = '';
+                        imagePreview.style.display = 'none';
+                        return;
+                    }
+
+                    const maxSize = 5 * 1024 * 1024;
+                    if (file.size > maxSize) {
+                        alert('File size must be less than 5MB');
+                        imageInput.value = '';
+                        imagePreview.style.display = 'none';
+                        return;
+                    }
+
+                    // Show preview
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewImage.src = e.target.result;
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    imagePreview.style.display = 'none';
+                }
+            });
+
+            form.addEventListener('submit', function(event) {
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Updating...';
+                submitBtn.disabled = true;
+
+                setTimeout(function() {
+                    if (submitBtn.disabled) {
+                        submitBtn.innerHTML = '<i class="fas fa-save me-2"></i>Update Game';
+                        submitBtn.disabled = false;
+                    }
+                }, 10000);
+            });
+
+            // Auto-dismiss alerts
+            setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+}

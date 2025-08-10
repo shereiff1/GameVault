@@ -1,0 +1,6 @@
+D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.AssemblyReference.cache
+D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfoInputs.cache
+D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfo.cs
+D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.CoreCompileInputs.cache
+D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.sourcelink.json

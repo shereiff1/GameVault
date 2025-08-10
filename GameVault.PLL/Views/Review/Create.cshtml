@@ -1,0 +1,105 @@
+@model GameVault.BLL.ModelVM.Review.CreateReview
+@{
+    ViewData["Title"] = "Create Review ";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-gamepad me-2"></i>Add New Review
+                    </h3>
+                </div>
+                <div class="card-body">
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@ViewBag.Error
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    <form >
+                        <div class="mb-3">
+                            <div class="mb-3">
+                                <label asp-for="CreatedBy" class="form-label">
+                                    <i class="fas fa-user me-1"></i>The reviewer name
+                                </label>
+                                <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="The reviewer name" required/>
+                                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                            </div>
+                            <label asp-for="Player_Id" class="form-label">
+                                <i class="fas fa-heading me-1"></i>The reviewer id
+                            </label>
+                            <input asp-for="Player_Id" id="Player_Id" class="form-control" placeholder="Enter the reviewer id" required />
+                            <span asp-validation-for="Player_Id" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Game_Id" class="form-label">
+								<i class="fas fa-user me-1"></i>The game id
+                            </label>
+                            <input asp-for="Game_Id" id="Game_Id" class="form-control" placeholder="Enter game id" required />
+                            <span asp-validation-for="Game_Id" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Rating" class="form-label">
+                                <i class="fas fa-user me-1"></i>Rating
+                            </label>
+                            <input asp-for="Rating" id="Rating" class="form-control" placeholder="Enter the rate" required />
+                            <span asp-validation-for="Rating" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Comment" class="form-label">
+                                <i class="fas fa-file-text me-1"></i>Comment here
+                            </label>
+                            <textarea asp-for="Comment" id=" Comment" class="form-control" rows="4" placeholder="Enter any comment please"></textarea>
+                            <span asp-validation-for="Comment" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a asp-action="GetAllReviews" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Back to Reviews
+                            </a>
+                            <button type="submit" id="formSubmit " class="btn btn-primary">
+                                <i class="fas fa-save me-1"></i>Create Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    document.getElementById('formSubmit').addEventListener('click',async function(e){
+        e.preventDefault()
+          try {
+      const response = await fetch('/Review/CreateReview', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            Player_Id: document.getElementById('Player_Id').value,
+          Game_Id: document.getElementById('Game_Id').value,
+          Rating: document.getElementById('Rating').value,
+	 	   Comment: document.getElementById('Comment').value,
+	      CreatedBy: document.getElementById('CreatedBy').value,
+        }),
+      });
+            const newPost = await response.json();
+      if (!response.ok) throw new Error("Failed to create Review");
+
+      console.log("New Review:", newPost);
+	  window.location.href = '/Review/GetAllReviews';
+    } catch (error) {
+      console.error("Create Error:", error);
+    }
+    })
+</script> 

@@ -1,0 +1,57 @@
+@model GameVault.BLL.ModelVM.Review.ReviewDTO
+
+@{
+    ViewData["Title"] = "Delete Review";
+}
+
+<h2>Delete Review</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this review?</h4>
+</div>
+
+<div class="mb-3">
+	<strong>Review ID:</strong> @Model.Review_Id
+</div>
+<div class="mb-3">
+	<strong>Review Rating:</strong> @Model.Rating
+</div>
+<div class="mb-3">
+    <strong>Reviewer Name:</strong> @Model.CreatedBy
+</div>
+
+<form method="post" asp-action="GetAllReviews">
+    <input type="hidden" asp-for="Review_Id" />
+    <button id="formSubmit" type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="GetAllCategories" class="btn btn-secondary">Cancel</a>
+</form>
+<script>
+    // document.getElementById('formSubmit').addEventListener('click', async function (e) {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await fetch('http:localhost:44341/Review/Delete', {
+    //             method: 'DELETE',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 Category_Id: @Model.Review_Id
+    //             })
+    //         });
+    //         if (response.ok) {
+    //             window.location.href = '/Review/GetAllReviews';
+    //         } else {
+    //             const errorData = await response.json();
+    //             alert(errorData.message || 'An error occurred while deleting the review.');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //         alert('An unexpected error occurred.');
+    //     }
+    // });
+</script>

@@ -1,0 +1,83 @@
+@model GameVault.BLL.ModelVM.Category.CategoryDTO
+
+@{
+    ViewData["Title"] = "Delete Category";
+}
+
+<h2>Delete Category</h2>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<div class="alert alert-warning">
+    <h4>Are you sure you want to delete this category?</h4>
+</div>
+
+<div class="mb-3">
+	<strong>Categry Name:</strong> @Model.Category_Name
+</div>
+<div class="mb-3">
+	<strong>Category Description:</strong> @Model.Description
+</div>
+<div class="mb-3">
+    <strong>Created By:</strong> @Model.CreatedBy
+</div>
+
+<form method="post" asp-action="GetAllCategories">
+    <input type="hidden" asp-for="Category_Id" />
+    <button id="formSubmit" type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="GetAllCategories" class="btn btn-secondary">Cancel</a>
+</form>
+<script>
+ //    document.getElementById('formSubmit').addEventListener('click', async function (e) {
+ //        e.preventDefault();
+ //        try {
+ //            const response = await fetch('http:localhost:44341/Category/Delete', {
+ //                method: 'DELETE',
+ //                headers: {
+ //                    'Content-Type': 'application/json',
+ //                },
+ //                body: JSON.stringify({
+ //                    Category_Id: @Model.Category_Id
+ //                })
+ //            });
+ //            if (response.ok) {
+ //                window.location.href = '/Category/GetAllCategories';
+ //            } else {
+ //                const errorData = await response.json();
+ //                alert(errorData.message || 'An error occurred while deleting the category.');
+ //            }
+ //        } catch (error) {
+ //            console.error('Error:', error);
+ //            alert('An unexpected error occurred.');
+ //        }
+	// });
+</script>
+<script>
+    // document.getElementById('formSubmit').addEventListener('click',async function(e){
+    //     e.preventDefault()
+    //       try {
+    //   const response = await fetch('https:localhost:44341/Category/Delete', {
+    //     method: 'DELETE',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //                 Category_Id: @Model.Category_Id
+    //             })
+    //   });
+    //     const newDelete = await response.json();
+    //   if (!response.ok) throw new Error("Failed to create post");
+
+
+    //   console.log("New Delete:", newDelete);
+    //   window.location.href = "/Category/GetAllCategories";
+
+    // } catch (error) {
+    //            console.log(error.errorMessage);
+    // }
+    // }
+    // )
+</script>

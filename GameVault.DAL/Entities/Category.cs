@@ -1,26 +1,33 @@
+using GameVault.DAL.Entites;
 using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace GameVault_DAL.Entities
+namespace GameVault.DAL.Entities
 {
     public class Category
     {
-        [Required]
+        [Key]
         public int Category_Id { get; private set; }
+
+        [Required]
+        [MaxLength(100)]
         public string Category_Name { get; private set; }
-        public string Description { get; private set; }
+
+        [MaxLength(500)]
+        public string? Description { get; private set; }
         public DateTime CreatedOn { get; private set; }
         public bool IsDeleted { get; private set; }
-        public DateTime ModifiedOn { get; private set; }
+        public DateTime? ModifiedOn { get; private set; }
+
+        [Required]
+        [MaxLength(50)]
         public string CreatedBy { get; private set; }
-        public List<Game>? Gamess { get; set; } = new List<Game>();
-    public Category()
+        public virtual List<Game>? Games { get; set; } = new List<Game>();
+        public Category()
         {
             CreatedOn = DateTime.Now;
             IsDeleted = false;
             ModifiedOn = DateTime.Now;
         }
-        public Category( string name, string discription, string createdBy ="Admin")
+        public Category(string name, string discription, string createdBy = "Admin")
         {
             Category_Name = name;
             Description = discription;
@@ -44,11 +51,12 @@ namespace GameVault_DAL.Entities
             IsDeleted = true;
             ModifiedOn = DateTime.Now;
         }
-        public void Update(int id, string name, string discription)
+        public void Update(int id, string name, string discription, string createdby)
         {
             Category_Id = id;
             Category_Name = name;
             Description = discription;
+            CreatedBy = createdby;
             ModifiedOn = DateTime.Now;
         }
 

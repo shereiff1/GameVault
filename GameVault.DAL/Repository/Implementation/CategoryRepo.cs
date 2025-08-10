@@ -1,92 +1,103 @@
-using GameVault_DAL.Entities;
-using GameVault_DAL.Repo.Abstraction;
-﻿using Microsoft.EntityFrameworkCore;
-using GameVault_DAL.Database;
+using GameVault.DAL.Database;
+using GameVault.DAL.Entities;
+using GameVault.DAL.Repository.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
-namespace GameVault_DAL.Repo.Implementation
+namespace GameVault.DAL.Repository.Implementation
 {
     public class CategoryRepo : ICategoryRepo
     {
-        // Connection string and database context would be injected here
-        private readonly GameVaultDbContext db;
-        public CategoryRepo()
+        private readonly ApplicationDbContext _context;
+        public CategoryRepo(ApplicationDbContext context)
         {
-            // Initialize the database context here if needed
-            this.db = new DbContext();
-        }
-        //dependency injection
-        public CategoryRepo(DbContext db)
-        {
-            this.db = db;
-        }
-        public (bool, string?) Create(Category category)
-        {
-             try
-             {
-                 db.Categories.Add(category);
-                 db.SaveChanges();
-                 return (true, "Category created successfully.");
-             }
-             catch (Exception ex)
-             {
-                 return (false, $"Error creating category: {ex.Message}");
-             }
-             
+            _context = context;
         }
 
-        public (bool, string?) Delete(int id)
-        {            
-             try
-             {
-                 var category = db.Categories.Find(id);
-                 if (category == null)
-                 {
-                     return (false, "Category not found.");
-                 }
-                    category.DELETE(); 
-                 db.SaveChanges();
-                 return (true, "Category deleted successfully.");
-             }
-             catch (Exception ex)
-             {
-                 return (false, $"Error deleting category: {ex.Message}");
-             }
-             
+        public async Task<(bool, string?)> CreateAsync(Category category)
+        {
+            try
+            {
+                _context.Categories.Add(category);
+                await _context.SaveChangesAsync();
+                return (true, "Category created successfully.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error creating category: {ex.Message}");
+            }
         }
 
-        public List<Category> GetAll()
+        public async Task<(bool, string?)> DeleteAsync(int id)
         {
-            
-             try
-             {
-                 return db.Categories.Where(c => !c.IsDeleted).ToList();
-             }
-             catch (Exception ex)
-             {
-                 return new List<Category>();
-             }
-             
+            try
+            {
+                var category = await _context.Categories.FindAsync(id);
+                if (category == null)
+                {
+                    return (false, "Category not found.");
+                }
+
+                category.DELETE();
+                await _context.SaveChangesAsync();
+
+                return (true, "Category deleted successfully.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error deleting category: {ex.Message}");
+            }
         }
 
-        public (bool, string?) Update(Category category)
+
+        public async Task<(bool, List<Category>?)> GetAllAsync()
         {
-            
-             try
-             {
-                 var categ = db.Categories.Find(category.Category_Id);
-                 if (categ == null)
-                 {
-                     return (false, "Category not found.");
-                 }
-                 categ.Update(category.Category_Id, category.Category_Name, category.Description);
-                 db.SaveChanges();
-                 return (true, "Category updated successfully.");
-             }
-             catch (Exception ex)
-             {
-                 return (false, $"Error updating category: {ex.Message}");
-             }
-             
+            try
+            {
+                var categories = await _context.Categories.Where(c => !c.IsDeleted).ToListAsync();
+                return (true, categories);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving categories: {ex.Message}");
+                return (false, null);
+            }
+        }
+
+
+        public async Task<(bool, string?)> UpdateAsync(Category category)
+        {
+            try
+            {
+                var existingCategory = await _context.Categories.FindAsync(category.Category_Id);
+                if (existingCategory == null)
+                {
+                    return (false, "Category not found.");
+                }
+                existingCategory.Update(category.Category_Id, category.Category_Name, category.Description,category.CreatedBy);
+                await _context.SaveChangesAsync();
+                return (true, "Category updated successfully.");
+            }
+            catch (Exception ex)
+            {
+                return (false, $"Error updating category: {ex.Message}");
+            }
+        }
+        public async Task<(bool, Category?)> GetByIdAsync(int id)
+        {
+            try
+            {
+                var category = await _context.Categories.FindAsync(id);
+                if (category == null || category.IsDeleted)
+                {
+                    return (false, null);
+                }
+                return (true, category);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error retrieving category by ID: {ex.Message}");
+                return (false, null);
+            }
         }
     }
 }

@@ -1,15 +1,18 @@
-﻿
 using GameVault.BLL.ModelVM;
+using GameVault.BLL.ModelVM.Game;
+using GameVault.DAL.Entities;
 
 namespace GameVault.BLL.Services.Abstraction
 {
     public interface IGameServices
     {
-        bool Add(int companyId, GameVM gameDto);
-        (bool, List<GameVM>?) GetAll(bool includeDeleted = false);
-        (bool, GameVM?) GetById(int gameId);
-        bool Update(GameVM gameDto);
-        bool Delete(int gameId);
-        (bool, List<GameVM>) GetByCompany(int companyId);
+        Task<bool> AddAsync(GameVM gameVM);
+        Task<(bool, List<GameVM>?)> GetAllAsync(bool includeDeleted = false);
+        Task<(bool, EditGame?)> GetByIdAsync(int gameId);
+        Task<bool> UpdateAsync(EditGame editGame);
+        Task<bool> DeleteAsync(int gameId);
+        Task<(bool, List<GameVM>)> GetByCompanyAsync(int companyId);
+        Task<(bool, List<GameDetails>?)> GetAllGameDetailsAsync();
+        Task<(bool success, GameDetails)> GetGameDetails(int id);
     }
 }

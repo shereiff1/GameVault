@@ -1,16 +1,23 @@
-﻿
-
 using GameVault.DAL.Entites;
+using GameVault.DAL.Entities;
 
 namespace GameVault.DAL.Repository.Abstraction
 {
     public interface IGameRepo
     {
-        bool Add(Game game,int companyId);
-        (bool,List<Game>?) GetAll(bool includeDeleted = false);
-        (bool,Game?) GetById(int gameId);
-        bool Update(Game game);
-        bool Delete(int gameId);
-        (bool,List<Game>) GetByCompany(int companyId);
+        Task<bool> AddAsync(Game game, decimal price, List<int>? categoryIds = null);
+        Task<bool> DeleteAsync(int gameId);
+        Task<(bool, List<Game>?)> GetAllAsync(bool includeDeleted = false);
+        Task<(bool, Game?)> GetByIdAsync(int gameId);
+        Task<(bool, Game?, decimal)> GetByIdWithPriceAsync(int gameId);
+        Task<List<int>> GetGameCategoryIdsAsync(int gameId);
+        Task<(bool, List<Game>)> GetByCompanyAsync(int companyId);
+        Task<bool> UpdateAsync(Game game, decimal price, List<int>? categoryIds = null);
+        Task<(bool, List<GameDTO>?)> GetAllGameDetailsAsync();
+        Task<(bool success, Game? game)> GetGameDetails(int id);
+
+        // Legacy methods for backward compatibility
+        Task<bool> AddAsync(Game game, decimal price);
+        Task<bool> UpdateAsync(Game game, decimal price);
     }
 }
