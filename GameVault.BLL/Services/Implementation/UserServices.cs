@@ -78,7 +78,6 @@ namespace GameVault.BLL.Services.Implementation
             {
                 // fix this here too
                 return (true, "Login failed");
-\
             }
             catch (Exception ex)
             {

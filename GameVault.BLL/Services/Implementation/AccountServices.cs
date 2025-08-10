@@ -34,12 +34,12 @@ namespace GameVault.BLL.Services.Implementation
                 : IdentityResult.Failed(new IdentityError { Description = "Invalid login attempt" });
         }
 
-        public async Task<IdentityResult> Login(UserLogin login)
-        {
-            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, true, false);
+        //public async Task<IdentityResult> Login(UserLogin login)
+        //{
+        //    var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, true, false);
 
-            return result;
-        }
+        //    return result;
+        //}
 
         public async Task<IdentityResult> SignUp(UserSignUp register)
         {

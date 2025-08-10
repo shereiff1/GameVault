@@ -8,9 +8,9 @@ namespace GameVault.BLL.Services.Abstraction
 {
     public interface IAccountServices
     {
-         Task<IdentityResult> Login(UserLogin user);
+        Task<IdentityResult> Login(UserLogin user);
 
-         Task<IdentityResult> SignUp(UserSignUp user);
+        Task<IdentityResult> SignUp(UserSignUp user);
 
         Task Logout();
 
