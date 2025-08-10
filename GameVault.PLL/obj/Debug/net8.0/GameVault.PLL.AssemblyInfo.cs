@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GameVault.PLL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b94c3a64d7fe1623c12e665fdc090999325cfec3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5d1915aa5a40443f9f6afc2e75ede40d0e77b1ee")]
 [assembly: System.Reflection.AssemblyProductAttribute("GameVault.PLL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GameVault.PLL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
