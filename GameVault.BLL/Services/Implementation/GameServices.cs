@@ -5,7 +5,7 @@ using GameVault.BLL.ModelVM.Category;
 using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.ModelVM.Review;
 using GameVault.BLL.Services.Abstraction;
-using GameVault.DAL.Entites;
+
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using Microsoft.EntityFrameworkCore;

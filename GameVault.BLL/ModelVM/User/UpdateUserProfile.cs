@@ -1,5 +1,5 @@
 
-using GameVault.DAL.Entites;
+using GameVault.DAL.Entities;
 using Microsoft.AspNetCore.Http;
 
 namespace GameVault.BLL.ModelVM.User

@@ -34,7 +34,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasIndex("GamesGameId");
 
-                    b.ToTable("CategoryGame");
+                    b.ToTable("CategoryGame", (string)null);
                 });
 
             modelBuilder.Entity("GameUser", b =>
@@ -49,44 +49,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("GameUser");
-                });
-
-            modelBuilder.Entity("GameVault.DAL.Entites.Game", b =>
-                {
-                    b.Property<int>("GameId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GameId"));
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.HasKey("GameId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("games");
+                    b.ToTable("GameUser", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.Category", b =>
@@ -122,7 +85,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasKey("Category_Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.Company", b =>
@@ -158,7 +121,44 @@ namespace GameVault.DAL.Migrations
 
                     b.HasKey("CompanyId");
 
-                    b.ToTable("companies");
+                    b.ToTable("companies", (string)null);
+                });
+
+            modelBuilder.Entity("GameVault.DAL.Entities.Game", b =>
+                {
+                    b.Property<int>("GameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GameId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("GameId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("games", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.Inventory", b =>
@@ -168,7 +168,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasKey("CompanyId");
 
-                    b.ToTable("inventories");
+                    b.ToTable("inventories", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.InventoryItem", b =>
@@ -203,7 +203,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasIndex("GameId");
 
-                    b.ToTable("inventoryItems");
+                    b.ToTable("inventoryItems", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.Review", b =>
@@ -245,7 +245,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasIndex("Game_Id");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.User", b =>
@@ -473,7 +473,7 @@ namespace GameVault.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("GameVault.DAL.Entites.Game", null)
+                    b.HasOne("GameVault.DAL.Entities.Game", null)
                         .WithMany()
                         .HasForeignKey("GamesGameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -482,7 +482,7 @@ namespace GameVault.DAL.Migrations
 
             modelBuilder.Entity("GameUser", b =>
                 {
-                    b.HasOne("GameVault.DAL.Entites.Game", null)
+                    b.HasOne("GameVault.DAL.Entities.Game", null)
                         .WithMany()
                         .HasForeignKey("LibraryGameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -495,7 +495,7 @@ namespace GameVault.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameVault.DAL.Entites.Game", b =>
+            modelBuilder.Entity("GameVault.DAL.Entities.Game", b =>
                 {
                     b.HasOne("GameVault.DAL.Entities.Company", "Company")
                         .WithMany("Games")
@@ -525,7 +525,7 @@ namespace GameVault.DAL.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("GameVault.DAL.Entites.Game", "Game")
+                    b.HasOne("GameVault.DAL.Entities.Game", "Game")
                         .WithMany()
                         .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -538,7 +538,7 @@ namespace GameVault.DAL.Migrations
 
             modelBuilder.Entity("GameVault.DAL.Entities.Review", b =>
                 {
-                    b.HasOne("GameVault.DAL.Entites.Game", "Game")
+                    b.HasOne("GameVault.DAL.Entities.Game", "Game")
                         .WithMany("Reviews")
                         .HasForeignKey("Game_Id")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -598,17 +598,17 @@ namespace GameVault.DAL.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("GameVault.DAL.Entites.Game", b =>
-                {
-                    b.Navigation("Reviews");
-                });
-
             modelBuilder.Entity("GameVault.DAL.Entities.Company", b =>
                 {
                     b.Navigation("Games");
 
                     b.Navigation("Inventory")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("GameVault.DAL.Entities.Game", b =>
+                {
+                    b.Navigation("Reviews");
                 });
 
             modelBuilder.Entity("GameVault.DAL.Entities.Inventory", b =>

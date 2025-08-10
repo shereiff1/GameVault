@@ -1,31 +1,32 @@
-using AutoMapper;
-using GameVault.BLL.Mappers;
-using GameVault.BLL.Services.Abstraction;
-using GameVault.BLL.Services.Implementation;
 using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
+using GameVault.BLL.Mappers;
+using GameVault.BLL.Services;
+using GameVault.BLL.Services.Abstraction;
+using GameVault.BLL.Services.Implementation;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
-using GameVault.PLL.Services;
-using Hangfire;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;ices;
+using GameVault.BLL.Mappers;
+using GameVault.PLL.Serv
+using Hangfire;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container
-builder.Services.AddControllersWithViews();
 
-var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
+builder.Services.AddControllersWithViews();
+var connectionString = builder.Configuration.GetConnectionString("TemplateConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+options.UseSqlServer(connectionString));
+builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
 
-// AutoMapper
-builder.Services.AddAutoMapper(typeof(DomainProfile).Assembly);
-
-// Identity
 builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
@@ -52,27 +53,43 @@ builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IReviewServices, ReviewServices>();
 
-// Configure Identity cookies (AddIdentity sets up cookies automatically, but you can customize)
-builder.Services.AddHostedService<FeaturedGameBackgroundService>();
-builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
-// Cookie settings
+
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IAccountServices, AccountServices>();
+builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IRoleService, RoleServices>();
+builder.Services.AddAuthentication()
+
+    .AddGoogle(options =>
+    {
+        options.ClientId = "732308948156-dsd0ftq5fdmf6imai4n9ohmt996uco2j.apps.googleusercontent.com";
+        options.ClientSecret = "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";
+    })
+    .AddFacebook(options =>
+    {
+        options.ClientId = "1704467360230786";
+        options.ClientSecret = "9425cb2c8f4fdaca6ba754a7dea28d14";
+    });
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/Login";
-});
-
-builder.Services.AddAuthentication().AddFacebook(opt =>
-{
-    opt.ClientId = "1704467360230786";
-    opt.ClientSecret = "9425cb2c8f4fdaca6ba754a7dea28d14";
-});
-
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.ExpireTimeSpan = TimeSpan.FromDays(30);
+    options.SlidingExpiration = true;
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+    options.Cookie.SameSite = SameSiteMode.Lax;
+});builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
 var app = builder.Build();
 
-// HTTP request pipeline
+
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -88,9 +105,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.UseHangfireDashboard("/Hangfire");
+
 app.Run();

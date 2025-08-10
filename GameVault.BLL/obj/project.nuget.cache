@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "YeaFlGzySL4=",
+  "dgSpecHash": "GArCKrivmQM=",
   "success": true,
   "projectFilePath": "D:\\CMP\\.NET\\GameVault\\GameVault.BLL\\GameVault.BLL.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,8 @@
     "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.authentication.abstractions\\2.3.0\\microsoft.aspnetcore.authentication.abstractions.2.3.0.nupkg.sha512",
     "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.authentication.cookies\\2.3.0\\microsoft.aspnetcore.authentication.cookies.2.3.0.nupkg.sha512",
     "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.authentication.core\\2.3.0\\microsoft.aspnetcore.authentication.core.2.3.0.nupkg.sha512",
+    "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.authentication.facebook\\8.0.19\\microsoft.aspnetcore.authentication.facebook.8.0.19.nupkg.sha512",
+    "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\8.0.19\\microsoft.aspnetcore.authentication.google.8.0.19.nupkg.sha512",
     "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.cryptography.internal\\8.0.18\\microsoft.aspnetcore.cryptography.internal.8.0.18.nupkg.sha512",
     "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.cryptography.keyderivation\\8.0.18\\microsoft.aspnetcore.cryptography.keyderivation.8.0.18.nupkg.sha512",
     "C:\\Users\\ibrahim\\.nuget\\packages\\microsoft.aspnetcore.dataprotection\\2.3.0\\microsoft.aspnetcore.dataprotection.2.3.0.nupkg.sha512",

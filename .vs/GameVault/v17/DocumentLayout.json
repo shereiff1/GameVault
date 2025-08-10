@@ -150,8 +150,12 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 6,
           "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
             {
               "$type": "Document",
               "DocumentIndex": 4,
@@ -162,8 +166,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Abstraction\\IAccountServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T15:43:12.053Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T15:43:12.053Z"
             },
             {
               "$type": "Document",
@@ -175,8 +178,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\User\\UpdateUserProfile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAqAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:34:24.932Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:34:24.932Z"
             },
             {
               "$type": "Document",
@@ -188,8 +190,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Abstraction\\IUserServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAABIAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:42:19.415Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:42:19.415Z"
             },
             {
               "$type": "Document",
@@ -201,8 +202,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Implementation\\AccountServices.cs",
               "ViewState": "AgIAAB0AAAAAAAAAAAA3wCgAAAAvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T15:44:23.007Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T15:44:23.007Z"
             },
             {
               "$type": "Document",
@@ -214,8 +214,7 @@
               "RelativeToolTip": "GameVault.PLL\\Controllers\\AccountController.cs",
               "ViewState": "AgIAABIAAAAAAAAAAAA1wAAAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T14:59:51.924Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T14:59:51.924Z"
             },
             {
               "$type": "Document",
@@ -240,8 +239,7 @@
               "RelativeToolTip": "GameVault.PLL\\Views\\Account\\SignUp.cshtml",
               "ViewState": "AgIAAD8AAAAAAAAAAAAowD8AAABbAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-08-01T15:14:12.746Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T15:14:12.746Z"
             },
             {
               "$type": "Document",
@@ -253,8 +251,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\User\\UserLogin.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:23:21.786Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:23:21.786Z"
             },
             {
               "$type": "Document",
@@ -266,8 +263,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\User\\UserPrivateProfile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:29:14.353Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:29:14.353Z"
             },
             {
               "$type": "Document",
@@ -279,8 +275,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\User\\UserPublicProfile.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:33:00.233Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:33:00.233Z"
             },
             {
               "$type": "Document",
@@ -292,8 +287,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\User\\UserSignUp.cs",
               "ViewState": "AgIAAAIAAAAAAAAAAAAAAAIAAAAsAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:23:03.356Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:23:03.356Z"
             },
             {
               "$type": "Document",
@@ -305,8 +299,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Implementation\\UserServices.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAQwAwAAAAoAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:53:46.992Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:53:46.992Z"
             },
             {
               "$type": "Document",
@@ -318,8 +311,7 @@
               "RelativeToolTip": "GameVault.BLL\\Class1.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T16:12:40.623Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T16:12:40.623Z"
             },
             {
               "$type": "Document",
@@ -331,8 +323,7 @@
               "RelativeToolTip": "GameVault.PLL\\Program.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAowC8AAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T12:39:13.138Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T12:39:13.138Z"
             },
             {
               "$type": "Document",
@@ -344,8 +335,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Implementation\\GameServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAuwAgAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:50:17.929Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:50:17.929Z"
             },
             {
               "$type": "Document",
@@ -357,8 +347,7 @@
               "RelativeToolTip": "GameVault.DAL\\Entities\\User.cs",
               "ViewState": "AgIAABQAAAAAAAAAAAAUwCUAAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:54:58.865Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:54:58.865Z"
             },
             {
               "$type": "Document",
@@ -370,8 +359,7 @@
               "RelativeToolTip": "GameVault.PLL\\Controllers\\HomeController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAaAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:55:26.781Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:55:26.781Z"
             },
             {
               "$type": "Document",
@@ -383,8 +371,7 @@
               "RelativeToolTip": "GameVault.DAL\\Database\\ApplicationDbContext.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAQwBsAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:54:36.891Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:54:36.891Z"
             },
             {
               "$type": "Document",
@@ -396,8 +383,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Abstraction\\IUserRepo.cs",
               "ViewState": "AgIAAAEAAAAAAAAAAAAAAA0AAAAiAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T12:57:54.89Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T12:57:54.89Z"
             },
             {
               "$type": "Document",
@@ -409,8 +395,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Implementation\\UserRepo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAGoAAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T12:57:59.36Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T12:57:59.36Z"
             },
             {
               "$type": "Document",
@@ -422,8 +407,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Implementation\\InventoryRepo.cs",
               "ViewState": "AgIAAD0AAAAAAAAAAAAowCoAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:08:34.304Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:08:34.304Z"
             },
             {
               "$type": "Document",
@@ -435,8 +419,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Abstraction\\IGameRepo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:55:14.185Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:55:14.185Z"
             },
             {
               "$type": "Document",
@@ -448,8 +431,7 @@
               "RelativeToolTip": "GameVault.BLL\\Mappers\\DomainProfile.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAAwwA0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:53:11.232Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:53:11.232Z"
             },
             {
               "$type": "Document",
@@ -461,8 +443,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Abstraction\\IGameServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:50:22.662Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:50:22.662Z"
             },
             {
               "$type": "Document",
@@ -474,8 +455,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Abstraction\\IInventoryItemServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:51:17.95Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:51:17.95Z"
             },
             {
               "$type": "Document",
@@ -487,8 +467,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Abstraction\\IHistoryRepo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:50:10.372Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:50:10.372Z"
             },
             {
               "$type": "Document",
@@ -500,8 +479,7 @@
               "RelativeToolTip": "GameVault.BLL\\Services\\Implementation\\InventoryItemServices.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T13:42:36.318Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T13:42:36.318Z"
             },
             {
               "$type": "Document",
@@ -513,12 +491,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Implementation\\GameRepo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T12:59:22.661Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+              "WhenOpened": "2025-08-01T12:59:22.661Z"
             },
             {
               "$type": "Document",
@@ -530,8 +503,7 @@
               "RelativeToolTip": "GameVault.PLL\\appsettings.json",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAACfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-08-01T12:39:32.514Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T12:39:32.514Z"
             },
             {
               "$type": "Document",
@@ -543,8 +515,7 @@
               "RelativeToolTip": "GameVault.DAL\\Entities\\Friendship.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:55:00.854Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:55:00.854Z"
             },
             {
               "$type": "Document",
@@ -556,8 +527,7 @@
               "RelativeToolTip": "GameVault.DAL\\Repository\\Implementation\\FriendshipRepo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:55:17.591Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:55:17.591Z"
             },
             {
               "$type": "Document",
@@ -569,8 +539,7 @@
               "RelativeToolTip": "GameVault.BLL\\GameVault.BLL.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2025-08-01T09:54:25.174Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:54:25.174Z"
             },
             {
               "$type": "Document",
@@ -582,8 +551,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\InventoryVM.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:53:08.634Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:53:08.634Z"
             },
             {
               "$type": "Document",
@@ -595,8 +563,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\InventoryItemVM.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:53:07.206Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:53:07.206Z"
             },
             {
               "$type": "Document",
@@ -608,8 +575,7 @@
               "RelativeToolTip": "GameVault.BLL\\ModelVM\\GameVM.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-08-01T09:53:03.698Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-08-01T09:53:03.698Z"
             }
           ]
         }
