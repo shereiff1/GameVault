@@ -9,9 +9,23 @@
 # Build results
 bin/
 obj/
+[Bb]in/
+[Oo]bj/
 
 # User-specific files
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
+
+# Build logs
+*.log
+*.tlog
+
+# NuGet packages
+*.nupkg
+packages/
+
+# Publish output
+publish/
+wwwroot/
