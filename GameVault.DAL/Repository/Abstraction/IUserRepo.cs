@@ -1,20 +1,23 @@
 
-using GameVault.DAL.Entites;
+
 using GameVault.DAL.Entities;
+
 
 namespace GameVault.DAL.Repository.Abstraction
 {
     public interface IUserRepo
     {
-        bool AddUser(User user);
-        List<User>? GetAll();
-        bool Update(User user);
+        Task<bool> AddUser(User user);
+        Task<List<User>?> GetAll();
+        Task<bool> Update(User user);
 
-        User GetUserById(string id);
-        bool AddGameToLibrary(User user, Game game);
-        bool RemoveGameFromLibrary(User user, Game game);
+        Task<User?> GetUserById(string id);
+        Task<bool> AddGameToLibrary(User user, Game game);
+        Task<bool> RemoveGameFromLibrary(User user, Game game);
         //bool AddFriend(User user, User friend);
         //bool RemoveFriend(User user, User friend);
+
+        public  Task<bool> IsUserInRole(User user, string rolename);
 
     }
 }

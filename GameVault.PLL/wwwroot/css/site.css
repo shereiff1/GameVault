@@ -20,3 +20,247 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+/* ===== LAYOUT PROTECTION CSS ===== */
+/* Add this to your site.css file to make both CSS frameworks coexist */
+
+/* CRITICAL: Force admin layout structure with highest specificity */
+html body .wrapper {
+    display: flex !important;
+    width: 100% !important;
+    min-height: 100vh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    overflow-x: hidden !important;
+}
+
+html body .sidebar {
+    position: fixed !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 250px !important;
+    height: 100vh !important;
+    z-index: 1050 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translateX(0) !important;
+    transition: all 0.3s ease !important;
+    flex-shrink: 0 !important;
+}
+
+html body .main-panel {
+    margin-left: 250px !important;
+    width: calc(100% - 250px) !important;
+    min-height: 100vh !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    position: relative !important;
+    flex: none !important;
+    display: block !important;
+    transition: margin-left 0.3s ease, width 0.3s ease !important;
+    overflow-x: hidden !important;
+}
+
+html body .main-header {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    z-index: 1040 !important;
+    float: none !important;
+    clear: both !important;
+}
+
+html body .main-header-logo {
+    position: relative !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+html body .logo-header {
+    padding: 0 20px !important;
+    height: 60px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    margin: 0 !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+html body .navbar-header {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    position: relative !important;
+    float: none !important;
+}
+
+html body .page-inner {
+    padding: 20px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    position: relative !important;
+}
+
+html body .container {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+    max-width: none !important;
+    width: 100% !important;
+    position: relative !important;
+}
+
+/* ===== SIDEBAR STATES ===== */
+/* When sidebar is collapsed */
+html body .sidebar-collapse .main-panel,
+html body.sidebar-collapse .main-panel {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+html body .sidebar-collapse .sidebar,
+html body.sidebar-collapse .sidebar {
+    margin-left: -250px !important;
+    transform: translateX(-100%) !important;
+}
+
+/* ===== RESPONSIVE BEHAVIOR ===== */
+@media (max-width: 991px) {
+    html body .main-panel {
+        margin-left: 0 !important;
+        width: 100% !important;
+    }
+
+    html body .sidebar {
+        margin-left: -250px !important;
+        transform: translateX(-100%) !important;
+    }
+
+        html body .sidebar.show,
+        html body .sidebar.open {
+            margin-left: 0 !important;
+            transform: translateX(0) !important;
+        }
+}
+
+/* ===== NAVIGATION ELEMENTS PROTECTION ===== */
+html body .nav-toggle,
+html body .topbar-toggler,
+html body .sidenav-toggler {
+    background: transparent !important;
+    border: none !important;
+    padding: 8px !important;
+    margin: 0 5px !important;
+    cursor: pointer !important;
+}
+
+    html body .nav-toggle:hover,
+    html body .topbar-toggler:hover,
+    html body .sidenav-toggler:hover {
+        background: rgba(255,255,255,0.1) !important;
+    }
+
+/* ===== DROPDOWN PROTECTION ===== */
+html body .dropdown-menu {
+    position: absolute !important;
+    z-index: 1060 !important;
+    min-width: 160px !important;
+}
+
+html body .topbar-nav .dropdown-menu {
+    right: 0 !important;
+    left: auto !important;
+}
+
+/* ===== FOOTER PROTECTION ===== */
+html body .footer {
+    margin-top: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    width: 100% !important;
+    position: relative !important;
+    padding: 20px !important;
+}
+
+/* ===== CONTENT AREA PROTECTION ===== */
+html body .page-inner > * {
+    /* Allow Plugin CSS to style content inside page-inner */
+    /* but protect the layout structure */
+}
+
+/* ===== BOX SIZING ENFORCEMENT ===== */
+html body .wrapper,
+html body .wrapper *,
+html body .main-panel,
+html body .main-panel *,
+html body .sidebar,
+html body .sidebar * {
+    box-sizing: border-box !important;
+}
+
+    /* ===== PREVENT PLUGIN CSS FROM BREAKING LAYOUT ===== */
+    /* Override common conflicting properties from Plugin CSS */
+    html body .wrapper > *:not(.sidebar):not(.main-panel):not(.custom-template) {
+        display: none !important; /* Hide any extra elements Plugin CSS might add */
+    }
+
+html body .main-panel {
+    /* Prevent Plugin CSS from making this flex or changing display */
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    position: relative !important;
+}
+
+/* Ensure search and navigation work */
+html body .nav-search {
+    position: relative !important;
+    display: flex !important;
+}
+
+html body .input-group {
+    position: relative !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    width: 100% !important;
+}
+
+/* ===== ANIMATION COMPATIBILITY ===== */
+/* Ensure animations from both frameworks don't conflict */
+html body .fadeIn {
+    animation-name: fadeIn !important;
+}
+
+html body .animated {
+    animation-duration: 0.3s !important;
+    animation-fill-mode: both !important;
+}
+
+/* ===== Z-INDEX HIERARCHY ===== */
+/* Establish clear z-index hierarchy to prevent conflicts */
+html body .sidebar {
+    z-index: 1050 !important;
+}
+
+html body .main-header {
+    z-index: 1040 !important;
+}
+
+html body .dropdown-menu {
+    z-index: 1060 !important;
+}
+
+html body .custom-template {
+    z-index: 1070 !important;
+}

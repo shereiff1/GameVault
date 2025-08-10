@@ -1,10 +1,11 @@
 
-using GameVault.DAL.Entites;
+using GameVault.DAL.Entities;
 
 namespace GameVault.BLL.ModelVM.User
 {
     public class UserPrivateProfile
     {
+        public string Id { get; set; }
         public string? Name { get; set; }
 
         public string? Email { get; set; }

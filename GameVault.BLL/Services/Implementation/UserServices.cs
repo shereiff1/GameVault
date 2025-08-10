@@ -1,4 +1,6 @@
 
+using System.Threading.Tasks;
+using _3TierArch.BLL.Helper;
 using AutoMapper;
 
 using GameVault.BLL.ModelVM.User;
@@ -7,6 +9,7 @@ using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace GameVault.BLL.Services.Implementation
 {
@@ -22,32 +25,33 @@ namespace GameVault.BLL.Services.Implementation
         }
 
 
-        public (bool, string?) AddUser(UserSignUp user)
-        {
-            try
-            {
-                if(user == null) 
-                    return (false, "Invalid SingUp info");
-                var User = new User(user.Email,user.Username,user.Password);
-                return (repo.AddUser(User), null);
+        //public (bool, string?) AddUser(UserSignUp user)
+        //{
+        //    try
+        //    {
+        //        if(user == null) 
+        //            return (false, "Invalid SingUp info");
+        //        var User = new User(user.Email,user.Username,user.Password);
+        //        return (repo.AddUser(User), null);
 
-            }
-            catch (Exception ex)
-            {
+        //    }
+        //    catch (Exception ex)
+        //    {
 
-                return (false, ex.Message);
-            }
-        }
+        //        return (false, ex.Message);
+        //    }
+        //}
 
-        public (bool, string?) UpdateUserProfile(UpdateUserProfile user)
+        public async Task<(bool, string?)> UpdateUserProfile(UpdateUserProfile user)
         {
             try
             {
                 if (user == null)
                     return (false,"Ivalid Update, please try again");
-                var User = repo.GetUserById(user.Id);
+                user.ProfilePicture = Upload.UploadFile("Images", user.ImageFile);
+                var User = await repo.GetUserById(user.Id);
                 User.UpdateProfile(user.UserName, user.Name, user.ProfilePicture);
-                return (repo.Update(User), null);
+                return (await repo.Update(User), null);
             }
             catch (Exception ex)
             {
@@ -55,11 +59,11 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public (List<UserPrivateProfile>?, string) GetAllPrivateUsers()
+        public async Task<(List<UserPrivateProfile>?, string)> GetAllPrivateUsers()
         {
             try
             {
-                var users = repo.GetAll();
+                var users =await repo.GetAll();
                 if (users == null)
                     return (null, "There are no users yet");
                 var map = mapper.Map<List<UserPrivateProfile>>(users);
@@ -71,26 +75,11 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-      
-        public (bool, string?) UserLogin(UserLogin user)
+        async Task<(List<UserPublicProfile>?, string)> IUserServices.GetAllUsers()
         {
             try
             {
-                // fix this here too
-                return (true, "Login failed");
-            }
-            catch (Exception ex)
-            {
-
-                return (false, ex.Message);
-            }
-        }
-
-        (List<UserPublicProfile>?, string) IUserServices.GetAllUsers()
-        {
-            try
-            {
-                var users = repo.GetAll();
+                var users = await repo.GetAll();
                 if (users == null)
                     return (null, "There are no users yet");
                 var map = mapper.Map<List<UserPublicProfile>>(users);
@@ -101,5 +90,52 @@ namespace GameVault.BLL.Services.Implementation
                 return (null, ex.Message);
             }
         }
+        public async Task<(UserPublicProfile?, string?)> GetPublicProfile(string id)
+        {
+            try
+            {
+                var user =await repo.GetUserById(id);
+                if (user == null)
+                    return (null, "Error, User not found");
+                var map = mapper.Map<UserPublicProfile>(user);
+                return (map, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+        public async Task<(UserPrivateProfile?, string?)> GetPrivateProfile(string id)
+        {
+            try
+            {
+                var user =await repo.GetUserById(id);
+                if (user == null)
+                    return (null, "Error, User not found");
+                var map = mapper.Map<UserPrivateProfile>(user);
+                return (map, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+        public async Task<(UpdateUserProfile?, string?)> GetUserInfo(string id)
+        {
+            try
+            {
+                var user = await repo.GetUserById(id);
+                if (user == null)
+                    return (null, "Error, User not found");
+                var map = mapper.Map<UpdateUserProfile>(user);
+                return (map, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
+
+
     }
 }

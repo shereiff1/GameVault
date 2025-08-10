@@ -1,0 +1,138 @@
+﻿@model GameVault.BLL.ModelVM.User.UserPrivateProfile
+
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Container-->
+    <div class="container-xxl" id="kt_content_container">
+
+        <!-- Display Error Messages -->
+        @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+        {
+            <div class="alert alert-danger" role="alert">
+                @ViewBag.ErrorMessage
+            </div>
+        }
+        <partial name ="UserNavBar"/>
+        <!--begin::details View-->
+        <div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+            <!--begin::Card header-->
+            <div class="card-header cursor-pointer">
+                <!--begin::Card title-->
+                <div class="card-title m-0">
+                    <h3 class="fw-bold m-0">Profile Details</h3>
+                </div>
+                <!--end::Card title-->
+                <!--begin::Action-->
+                <a href="@Url.Action("UpdateProfile", "User", new { id = Model?.Id })" class="btn btn-sm btn-primary align-self-center">Edit Profile</a>
+                <!--end::Action-->
+            </div>
+            <!--begin::Card header-->
+            <!--begin::Card body-->
+            <div class="card-body p-9">
+                <!--begin::Row-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-semibold text-muted">Full Name</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <span class="fw-bold fs-6 text-gray-800">@(Model?.Name ?? "Not specified")</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Row-->
+                <!--begin::Input group-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-semibold text-muted">Username</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8 fv-row">
+                        <span class="fw-semibold text-gray-800 fs-6">@(Model?.UserName ?? "Not specified")</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-semibold text-muted">Email Address</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8 d-flex align-items-center">
+                        <span class="fw-bold fs-6 text-gray-800 me-2">@(Model?.Email ?? "Not specified")</span>
+                        <span class="badge badge-success">Verified</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Input group-->
+                <div class="row mb-7">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-semibold text-muted">Member Since</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <span class="fw-bold fs-6 text-gray-800">@Model?.CreatedOn.ToString("MMMM dd, yyyy")</span>
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                @if (Model?.ModifiedOn.HasValue == true)
+                {
+                    <!--begin::Input group-->
+                    <div class="row mb-7">
+                        <!--begin::Label-->
+                        <label class="col-lg-4 fw-semibold text-muted">Last Updated</label>
+                        <!--end::Label-->
+                        <!--begin::Col-->
+                        <div class="col-lg-8">
+                            <span class="fw-bold fs-6 text-gray-800">@Model.ModifiedOn.Value.ToString("MMMM dd, yyyy")</span>
+                        </div>
+                        <!--end::Col-->
+                    </div>
+                    <!--end::Input group-->
+                }
+
+                <!--begin::Input group-->
+                <div class="row mb-10">
+                    <!--begin::Label-->
+                    <label class="col-lg-4 fw-semibold text-muted">Game Library</label>
+                    <!--end::Label-->
+                    <!--begin::Col-->
+                    <div class="col-lg-8">
+                        <span class="fw-bold fs-6 text-gray-800">@(Model?.Library?.Count ?? 0) Games</span>
+                        @if (Model?.Library?.Any() == true)
+                        {
+                            <div class="mt-3">
+                                @foreach (var game in Model.Library.Take(5))
+                                {
+                                    <span class="badge badge-light-primary me-2 mb-2">@game.Title</span>
+                                }
+                                @if (Model.Library.Count > 5)
+                                {
+                                    <span class="text-muted fs-7">and @(Model.Library.Count - 5) more...</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <!--end::Col-->
+                </div>
+                <!--end::Input group-->
+                <div class="card-header cursor-pointer">
+                    <!--begin::Card title-->
+                    <div class="card-title m-0">
+                        <h3 class="fw-bold m-0"></h3>
+                    </div>
+                    <!--end::Card title-->
+                    <!--begin::Action-->
+                    <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-sm btn-primary align-self-center">Change Password</a>
+                    <!--end::Action-->
+                </div>
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::details View-->
+
+    </div>
+    <!--end::Container-->
+</div>

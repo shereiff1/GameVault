@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 
 using System.Globalization;
-using GameVault.DAL.Entites;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
@@ -12,24 +11,25 @@ namespace GameVault.DAL.Entities
     {
         [MaxLength(150)]
         public string? Name { get; private set; }
-        public DateTime CreatedOn { get; private set; }
+        public DateTime CreatedOn { get; private set; } = DateTime.Now;
         public DateTime? ModifiedOn { get; private set; }
-        public bool? IsDeleted { get; private set; }
+        public bool? IsDeleted { get; private set; } = false;
         public DateTime? DeletedOn { get; private set; }
         public string? ProfilePicture { get; private set; }
         public List<Game>? Library {get; private set;} = new List<Game>();
 
         //public List<User>? Friends { get; private set; } = new List<User>();
 
-        public User() { }
-
-        public User(string Email, string Username, string Password) : base()
-        {
-            this.Email = Email;
-            this.UserName = Username;
-            this.PasswordHash = Password;
-            
+        public User() {
         }
+
+        //public User(string Email, string Username, string Password) : base()
+        //{
+        //    this.Email = Email;
+        //    this.UserName = Username;
+        //    this.PasswordHash = Password;
+            
+        //}
 
         public void UpdateProfile(string? Username, string? Name, string? ImagePath)
         {

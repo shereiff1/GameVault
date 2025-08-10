@@ -1,8 +1,8 @@
 
 using GameVault.DAL.Database;
-using GameVault.DAL.Entites;
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
 namespace GameVault.DAL.Repository.Implementation
 {
@@ -15,12 +15,12 @@ namespace GameVault.DAL.Repository.Implementation
         {
             this.db = db;
         }
-        public bool AddUser(User user)
+        public async Task<bool> AddUser(User user)
         {
             try
             {
-                db.Users.Add(user);
-                db.SaveChanges();
+                await db.Users.AddAsync(user);
+                await db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -28,11 +28,11 @@ namespace GameVault.DAL.Repository.Implementation
                 return false;
             }
         }
-        public List<User>? GetAll()
+        public async Task<List<User>?> GetAll()
         {
             try
             {
-                var users = db.Users.ToList();
+                var users = await db.Users.Where(a => a.IsDeleted == false).ToListAsync();
                 return users;
             }
             catch (Exception)
@@ -41,11 +41,11 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public User GetUserById(string id)
+        public async Task<User?> GetUserById(string id)
         {
             try
             {
-                var user = db.Users.Where(a => a.Id == id).FirstOrDefault();
+                var user = await db.Users.FirstOrDefaultAsync(a => a.Id == id);
 
                 if (user == null)
                     return null;
@@ -56,12 +56,12 @@ namespace GameVault.DAL.Repository.Implementation
                 return null;
             }
         }
-        public bool Update(User user)
+        public async Task<bool> Update(User user)
         {
             try
             {
-                db.Users.Update(user);
-                db.SaveChanges();
+                 db.Users.Update(user);
+                await db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -69,13 +69,13 @@ namespace GameVault.DAL.Repository.Implementation
                 return false;
             }
         }
-        public bool AddGameToLibrary(User user, Game game)
+        public async Task<bool> AddGameToLibrary(User user, Game game)
         {
             try
             {
                 user.AddGameToLibrary(game);
                 db.Users.Update(user);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
@@ -83,19 +83,38 @@ namespace GameVault.DAL.Repository.Implementation
                 return false;
             }
         }
-        public bool RemoveGameFromLibrary(User user, Game game)
+        public async Task<bool> RemoveGameFromLibrary(User user, Game game)
         {
             try
             {
-                user.RemoveGameFromLibrary(game);
+                 user.RemoveGameFromLibrary(game);
                 db.Users.Update(user);
-                db.SaveChanges();
+                await db.SaveChangesAsync();
                 return true;
             }
             catch (Exception)
             {
                 return false;
             }
+        }
+        public async Task<bool> IsUserInRole(User user,string rolename)
+        {
+            try
+            {
+                var inRole = await db.UserRoles
+                 .AnyAsync(ur => ur.UserId == user.Id &&
+                  ur.RoleId == db.Roles
+                      .Where(r => r.Name == rolename)
+                      .Select(r => r.Id)
+                      .FirstOrDefault());
+                return inRole;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+          
+            
         }
         //public bool AddFriend(User user, User friend)
         //{

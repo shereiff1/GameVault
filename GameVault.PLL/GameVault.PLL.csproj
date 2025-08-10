@@ -6,18 +6,23 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Hangfire" Version="1.8.20" />
-		<PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.15" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.18" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.18" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.18">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="AutoMapper" Version="12.0.1" />
-		<PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-	</ItemGroup>
+  <ItemGroup>
+    <Content Remove="Views\Review\GetAllReviews.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Hangfire" Version="1.8.20" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.20" />
+    <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.4" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.19" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.19" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.18" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.7">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\GameVault.BLL\GameVault.BLL.csproj" />
@@ -27,5 +32,13 @@
 	<ItemGroup>
 	  <Folder Include="wwwroot\Files\" />
 	</ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Review\GetAllReviews.cshtml" />
+  </ItemGroup>
 
 </Project>
