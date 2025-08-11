@@ -4,13 +4,35 @@ D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfoI
 D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfo.cs
 D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.CoreCompileInputs.cache
 D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.sourcelink.json
-D:\CMP\.NET\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.deps.json
-D:\CMP\.NET\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.dll
-D:\CMP\.NET\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.pdb
-D:\CMP\.NET\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.DAL.dll
-D:\CMP\.NET\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.DAL.pdb
-D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVaul.308D7928.Up2Date
-D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.dll
-D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\refint\GameVault.BLL.dll
-D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.pdb
-D:\CMP\.NET\GameVault\GameVault.BLL\obj\Debug\net8.0\ref\GameVault.BLL.dll
+E:\ITI Project\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.deps.json
+E:\ITI Project\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.dll
+E:\ITI Project\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.pdb
+E:\ITI Project\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.DAL.dll
+E:\ITI Project\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.DAL.pdb
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.AssemblyReference.cache
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.GeneratedMSBuildEditorConfig.editorconfig
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfoInputs.cache
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfo.cs
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.CoreCompileInputs.cache
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.sourcelink.json
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVaul.308D7928.Up2Date
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.dll
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\refint\GameVault.BLL.dll
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.pdb
+E:\ITI Project\GameVault\GameVault.BLL\obj\Debug\net8.0\ref\GameVault.BLL.dll
+E:\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.deps.json
+E:\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.dll
+E:\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.BLL.pdb
+E:\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.DAL.dll
+E:\GameVault\GameVault.BLL\bin\Debug\net8.0\GameVault.DAL.pdb
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.AssemblyReference.cache
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.GeneratedMSBuildEditorConfig.editorconfig
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfoInputs.cache
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.AssemblyInfo.cs
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.csproj.CoreCompileInputs.cache
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.sourcelink.json
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVaul.308D7928.Up2Date
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.dll
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\refint\GameVault.BLL.dll
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\GameVault.BLL.pdb
+E:\GameVault\GameVault.BLL\obj\Debug\net8.0\ref\GameVault.BLL.dll

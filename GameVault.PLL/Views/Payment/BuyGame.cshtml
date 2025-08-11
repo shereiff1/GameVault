@@ -1,0 +1,286 @@
+﻿@{
+    ViewData["Title"] = "Complete Purchase";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3><i class="fas fa-credit-card"></i> Complete Your Purchase</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Payment Form -->
+                    <form id="paymentForm" novalidate>
+                        <div id="payment-form">
+                            <div id="paymentError" class="alert alert-danger" style="display:none;"></div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <h5 class="text-muted">Payment Method</h5>
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="creditCard" value="card" checked>
+                                        <label class="form-check-label" for="creditCard">
+                                            <i class="fas fa-credit-card"></i> Credit Card
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="paymentMethod" id="paypal" value="paypal">
+                                        <label class="form-check-label" for="paypal">
+                                            <i class="fab fa-paypal"></i> PayPal
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label for="cardNumber" class="form-label">Card Number</label>
+                                    <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="23" aria-describedby="cardNumberFeedback">
+                                    <div id="cardNumberFeedback" class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="cardName" class="form-label">Cardholder Name</label>
+                                    <input type="text" class="form-control" id="cardName" placeholder="John Doe" aria-describedby="cardNameFeedback">
+                                    <div id="cardNameFeedback" class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <label for="expMonth" class="form-label">Exp Month</label>
+                                    <select class="form-select" id="expMonth" aria-describedby="expMonthFeedback">
+                                        <option value="">MM</option>
+                                        <option value="01">01</option>
+                                        <option value="02">02</option>
+                                        <option value="03">03</option>
+                                        <option value="04">04</option>
+                                        <option value="05">05</option>
+                                        <option value="06">06</option>
+                                        <option value="07">07</option>
+                                        <option value="08">08</option>
+                                        <option value="09">09</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                    </select>
+                                    <div id="expMonthFeedback" class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="expYear" class="form-label">Exp Year</label>
+                                    <select class="form-select" id="expYear" aria-describedby="expYearFeedback">
+                                        <option value="">YYYY</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2025">2025</option>
+                                        <option value="2026">2026</option>
+                                        <option value="2027">2027</option>
+                                        <option value="2028">2028</option>
+                                        <option value="2029">2029</option>
+                                    </select>
+                                    <div id="expYearFeedback" class="invalid-feedback"></div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="cvv" class="form-label">CVV</label>
+                                    <input type="text" class="form-control" id="cvv" placeholder="123" maxlength="4" aria-describedby="cvvFeedback">
+                                    <div id="cvvFeedback" class="invalid-feedback"></div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-success btn-lg" id="processPayment">
+                                    <i class="fas fa-lock"></i> Process Payment
+                                </button>
+                                <a asp-Controller="Home">Cancel</a>
+                            </div>
+                        </div>
+                    </form>
+
+                    <!-- Success Message (Hidden Initially) -->
+                    <div id="success-message" class="text-center" style="display: none;">
+                        <div class="mb-4">
+                            <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+                        </div>
+                        <h3 class="text-success mb-3">Payment Successful!</h3>
+                        <p class="lead">Your payment has been processed successfully.</p>
+                        <p class="text-muted">Adding game to your library...</p>
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const processPaymentBtn = document.getElementById('processPayment');
+        const paymentForm = document.getElementById('payment-form');
+        const successMessage = document.getElementById('success-message');
+
+        const paymentError = document.getElementById('paymentError');
+
+        const cardNumber = document.getElementById('cardNumber');
+        const cardName = document.getElementById('cardName');
+        const expMonth = document.getElementById('expMonth');
+        const expYear = document.getElementById('expYear');
+        const cvv = document.getElementById('cvv');
+
+        // Format card number input (group by 4)
+        cardNumber.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s+/g, '').replace(/[^0-9]/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+
+        function clearValidation() {
+            paymentError.style.display = 'none';
+            [cardNumber, cardName, expMonth, expYear, cvv].forEach(el => {
+                el.classList.remove('is-invalid');
+                const fb = document.getElementById(el.id + 'Feedback');
+                if (fb) fb.textContent = '';
+            });
+        }
+
+        function showFieldError(el, message) {
+            el.classList.add('is-invalid');
+            const fb = document.getElementById(el.id + 'Feedback');
+            if (fb) fb.textContent = message;
+        }
+
+        function validateCreditCardFields() {
+            clearValidation();
+            let valid = true;
+
+            // Card number (digits length between 13 and 19)
+            const digits = cardNumber.value.replace(/\s+/g, '').replace(/\D/g, '');
+            if (!digits || digits.length < 13 || digits.length > 19) {
+                showFieldError(cardNumber, 'Enter a valid card number (13–19 digits).');
+                valid = false;
+            }
+
+            // Cardholder name
+            if (!cardName.value.trim()) {
+                showFieldError(cardName, 'Cardholder name is required.');
+                valid = false;
+            }
+
+            // Expiry month/year selected
+            if (!expMonth.value) {
+                showFieldError(expMonth, 'Select expiry month.');
+                valid = false;
+            }
+            if (!expYear.value) {
+                showFieldError(expYear, 'Select expiry year.');
+                valid = false;
+            }
+
+            // If month and year are supplied, check not expired
+            if (expMonth.value && expYear.value) {
+                const month = parseInt(expMonth.value, 10);
+                const year = parseInt(expYear.value, 10);
+                // Compare to first day of current month
+                const now = new Date();
+                const currentMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+                const cardMonthStart = new Date(year, month - 1, 1);
+                if (cardMonthStart < currentMonthStart) {
+                    showFieldError(expMonth, 'Card has expired.');
+                    showFieldError(expYear, 'Card has expired.');
+                    valid = false;
+                }
+            }
+
+            // CVV length 3 or 4
+            const cvvDigits = cvv.value.replace(/\D/g, '');
+            if (!cvvDigits || (cvvDigits.length !== 3 && cvvDigits.length !== 4)) {
+                showFieldError(cvv, 'Enter a valid CVV (3 or 4 digits).');
+                valid = false;
+            }
+
+            return valid;
+        }
+
+        processPaymentBtn.addEventListener('click', function() {
+            clearValidation();
+
+            const selectedMethod = document.querySelector('input[name="paymentMethod"]:checked')?.value || 'card';
+
+            // If PayPal is selected, we skip card validation (in a real app you'd redirect to PayPal)
+            if (selectedMethod === 'paypal') {
+                // proceed with PayPal flow (for now we simulate success)
+                startProcessing();
+                return;
+            }
+
+            // Validate card fields
+            const ok = validateCreditCardFields();
+            if (!ok) {
+                paymentError.textContent = 'Please fix the highlighted fields before continuing.';
+                paymentError.style.display = 'block';
+                const firstInvalid = document.querySelector('.is-invalid');
+                if (firstInvalid) firstInvalid.focus();
+                return; // stop processing
+            }
+
+            // All validations passed -> proceed
+            startProcessing();
+        });
+
+        function startProcessing() {
+            processPaymentBtn.disabled = true;
+            // Hide payment form and show success message
+            paymentForm.style.display = 'none';
+            successMessage.style.display = 'block';
+
+            // Simulate payment processing delay, then redirect
+            setTimeout(function() {
+                // Get the GameId from the URL or ViewBag
+                const gameId = @Html.Raw(ViewBag.GameId ?? "1"); // Default to 1 if not provided
+
+                // Redirect to User controller, AddGameToLibrary action
+                window.location.href = '@Url.Action("AddGameToLibrary", "User")?Id=' + gameId;
+            }, 3000); // 3 second delay to simulate processing
+        }
+    });
+</script>
+
+<style>
+    .card {
+        border: none;
+        border-radius: 15px;
+    }
+
+    .card-header {
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem;
+    }
+
+    .btn-success {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        border: none;
+        border-radius: 8px;
+    }
+
+        .btn-success:hover {
+            background: linear-gradient(45deg, #218838, #1abc9c);
+        }
+
+    .form-control, .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        transition: border-color 0.3s ease;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+    .bg-light {
+        background-color: #f8f9fa !important;
+    }
+</style>

@@ -17,7 +17,7 @@ namespace GameVault.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.7")
+                .HasAnnotation("ProductVersion", "8.0.18")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -49,6 +49,52 @@ namespace GameVault.DAL.Migrations
 
                     b.HasIndex("UsersId");
 
+                    b.ToTable("GameUser");
+                });
+
+            modelBuilder.Entity("GameVault.DAL.Entites.Game", b =>
+                {
+                    b.Property<int>("GameId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GameId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.HasKey("GameId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("games");
                     b.ToTable("GameUser", (string)null);
                 });
 
@@ -121,6 +167,7 @@ namespace GameVault.DAL.Migrations
 
                     b.HasKey("CompanyId");
 
+                    b.ToTable("Companies");
                     b.ToTable("companies", (string)null);
                 });
 
@@ -332,6 +379,41 @@ namespace GameVault.DAL.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("InventoryItem", b =>
+                {
+                    b.Property<int>("InventoryItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("InventoryItemId"));
+
+                    b.Property<int>("CompanyId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("GameId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UpdatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("InventoryItemId");
+
+                    b.HasIndex("CompanyId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("inventoryItems");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -506,23 +588,23 @@ namespace GameVault.DAL.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("GameVault.DAL.Entities.Inventory", b =>
+            modelBuilder.Entity("GameVault.DAL.Entities.Review", b =>
                 {
-                    b.HasOne("GameVault.DAL.Entities.Company", "Company")
-                        .WithOne("Inventory")
-                        .HasForeignKey("GameVault.DAL.Entities.Inventory", "CompanyId")
+                    b.HasOne("GameVault.DAL.Entites.Game", "Game")
+                        .WithMany("Reviews")
+                        .HasForeignKey("Game_Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Company");
+                    b.Navigation("Game");
                 });
 
-            modelBuilder.Entity("GameVault.DAL.Entities.InventoryItem", b =>
+            modelBuilder.Entity("InventoryItem", b =>
                 {
-                    b.HasOne("GameVault.DAL.Entities.Inventory", "Inventory")
-                        .WithMany("Items")
+                    b.HasOne("GameVault.DAL.Entities.Company", "Company")
+                        .WithMany("InventoryItems")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("GameVault.DAL.Entities.Game", "Game")
@@ -531,6 +613,7 @@ namespace GameVault.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Company");
                     b.Navigation("Game");
 
                     b.Navigation("Inventory");
@@ -602,6 +685,7 @@ namespace GameVault.DAL.Migrations
                 {
                     b.Navigation("Games");
 
+                    b.Navigation("InventoryItems");
                     b.Navigation("Inventory")
                         .IsRequired();
                 });

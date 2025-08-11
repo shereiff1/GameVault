@@ -1,6 +1,12 @@
 {
   "runtimeOptions": {
     "tfm": "net8.0",
+<<<<<<< HEAD
+    "framework": {
+      "name": "Microsoft.NETCore.App",
+      "version": "8.0.0"
+    },
+=======
     "frameworks": [
       {
         "name": "Microsoft.NETCore.App",
@@ -11,6 +17,7 @@
         "version": "8.0.0"
       }
     ],
+>>>>>>> eeddbfb7f6b82addf0ad59f77cc3a4c839c0309a
     "configProperties": {
       "System.Reflection.NullabilityInfoContext.IsSupported": true,
       "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false

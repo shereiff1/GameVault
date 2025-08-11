@@ -4,12 +4,33 @@ D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.AssemblyInfoI
 D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.AssemblyInfo.cs
 D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.csproj.CoreCompileInputs.cache
 D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.sourcelink.json
-D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.deps.json
-D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.runtimeconfig.json
-D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.dll
-D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.pdb
-D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.dll
-D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\refint\GameVault.DAL.dll
-D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.pdb
-D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.genruntimeconfig.cache
-D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\ref\GameVault.DAL.dll
+E:\ITI Project\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.deps.json
+E:\ITI Project\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.runtimeconfig.json
+E:\ITI Project\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.dll
+E:\ITI Project\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.pdb
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.csproj.AssemblyReference.cache
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.GeneratedMSBuildEditorConfig.editorconfig
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.AssemblyInfoInputs.cache
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.AssemblyInfo.cs
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.csproj.CoreCompileInputs.cache
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.sourcelink.json
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.dll
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\refint\GameVault.DAL.dll
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.pdb
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.genruntimeconfig.cache
+E:\ITI Project\GameVault\GameVault.DAL\obj\Debug\net8.0\ref\GameVault.DAL.dll
+E:\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.deps.json
+E:\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.runtimeconfig.json
+E:\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.dll
+E:\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.pdb
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.csproj.AssemblyReference.cache
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.GeneratedMSBuildEditorConfig.editorconfig
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.AssemblyInfoInputs.cache
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.AssemblyInfo.cs
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.csproj.CoreCompileInputs.cache
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.sourcelink.json
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.dll
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\refint\GameVault.DAL.dll
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.pdb
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.genruntimeconfig.cache
+E:\GameVault\GameVault.DAL\obj\Debug\net8.0\ref\GameVault.DAL.dll

@@ -1,10 +1,10 @@
-﻿    using GameVault.DAL.Database;
-    using GameVault.DAL.Entities;
-    using GameVault.DAL.Repository.Abstraction;
-    using Microsoft.EntityFrameworkCore;
+﻿using GameVault.DAL.Database;
+using GameVault.DAL.Entities;
+using GameVault.DAL.Repository.Abstraction;
+using Microsoft.EntityFrameworkCore;
 
-    namespace GameVault.DAL.Repository.Implementation
-    {
+namespace GameVault.DAL.Repository.Implementation
+{
     public class GameRepo : IGameRepo
     {
         private readonly ApplicationDbContext _context;
@@ -127,9 +127,6 @@
             {
                 Console.WriteLine(ex.Message);
                 return (false, null, 0);
-
-
-
             }
         }
 
@@ -141,15 +138,12 @@
                     .Include(g => g.Categories)
                     .FirstOrDefaultAsync(g => g.GameId == gameId && !g.IsDeleted);
 
-
-
                 return game?.Categories?.Where(c => !c.IsDeleted).Select(c => c.Category_Id).ToList() ?? new List<int>();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
                 return new List<int>();
-
             }
         }
 
@@ -168,14 +162,6 @@
             {
                 Console.WriteLine(ex.Message);
                 return (false, new List<Game>());
-
-
-
-
-
-
-
-
             }
         }
 
@@ -206,11 +192,6 @@
                         .ToListAsync();
 
                     existingGame.Categories.AddRange(newCategories);
-
-
-
-
-
                 }
 
                 var inventoryItem = await _context.inventoryItems
@@ -309,19 +290,9 @@
             {
                 Console.WriteLine($"Error fetching game details: {ex.Message}");
                 return (false, null);
-
-
-
-
-
-
-
-
-
             }
         }
 
-        // Legacy methods for backward compatibility (if needed by existing code)
         public async Task<bool> AddAsync(Game game, decimal price)
         {
             return await AddAsync(game, price, null);
@@ -333,4 +304,3 @@
         }
     }
 }
-    

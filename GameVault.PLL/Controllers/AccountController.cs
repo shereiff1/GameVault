@@ -3,7 +3,6 @@ using GameVault.BLL.ModelVM.Account;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
 using GameVault.DAL.Entities;
-using Microsoft.AspNet.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;

@@ -7,7 +7,6 @@ namespace GameVault.PLL.Services
         GameVM? GetCurrentFeaturedGame();
         Task<GameVM?> GetCurrentFeaturedGameAsync();
     }
-
     public class FeaturedGameService : IFeaturedGameService
     {
         private readonly ILogger<FeaturedGameService> _logger;
@@ -17,12 +16,12 @@ namespace GameVault.PLL.Services
             _logger = logger;
         }
 
-        public GameVM? GetCurrentFeaturedGame()
+        public GameDetails? GetCurrentFeaturedGame()
         {
             return FeaturedGameBackgroundService.GetCurrentFeaturedGame();
         }
 
-        public async Task<GameVM?> GetCurrentFeaturedGameAsync()
+        public async Task<GameDetails?> GetCurrentFeaturedGameAsync()
         {
             return await Task.FromResult(GetCurrentFeaturedGame());
         }

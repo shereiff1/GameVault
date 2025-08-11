@@ -32,7 +32,7 @@ namespace GameVault.PLL.Services
                 {
                     await UpdateFeaturedGame();
 
-                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(20), stoppingToken);
                 }
                 catch (OperationCanceledException)
                 {
