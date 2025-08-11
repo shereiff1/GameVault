@@ -8,7 +8,6 @@ using GameVault.BLL.Services.Abstraction;
 
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
-using Microsoft.EntityFrameworkCore;
 
 namespace GameVault.BLL.Services.Implementation
 {
@@ -31,7 +30,6 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                // Handle new category creation if provided
                 if (!string.IsNullOrWhiteSpace(gameDto.NewCategoryName))
                 {
                     var newCategory = new CreateCategory
@@ -43,7 +41,6 @@ namespace GameVault.BLL.Services.Implementation
                     var (categoryCreated, categoryMessage) = await _categoryServices.CreateAsync(newCategory);
                     if (categoryCreated)
                     {
-                        // Get the newly created category and add its ID to selected categories
                         var (success, categories) = await _categoryServices.GetAllAsync();
                         if (success && categories != null)
                         {
@@ -97,7 +94,6 @@ namespace GameVault.BLL.Services.Implementation
                 if (!success || game == null)
                     return (false, null);
 
-                // Get selected category IDs
                 var categoryIds = await _gameRepo.GetGameCategoryIdsAsync(gameId);
 
                 var editGame = new EditGame
@@ -131,7 +127,6 @@ namespace GameVault.BLL.Services.Implementation
                 if (!success || existingGame == null)
                     return false;
 
-                // Handle new category creation if provided
                 if (!string.IsNullOrWhiteSpace(editGame.NewCategoryName))
                 {
                     var newCategory = new CreateCategory
@@ -143,7 +138,6 @@ namespace GameVault.BLL.Services.Implementation
                     var (categoryCreated, categoryMessage) = await _categoryServices.CreateAsync(newCategory);
                     if (categoryCreated)
                     {
-                        // Get the newly created category and add its ID to selected categories
                         var (categorySuccess, categories) = await _categoryServices.GetAllAsync();
                         if (categorySuccess && categories != null)
                         {
@@ -161,8 +155,6 @@ namespace GameVault.BLL.Services.Implementation
                 {
                     imagePath = Upload.UploadFile("Files", editGame.formFile);
                 }
-
-                // Update the existing game properties
                 existingGame.Update(editGame.Title, editGame.Description);
                 existingGame.UpdateCompany(editGame.CompanyId);
                 existingGame.UpdatePhoto(imagePath);
@@ -233,8 +225,6 @@ namespace GameVault.BLL.Services.Implementation
 
                 if (!success || game == null)
                     return (false, null);
-
-                // Get price from inventory
                 var (inventorySuccess, inventoryItems) = await _inventoryItemRepo.GetByGameAsync(gameId);
                 var inventoryItem = inventoryItems?.FirstOrDefault();
 
@@ -243,7 +233,7 @@ namespace GameVault.BLL.Services.Implementation
                     GameId = game.GameId,
                     Title = game.Title,
                     Description = game.Description,
-                    CompanyName = game.Company?.CompanyName ?? "Unknown",
+                    CompanyName = game.Company.CompanyName,
                     ImagePath = game.ImagePath,
                     Rating = game.Reviews != null && game.Reviews.Any()
                         ? game.Reviews.Average(r => r.Rating)
