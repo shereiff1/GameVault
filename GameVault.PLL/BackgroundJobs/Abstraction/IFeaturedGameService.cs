@@ -4,8 +4,8 @@ namespace GameVault.PLL.Services
 {
     public interface IFeaturedGameService
     {
-        GameDetails? GetCurrentFeaturedGame();
-        Task<GameDetails?> GetCurrentFeaturedGameAsync();
+        GameVM? GetCurrentFeaturedGame();
+        Task<GameVM?> GetCurrentFeaturedGameAsync();
     }
 
     public class FeaturedGameService : IFeaturedGameService
@@ -17,12 +17,12 @@ namespace GameVault.PLL.Services
             _logger = logger;
         }
 
-        public GameDetails? GetCurrentFeaturedGame()
+        public GameVM? GetCurrentFeaturedGame()
         {
             return FeaturedGameBackgroundService.GetCurrentFeaturedGame();
         }
 
-        public async Task<GameDetails?> GetCurrentFeaturedGameAsync()
+        public async Task<GameVM?> GetCurrentFeaturedGameAsync()
         {
             return await Task.FromResult(GetCurrentFeaturedGame());
         }

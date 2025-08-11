@@ -1,8 +1,9 @@
 @using GameVault.BLL.ModelVM.Game
-@model List<GameDetails>
+@model List<GameVM>
 @{
     ViewData["Title"] = "Home Page - GameVault";
-    var featuredGame = ViewBag.FeaturedGame as GameDetails;
+    var featuredGame = ViewBag.FeaturedGame as GameVM;
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
 }
 
 <div class="container-fluid">
@@ -273,7 +274,7 @@
         </div>
 
     }
-    else
+    else if (currentUser != null && UserManager.IsInRoleAsync(currentUser,"Admin").Result)
     {
         <div class="row">
             <div class="col-12 text-center">

@@ -1,17 +1,19 @@
-using GameVault.DAL.Database;
-using GameVault.DAL.Entities;
+using AutoMapper;
+using GameVault.BLL.Helpers;
+using GameVault.BLL.Interfaces;
 using GameVault.BLL.Mappers;
 using GameVault.BLL.Services;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
+using GameVault.DAL.Database;
+using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
+using GameVault.PLL.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using GameVault.BLL.Interfaces;
-using Hangfire;
 
 
 
@@ -19,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllersWithViews();
-var connectionString = builder.Configuration.GetConnectionString("TemplateConnection");
+var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(connectionString));
@@ -30,14 +32,25 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
-    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireNonAlphanumeric = true; 
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
     options.SignIn.RequireConfirmedAccount = true;
+    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+
+
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opts =>
+{
+    opts.TokenLifespan = TimeSpan.FromHours(24); // Email confirmation tokens valid for 24 hours
+});
+
 
 // Custom services
 builder.Services.AddScoped<ICompanyServices, CompanyServices>();
@@ -51,25 +64,27 @@ builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IReviewServices, ReviewServices>();
-
-
+builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IRoleService, RoleServices>();
 
-builder.Services.AddAuthentication()
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
-  .AddGoogle(options =>
-  {
-      options.ClientId = "732308948156-dsd0ftq5fdmf6imai4n9ohmt996uco2j.apps.googleusercontent.com";
-      options.ClientSecret = "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";
-  })
-  .AddFacebook(options =>
-  {
-      options.ClientId = "1704467360230786";
-      options.ClientSecret = "9425cb2c8f4fdaca6ba754a7dea28d14";
-  });
+
+builder.Services.AddAuthentication()
+   .AddGoogle(options =>
+   {
+       options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+       options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+   })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+    });
 
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -88,6 +103,9 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
+
+
+
 var app = builder.Build();
 
 

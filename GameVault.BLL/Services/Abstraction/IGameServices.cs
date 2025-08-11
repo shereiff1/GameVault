@@ -6,13 +6,13 @@ namespace GameVault.BLL.Services.Abstraction
 {
     public interface IGameServices
     {
-        Task<bool> AddAsync(GameVM gameVM);
-        Task<(bool, List<GameVM>?)> GetAllAsync(bool includeDeleted = false);
+        Task<bool> AddAsync(ModelVM.GameVM gameVM);
+        Task<(bool, List<ModelVM.GameVM>?)> GetAllAsync(bool includeDeleted = false);
         Task<(bool, EditGame?)> GetByIdAsync(int gameId);
         Task<bool> UpdateAsync(EditGame editGame);
         Task<bool> DeleteAsync(int gameId);
-        Task<(bool, List<GameVM>)> GetByCompanyAsync(int companyId);
-        Task<(bool, List<GameDetails>?)> GetAllGameDetailsAsync();
-        Task<(bool success, GameDetails)> GetGameDetails(int id);
+        Task<(bool, List<ModelVM.GameVM>)> GetByCompanyAsync(int companyId);
+        Task<(bool, List<ModelVM.Game.GameVM>?)> GetAllGameDetailsAsync();
+        Task<(bool success, ModelVM.Game.GameVM)> GetGameDetails(int id);
     }
 }

@@ -2,6 +2,7 @@
 using GameVault.BLL.Services.Abstraction;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using GameVault.BLL.ModelVM.Game;
 
 namespace GameVault.PLL.Controllers
 {
@@ -227,6 +228,77 @@ namespace GameVault.PLL.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> AddGameToLibrary(int gameId)
+        {
+            var userId = GetCurrentUserId().Result;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+            var (success, error) = await userServices.AddGameToLibrary(userId, gameId);
+
+            if (!success)
+            {
+                ViewBag.ErrorMessage = error ?? "Failed to Add the Game";
+                return View();
+            }
+
+            return RedirectToAction("Library", "User");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveGameFromLibrary(int gameId)
+        {
+            var userId = GetCurrentUserId().Result;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+
+            var (success, error) = await userServices.RemoveGameFromLibrary(userId, gameId);
+
+            if (!success)
+            {
+                ViewBag.ErrorMessage = error ?? "Failed to remove the Game";
+                return View();
+            }
+
+            return RedirectToAction("Library", "User");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> UserLibrary()
+        {
+            try
+            {
+                var userId = await GetCurrentUserId();
+                if (string.IsNullOrEmpty(userId))
+                {
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var (Library,error) = await userServices.GetUserLibrary(userId);
+
+                if(error != null)
+                {
+                    ViewBag.ErrorMessage = error ?? "Failed to load your games library";
+                }
+                return View(Library);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "An error occurred while loading your Library.";
+                return RedirectToAction("Index", "Home");
+            }
+        }
+
+       
         public IActionResult UserNavBar()
         {
             return View();

@@ -8,10 +8,10 @@ namespace GameVault.PLL.Services
         private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly ILogger<FeaturedGameBackgroundService> _logger;
 
-        public static GameDetails? CurrentFeaturedGame { get; private set; }
+        public static GameVM? CurrentFeaturedGame { get; private set; }
         public static DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
-        private static List<GameDetails> _allGames = new();
+        private static List<GameVM> _allGames = new();
         private static int _currentGameIndex = 0;
 
         public FeaturedGameBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<FeaturedGameBackgroundService> logger)
@@ -97,7 +97,7 @@ namespace GameVault.PLL.Services
 
             _logger.LogInformation($"Updated featured game to: {CurrentFeaturedGame.Title}");
         }
-        public static GameDetails? GetCurrentFeaturedGame()
+        public static GameVM? GetCurrentFeaturedGame()
         {
             return CurrentFeaturedGame;
         }

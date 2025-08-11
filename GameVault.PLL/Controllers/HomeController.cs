@@ -25,7 +25,7 @@ namespace GameVault.PLL.Controllers
             try
             {
                 var (success, gameDetails) = await gameServices.GetAllGameDetailsAsync();
-                var games = success && gameDetails != null ? gameDetails : new List<GameDetails>();
+                var games = success && gameDetails != null ? gameDetails : new List<GameVM>();
                 var featuredGame = await featuredGameService.GetCurrentFeaturedGameAsync();
                 ViewBag.FeaturedGame = featuredGame;
                 return View(games);
@@ -34,7 +34,7 @@ namespace GameVault.PLL.Controllers
             {
                 _logger.LogError(ex, "Error occurred while loading home page");
                 ViewBag.FeaturedGame = null;
-                return View(new List<GameDetails>());
+                return View(new List<GameVM>());
             }
         }
 

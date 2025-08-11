@@ -38,10 +38,11 @@ namespace GameVault.PLL.Controllers
             }
             if (ModelState.IsValid)
             {
-                var result  = await services.SignUp(register);
+                var confirmationUrl = Url.Action("ConfirmEmail", "Account", null, Request.Scheme);
+                var result = await services.SignUp(register, confirmationUrl);
                 if (result.Succeeded)
                 {
-
+                    TempData["Message"] = "Registration successful! Please check your email to confirm your account before logging in.";
                     return RedirectToAction("Login");
                 }
                 else
@@ -74,7 +75,14 @@ namespace GameVault.PLL.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid UserName Or Password");
+                    var errorMessage = result.Errors.FirstOrDefault()?.Description ?? "Invalid UserName Or Password";
+
+                    if (errorMessage.Contains("confirm your email"))
+                    {
+                        ViewBag.ShowResendLink = true;
+                        ViewBag.Email = login.Email;
+                    }
+                    ModelState.AddModelError("", errorMessage);
 
                 }
             }
@@ -107,19 +115,27 @@ namespace GameVault.PLL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await services.ForgetPassword(model, Request.Scheme, Url.Action);
-
-                if (result.Success && !string.IsNullOrEmpty(result.PasswordResetLink))
+                try
                 {
-                    // Send email with the password reset link
-                    // You'll need to inject your email service here
-                    // MailSender.Mail("Password Reset", result.PasswordResetLink);
+                    var result = await services.ForgetPassword(model, Request.Scheme, Url.Action);
 
-                    // For now, you can log it or handle it as needed
-                    // logger.Log(LogLevel.Warning, result.PasswordResetLink);
+                    if (result.Success)
+                    {
+                        TempData["Message"] = "If your email is registered with us, you will receive a password reset link shortly.";
+                        return RedirectToAction("ConfirmForgetPassword");
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(result.ErrorMessage))
+                        {
+                            ModelState.AddModelError("", result.ErrorMessage);
+                        }
+                    }
                 }
-
-                return RedirectToAction("ConfirmForgetPassword");
+                catch (Exception ex)
+                {
+                    TempData["Error"] = "An error occurred while processing your request. Please try again.";
+                }
             }
 
             return View(model);
@@ -130,7 +146,8 @@ namespace GameVault.PLL.Controllers
         {
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
             {
-                return BadRequest("Invalid password reset link");
+                TempData["Error"] = "Invalid password reset link.";
+                return RedirectToAction("Login");
             }
 
             var model = new ResetPassword
@@ -147,15 +164,24 @@ namespace GameVault.PLL.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await services.ResetPassword(model);
-                if (result.Succeeded)
+                try
                 {
-                    return RedirectToAction("ConfirmResetPassword");
-                }
+                    var result = await services.ResetPassword(model);
 
-                foreach (var error in result.Errors)
+                    if (result.Succeeded)
+                    {
+                        TempData["Message"] = "Your password has been successfully reset. You can now sign in with your new password.";
+                        return RedirectToAction("ConfirmResetPassword");
+                    }
+
+                    foreach (var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                }
+                catch (Exception ex)
                 {
-                    ModelState.AddModelError("", error.Description);
+                    ModelState.AddModelError("", "An error occurred while resetting your password. Please try again.");
                 }
             }
 
@@ -233,6 +259,55 @@ namespace GameVault.PLL.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+        }
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string token)
+        {
+            if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            {
+                ViewBag.Message = "Invalid email confirmation link.";
+                ViewBag.Success = false;
+                return View();
+            }
+
+            var result = await services.ConfirmEmail(userId, token);
+
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Email confirmed successfully! You can now log in.";
+                ViewBag.Success = true;
+            }
+            else
+            {
+                ViewBag.Message = "Error confirming email: " + string.Join(", ", result.Errors.Select(e => e.Description));
+                ViewBag.Success = false;
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResendConfirmation(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                TempData["Error"] = "Email is required.";
+                return RedirectToAction("Login");
+            }
+
+            var confirmationUrl = Url.Action("ConfirmEmail", "Account", null, Request.Scheme);
+            var result = await services.ResendConfirmationEmail(email, confirmationUrl);
+
+            if (result.Succeeded)
+            {
+                TempData["Message"] = "Confirmation email has been resent. Please check your email.";
+            }
+            else
+            {
+                TempData["Error"] = string.Join(", ", result.Errors.Select(e => e.Description));
+            }
+
+            return RedirectToAction("Login");
         }
     }
 }

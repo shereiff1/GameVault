@@ -10,7 +10,7 @@ namespace GameVault.DAL.Database
 
     {
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Company> companies { get; set; }
+        public DbSet<Company> Companies { get; set; }
         public DbSet<Game> games { get; set; }
         public DbSet<InventoryItem> inventoryItems { get; set; }
         public DbSet<Review> Reviews { get; set; }
