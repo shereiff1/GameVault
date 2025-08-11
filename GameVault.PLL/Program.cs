@@ -1,17 +1,18 @@
-using GameVault.DAL.Database;
-using GameVault.DAL.Entities;
+using AutoMapper;
+using GameVault.BLL.Interfaces;
 using GameVault.BLL.Mappers;
 using GameVault.BLL.Services;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
+using GameVault.DAL.Database;
+using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
+using GameVault.PLL.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
-using GameVault.BLL.Interfaces;
-using Hangfire;
 
 
 
@@ -19,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 builder.Services.AddControllersWithViews();
-var connectionString = builder.Configuration.GetConnectionString("TemplateConnection");
+var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(connectionString));
@@ -57,7 +58,8 @@ builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IRoleService, RoleServices>();
-
+builder.Services.AddHostedService<FeaturedGameBackgroundService>();
+builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
 builder.Services.AddAuthentication()
 
   .AddGoogle(options =>
