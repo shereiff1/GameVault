@@ -34,3 +34,12 @@ E:\GameVault\GameVault.DAL\obj\Debug\net8.0\refint\GameVault.DAL.dll
 E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.pdb
 E:\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.genruntimeconfig.cache
 E:\GameVault\GameVault.DAL\obj\Debug\net8.0\ref\GameVault.DAL.dll
+D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.deps.json
+D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.runtimeconfig.json
+D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.dll
+D:\CMP\.NET\GameVault\GameVault.DAL\bin\Debug\net8.0\GameVault.DAL.pdb
+D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.dll
+D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\refint\GameVault.DAL.dll
+D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.pdb
+D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\GameVault.DAL.genruntimeconfig.cache
+D:\CMP\.NET\GameVault\GameVault.DAL\obj\Debug\net8.0\ref\GameVault.DAL.dll

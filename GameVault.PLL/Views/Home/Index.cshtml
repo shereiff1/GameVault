@@ -1,8 +1,8 @@
 @using GameVault.BLL.ModelVM.Game
-@model List<GameVM>
+@model List<GameDetails>
 @{
     ViewData["Title"] = "Home Page - GameVault";
-    var featuredGame = ViewBag.FeaturedGame as GameVM;
+    var featuredGame = ViewBag.FeaturedGame as GameDetails;
     var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
 }
 

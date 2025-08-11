@@ -12,7 +12,7 @@ namespace GameVault.BLL.Services.Abstraction
         Task<bool> UpdateAsync(EditGame editGame);
         Task<bool> DeleteAsync(int gameId);
         Task<(bool, List<ModelVM.GameVM>)> GetByCompanyAsync(int companyId);
-        Task<(bool, List<ModelVM.Game.GameVM>?)> GetAllGameDetailsAsync();
-        Task<(bool success, ModelVM.Game.GameVM)> GetGameDetails(int id);
+        Task<(bool, List<GameDetails>?)> GetAllGameDetailsAsync();
+        Task<(bool success, GameDetails)> GetGameDetails(int id);
     }
 }

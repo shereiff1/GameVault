@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace GameVault.BLL.ModelVM.Game
 {
-    public class GameVM
+    public class GameDetails
     {
         public int GameId { get; set; }
         public string Title { get; set; }

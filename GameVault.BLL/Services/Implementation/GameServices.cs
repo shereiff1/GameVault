@@ -198,7 +198,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool, List<ModelVM.Game.GameVM>?)> GetAllGameDetailsAsync()
+        public async Task<(bool, List<GameDetails>?)> GetAllGameDetailsAsync()
         {
             try
             {
@@ -207,7 +207,7 @@ namespace GameVault.BLL.Services.Implementation
                 if (!success || gameDetailsDTOs == null)
                     return (false, null);
 
-                var gameDetails = _mapper.Map<List<ModelVM.Game.GameVM>>(gameDetailsDTOs);
+                var gameDetails = _mapper.Map<List<GameDetails>>(gameDetailsDTOs);
                 return (true, gameDetails);
             }
             catch (Exception ex)
@@ -217,7 +217,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool success, ModelVM.Game.GameVM?)> GetGameDetails(int gameId)
+        public async Task<(bool success, GameDetails?)> GetGameDetails(int gameId)
         {
             try
             {
@@ -228,7 +228,7 @@ namespace GameVault.BLL.Services.Implementation
                 var (inventorySuccess, inventoryItems) = await _inventoryItemRepo.GetByGameAsync(gameId);
                 var inventoryItem = inventoryItems?.FirstOrDefault();
 
-                var details = new ModelVM.Game.GameVM
+                var details = new GameDetails
                 {
                     GameId = game.GameId,
                     Title = game.Title,

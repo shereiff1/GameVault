@@ -13,7 +13,7 @@ namespace GameVault.BLL.Mappers
         public DomainProfile()
         {
             CreateMap<Game, ModelVM.GameVM>().ReverseMap();
-            CreateMap<GameDTO, ModelVM.Game.GameVM>().ReverseMap();
+            CreateMap<GameDTO, GameDetails>().ReverseMap();
             CreateMap<Category, UpdateCategory>().ReverseMap();
             CreateMap<Category, CreateCategory>().ReverseMap();
             CreateMap<Category, CategoryDTO>().ReverseMap();
