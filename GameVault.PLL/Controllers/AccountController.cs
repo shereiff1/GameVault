@@ -47,7 +47,7 @@ namespace GameVault.PLL.Controllers
                 {
                     foreach (var item in result.Errors)
                     {
-                        ModelState.AddModelError("Password", item.Description);
+                        ModelState.AddModelError("", item.Description);
                     }
                 } 
             }
