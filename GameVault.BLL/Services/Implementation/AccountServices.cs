@@ -39,7 +39,7 @@ namespace GameVault.BLL.Services.Implementation
                 return IdentityResult.Failed(new IdentityError { Description = "Please confirm your email before logging in" });
             }
             var result = await signInManager.PasswordSignInAsync(
-                login.Email,
+                user.UserName,
                 login.Password,
                 isPersistent: true,
                 lockoutOnFailure: false);
