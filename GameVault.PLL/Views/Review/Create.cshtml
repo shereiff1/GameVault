@@ -1,15 +1,22 @@
-@model GameVault.BLL.ModelVM.Review.CreateReview
+﻿@model GameVault.BLL.ModelVM.Review.CreateReview
+@using GameVault.DAL.Entities
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @{
-    ViewData["Title"] = "Create Review ";
+    ViewData["Title"] = "Create Review";
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+    var gameId = ViewBag.GameId ?? Context.Request.Query["GameId"].ToString();
+    var gameName = ViewBag.GameName ?? "Selected Game";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header bg-primary text-white">
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-dark">
                     <h3 class="mb-0">
-                        <i class="fas fa-gamepad me-2"></i>Add New Review
+                        <i class="fas fa-star me-2"></i>Add Your Review for "@gameName"
                     </h3>
                 </div>
                 <div class="card-body">
@@ -21,52 +28,69 @@
                         </div>
                     }
 
-                    <form >
-                        <div class="mb-3">
-                            <div class="mb-3">
-                                <label asp-for="CreatedBy" class="form-label">
-                                    <i class="fas fa-user me-1"></i>The reviewer name
-                                </label>
-                                <input asp-for="CreatedBy" id="CreatedBy" class="form-control" placeholder="The reviewer name" required/>
-                                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                    <form asp-controller="Review" asp-action="CreateReview" method="post">
+                        <input type="hidden" asp-for="Game_Id" value="@gameId" />
+                        @if (currentUser != null)
+                        {
+                            <input type="hidden" asp-for="Player_Id" value="@currentUser.Id" />
+                        }
+                        <input type="hidden" asp-for="Rating" />
+                        <input type="hidden" asp-for="CreatedOn" value="@DateTime.UtcNow" />
+
+                        <!-- User Info -->
+                        @if (currentUser != null)
+                        {
+                            <div class="mb-4 p-3 bg-light rounded">
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-circle fa-2x text-primary me-3"></i>
+                                    <div>
+                                        <h5 class="mb-0">@currentUser.UserName</h5>
+                                        <small class="text-muted">Writing a review for: <strong>@gameName</strong></small>
+                                    </div>
+                                </div>
                             </div>
-                            <label asp-for="Player_Id" class="form-label">
-                                <i class="fas fa-heading me-1"></i>The reviewer id
+                        }
+
+                        <!-- Rating -->
+                        <div class="mb-4">
+                            <label class="form-label h5">
+                                <i class="fas fa-star text-warning me-2"></i>Your Rating
                             </label>
-                            <input asp-for="Player_Id" id="Player_Id" class="form-control" placeholder="Enter the reviewer id" required />
-                            <span asp-validation-for="Player_Id" class="text-danger"></span>
+                            <div class="rating-container mb-2">
+                                <div class="star-rating" id="starRating">
+                                    <span class="star" data-rating="1">★</span>
+                                    <span class="star" data-rating="2">★</span>
+                                    <span class="star" data-rating="3">★</span>
+                                    <span class="star" data-rating="4">★</span>
+                                    <span class="star" data-rating="5">★</span>
+                                </div>
+                                <div class="rating-text mt-2">
+                                    <small class="text-muted" id="ratingText">Click on stars to rate</small>
+                                </div>
+                            </div>
+                            <span class="text-danger" id="ratingError"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Game_Id" class="form-label">
-								<i class="fas fa-user me-1"></i>The game id
-                            </label>
-                            <input asp-for="Game_Id" id="Game_Id" class="form-control" placeholder="Enter game id" required />
-                            <span asp-validation-for="Game_Id" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Rating" class="form-label">
-                                <i class="fas fa-user me-1"></i>Rating
-                            </label>
-                            <input asp-for="Rating" id="Rating" class="form-control" placeholder="Enter the rate" required />
-                            <span asp-validation-for="Rating" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Comment" class="form-label">
-                                <i class="fas fa-file-text me-1"></i>Comment here
-                            </label>
-                            <textarea asp-for="Comment" id=" Comment" class="form-control" rows="4" placeholder="Enter any comment please"></textarea>
+                        <!-- Comment -->
+                        <div class="mb-4">
+                            <label asp-for="Comment" class="form-label h5"></label>
+                            <textarea asp-for="Comment" class="form-control" rows="5"
+                                      placeholder="Share your thoughts about this game..."
+                                      maxlength="1000"></textarea>
+                            <div class="d-flex justify-content-between mt-1">
+                                <small class="text-muted">Optional - but helps other players!</small>
+                                <small class="text-muted"><span id="charCount">0</span>/1000 characters</small>
+                            </div>
                             <span asp-validation-for="Comment" class="text-danger"></span>
                         </div>
 
+                        <!-- Buttons -->
                         <div class="d-flex justify-content-between">
-                            <a asp-action="GetAllReviews" class="btn btn-secondary">
-                                <i class="fas fa-arrow-left me-1"></i>Back to Reviews
+                            <a href="javascript:history.back()" class="btn btn-secondary">
+                                <i class="fas fa-arrow-left me-1"></i>Cancel
                             </a>
-                            <button type="submit" id="formSubmit " class="btn btn-primary">
-                                <i class="fas fa-save me-1"></i>Create Review
+                            <button type="submit" id="formSubmit" class="btn btn-warning">
+                                <i class="fas fa-star me-1"></i>Submit Review
                             </button>
                         </div>
                     </form>
@@ -75,31 +99,86 @@
         </div>
     </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-    document.getElementById('formSubmit').addEventListener('click',async function(e){
-        e.preventDefault()
-          try {
-      const response = await fetch('/Review/CreateReview', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            Player_Id: document.getElementById('Player_Id').value,
-          Game_Id: document.getElementById('Game_Id').value,
-          Rating: document.getElementById('Rating').value,
-	 	   Comment: document.getElementById('Comment').value,
-	      CreatedBy: document.getElementById('CreatedBy').value,
-        }),
-      });
-            const newPost = await response.json();
-      if (!response.ok) throw new Error("Failed to create Review");
 
-      console.log("New Review:", newPost);
-	  window.location.href = '/Review/GetAllReviews';
-    } catch (error) {
-      console.error("Create Error:", error);
+<style>
+    .star-rating {
+        font-size: 2.5rem;
+        color: #ddd;
+        cursor: pointer;
+        user-select: none;
     }
-    })
-</script> 
+
+        .star-rating .star {
+            transition: color 0.2s ease;
+            margin-right: 5px;
+        }
+
+            .star-rating .star:hover,
+            .star-rating .star.active {
+                color: #ffc107;
+            }
+
+                .star-rating .star:hover ~ .star {
+                    color: #ddd;
+                }
+</style>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const stars = document.querySelectorAll('.star');
+            const ratingInput = document.querySelector('#Rating');
+            const ratingText = document.getElementById('ratingText');
+            const commentTextarea = document.getElementById('Comment');
+            const charCount = document.getElementById('charCount');
+            const ratingError = document.getElementById('ratingError');
+            let currentRating = 0;
+
+            const ratingDescriptions = {
+                1: '⭐ Poor - Not recommended',
+                2: '⭐⭐ Fair - Has some issues',
+                3: '⭐⭐⭐ Good - Worth playing',
+                4: '⭐⭐⭐⭐ Great - Highly recommended',
+                5: '⭐⭐⭐⭐⭐ Excellent - Must play!'
+            };
+
+            stars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    currentRating = index + 1;
+                    ratingInput.value = currentRating;
+                    updateStars();
+                    ratingText.textContent = ratingDescriptions[currentRating];
+                    ratingText.className = 'text-warning fw-bold';
+                    ratingError.textContent = '';
+                });
+                star.addEventListener('mouseover', () => highlightStars(index + 1));
+            });
+
+            document.getElementById('starRating').addEventListener('mouseleave', updateStars);
+
+            function highlightStars(rating) {
+                stars.forEach((star, index) => {
+                    star.classList.toggle('active', index < rating);
+                });
+            }
+
+            function updateStars() {
+                highlightStars(currentRating);
+            }
+
+            commentTextarea.addEventListener('input', function() {
+                const count = this.value.length;
+                charCount.textContent = count;
+                charCount.className = count > 950 ? 'text-danger' :
+                                       count > 800 ? 'text-warning' : 'text-muted';
+            });
+
+            document.getElementById('formSubmit').addEventListener('click', function(e) {
+                if (!currentRating) {
+                    e.preventDefault();
+                    ratingError.textContent = 'Please select a rating';
+                }
+            });
+        });
+    </script>
+}
