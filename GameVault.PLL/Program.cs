@@ -11,7 +11,6 @@ using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
 using GameVault.PLL.Services;
 using Hangfire;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -64,13 +63,12 @@ builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IReviewServices, ReviewServices>();
-builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IRoleService, RoleServices>();
-
+builder.Services.AddHostedService<SaleBackgroundService>();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 
@@ -107,7 +105,6 @@ builder.Services.AddHangfireServer();
 
 
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
