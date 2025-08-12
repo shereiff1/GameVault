@@ -77,7 +77,7 @@ namespace GameVault.DAL.Repository.Implementation
                 db.Users.Update(user);
                 await db.SaveChangesAsync();
                 return true;
-            }
+            }   
             catch (Exception)
             {
                 return false;
@@ -116,6 +116,41 @@ namespace GameVault.DAL.Repository.Implementation
           
             
         }
+
+        public async Task<bool> IsGameInUserLibrary(string userId, Game game)
+        {
+            try
+            {
+                var user = await GetUserById(userId);
+                if (user.Library != null && user.Library.Contains(game))
+                {
+                    return true;
+                }
+                return false;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public async Task<List<Game>?> GetUserLibrary(string userId)
+        {
+            try
+            {
+                var user = await GetUserById(userId);
+                if (user?.Library == null)
+                {
+                    return null;
+                }
+                return user.Library.ToList();
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
         //public bool AddFriend(User user, User friend)
         //{
         //    try

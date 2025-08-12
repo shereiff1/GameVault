@@ -1,6 +1,4 @@
-﻿@inject SignInManager<GameVault.DAL.Entities.User> SignInManager
-@inject UserManager<GameVault.DAL.Entities.User> UserManager
-
+﻿
 @{
     var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
     var profileImageUrl = !string.IsNullOrEmpty(currentUser?.ProfilePicture)

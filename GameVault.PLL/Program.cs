@@ -1,4 +1,5 @@
 using AutoMapper;
+using GameVault.BLL.Helpers;
 using GameVault.BLL.Interfaces;
 using GameVault.BLL.Mappers;
 using GameVault.BLL.Services;
@@ -36,9 +37,20 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
     options.SignIn.RequireConfirmedAccount = true;
+    options.Tokens.EmailConfirmationTokenProvider = TokenOptions.DefaultEmailProvider;
+    options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+    options.User.RequireUniqueEmail = true;
+
+
 })
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultTokenProviders();
+
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opts =>
+{
+    opts.TokenLifespan = TimeSpan.FromHours(24); // Email confirmation tokens valid for 24 hours
+});
+
 
 // Custom services
 builder.Services.AddScoped<ICompanyServices, CompanyServices>();
@@ -52,26 +64,27 @@ builder.Services.AddScoped<ICategoryRepo, CategoryRepo>();
 builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
 builder.Services.AddScoped<ICategoryServices, CategoryServices>();
 builder.Services.AddScoped<IReviewServices, ReviewServices>();
-
-
+builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IRoleService, RoleServices>();
-builder.Services.AddHostedService<FeaturedGameBackgroundService>();
-builder.Services.AddScoped<IFeaturedGameService, FeaturedGameService>();
-builder.Services.AddAuthentication()
 
-  .AddGoogle(options =>
-  {
-      options.ClientId = "732308948156-dsd0ftq5fdmf6imai4n9ohmt996uco2j.apps.googleusercontent.com";
-      options.ClientSecret = "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";
-  })
-  .AddFacebook(options =>
-  {
-      options.ClientId = "1704467360230786";
-      options.ClientSecret = "9425cb2c8f4fdaca6ba754a7dea28d14";
-  });
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+
+
+builder.Services.AddAuthentication()
+   .AddGoogle(options =>
+   {
+       options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+       options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+   })
+    .AddFacebook(options =>
+    {
+        options.AppId = builder.Configuration["Authentication:Facebook:AppId"];
+        options.AppSecret = builder.Configuration["Authentication:Facebook:AppSecret"];
+    });
 
 
 builder.Services.ConfigureApplicationCookie(options =>
@@ -84,12 +97,15 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.Cookie.SameSite = SameSiteMode.Lax;
-});builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+}); builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
+
+
+
 var app = builder.Build();
 
 

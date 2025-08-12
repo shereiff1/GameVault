@@ -1,4 +1,5 @@
 
+using GameVault.BLL.ModelVM.Game;
 using GameVault.DAL.Entities;
 
 namespace GameVault.BLL.ModelVM.User

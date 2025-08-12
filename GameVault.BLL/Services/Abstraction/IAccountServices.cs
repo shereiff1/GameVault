@@ -13,10 +13,11 @@ namespace GameVault.BLL.Services.Abstraction
 
         Task<(bool,string)> IsEmailInUse(string email);
 
-        Task<IdentityResult> SignUp(UserSignUp user);
+        Task<IdentityResult> SignUp(UserSignUp user,string confirmationUrl);
 
 
-        Task<(bool Success, string PasswordResetLink)> ForgetPassword(ForgetPassword model, string scheme, Func<string, string, object, string, string> urlAction);
+        public Task<(bool Success, string PasswordResetLink, string ErrorMessage)> ForgetPassword(
+              ForgetPassword model, string scheme, Func<string, string, object, string, string> urlAction);       
         Task<IdentityResult> ResetPassword(ResetPassword model);
 
         Task Logout();
@@ -24,6 +25,11 @@ namespace GameVault.BLL.Services.Abstraction
         (AuthenticationProperties properties, string provider) ConfigureExternalLogin(string provider, string redirectUrl);
         Task<ExternalLoginResult> HandleExternalLoginCallback();
         Task<ExternalLoginCreationResult> CreateExternalUser(ExternalLoginInfo externalLoginInfo);
+
+        public Task<IdentityResult> ConfirmEmail(string userId, string token);
+
+        public Task<IdentityResult> ResendConfirmationEmail(string email, string confirmationUrl);
+
 
     }
 }

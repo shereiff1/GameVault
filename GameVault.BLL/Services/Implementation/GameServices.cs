@@ -26,7 +26,7 @@ namespace GameVault.BLL.Services.Implementation
             _categoryServices = categoryServices;
         }
 
-        public async Task<bool> AddAsync(GameVM gameDto)
+        public async Task<bool> AddAsync(ModelVM.GameVM gameDto)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool, List<GameVM>?)> GetAllAsync(bool includeDeleted = false)
+        public async Task<(bool, List<ModelVM.GameVM>?)> GetAllAsync(bool includeDeleted = false)
         {
             try
             {
@@ -73,7 +73,7 @@ namespace GameVault.BLL.Services.Implementation
                 bool success = result.Item1;
                 List<Game>? games = result.Item2;
 
-                return (success, games != null ? _mapper.Map<List<GameVM>>(games) : null);
+                return (success, games != null ? _mapper.Map<List<ModelVM.GameVM>>(games) : null);
             }
             catch (Exception ex)
             {
@@ -181,7 +181,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool, List<GameVM>)> GetByCompanyAsync(int companyId)
+        public async Task<(bool, List<ModelVM.GameVM>)> GetByCompanyAsync(int companyId)
         {
             try
             {
@@ -189,12 +189,12 @@ namespace GameVault.BLL.Services.Implementation
                 bool success = result.Item1;
                 List<Game> games = result.Item2;
 
-                return (success, _mapper.Map<List<GameVM>>(games));
+                return (success, _mapper.Map<List<ModelVM.GameVM>>(games));
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return (false, new List<GameVM>());
+                return (false, new List<ModelVM.GameVM>());
             }
         }
 

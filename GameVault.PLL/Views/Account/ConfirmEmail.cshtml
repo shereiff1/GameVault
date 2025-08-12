@@ -1,0 +1,61 @@
+﻿@{
+    ViewData["Title"] = "Email Confirmation";
+}
+
+<div class="d-flex flex-column flex-root" id="kt_app_root">
+    <div class="d-flex flex-column flex-lg-row flex-column-fluid">
+        <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
+            <div class="d-flex flex-center flex-column flex-lg-row-fluid">
+                <div class="w-lg-500px p-10">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            @if (ViewBag.Success == true)
+                            {
+                                <div class="mb-10">
+                                    <div class="text-success mb-5">
+                                        <i class="ki-duotone ki-check-circle fs-5x">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </div>
+                                    <h1 class="text-gray-900 fw-bolder mb-3">Email Confirmed!</h1>
+                                    <div class="text-gray-500 fw-semibold fs-6">
+                                        @ViewBag.Message
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-center">
+                                    <a href="@Url.Action("Login", "Account")" class="btn btn-primary">
+                                        Continue to Login
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="mb-10">
+                                    <div class="text-danger mb-5">
+                                        <i class="ki-duotone ki-cross-circle fs-5x">
+                                            <span class="path1"></span>
+                                            <span class="path2"></span>
+                                        </i>
+                                    </div>
+                                    <h1 class="text-gray-900 fw-bolder mb-3">Confirmation Failed</h1>
+                                    <div class="text-gray-500 fw-semibold fs-6">
+                                        @ViewBag.Message
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-center">
+                                    <a href="@Url.Action("Login", "Account")" class="btn btn-secondary me-3">
+                                        Back to Login
+                                    </a>
+                                    <a href="@Url.Action("SignUp", "Account")" class="btn btn-primary">
+                                        Try Again
+                                    </a>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

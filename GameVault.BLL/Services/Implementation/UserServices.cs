@@ -1,8 +1,9 @@
 
 using System.Threading.Tasks;
-using _3TierArch.BLL.Helper;
+using GameVault.BLL.Helpers.UploadFile;
 using AutoMapper;
-
+using GameVault.BLL.ModelVM;
+using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.ModelVM.User;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Database;
@@ -15,32 +16,17 @@ namespace GameVault.BLL.Services.Implementation
 {
     public class UserServices : IUserServices
     {
-        private readonly IUserRepo repo;
+        private readonly IUserRepo userrepo;
+        private readonly IGameRepo gamerepo;
         private readonly IMapper mapper;
 
-        public UserServices(IUserRepo repo, IMapper mapper)
+        public UserServices(IUserRepo repo, IMapper mapper,IGameRepo gamerepo)
         {
-            this.repo = repo;
+            this.userrepo = repo;
             this.mapper = mapper;
+            this.gamerepo = gamerepo;
         }
 
-
-        //public (bool, string?) AddUser(UserSignUp user)
-        //{
-        //    try
-        //    {
-        //        if(user == null) 
-        //            return (false, "Invalid SingUp info");
-        //        var User = new User(user.Email,user.Username,user.Password);
-        //        return (repo.AddUser(User), null);
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-
-        //        return (false, ex.Message);
-        //    }
-        //}
 
         public async Task<(bool, string?)> UpdateUserProfile(UpdateUserProfile user)
         {
@@ -49,9 +35,9 @@ namespace GameVault.BLL.Services.Implementation
                 if (user == null)
                     return (false,"Ivalid Update, please try again");
                 user.ProfilePicture = Upload.UploadFile("Images", user.ImageFile);
-                var User = await repo.GetUserById(user.Id);
+                var User = await userrepo.GetUserById(user.Id);
                 User.UpdateProfile(user.UserName, user.Name, user.ProfilePicture);
-                return (await repo.Update(User), null);
+                return (await userrepo.Update(User), null);
             }
             catch (Exception ex)
             {
@@ -63,7 +49,7 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                var users =await repo.GetAll();
+                var users =await userrepo.GetAll();
                 if (users == null)
                     return (null, "There are no users yet");
                 var map = mapper.Map<List<UserPrivateProfile>>(users);
@@ -75,11 +61,11 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        async Task<(List<UserPublicProfile>?, string)> IUserServices.GetAllUsers()
+        public async Task<(List<UserPublicProfile>?, string)> GetAllUsers()
         {
             try
             {
-                var users = await repo.GetAll();
+                var users = await userrepo.GetAll();
                 if (users == null)
                     return (null, "There are no users yet");
                 var map = mapper.Map<List<UserPublicProfile>>(users);
@@ -94,7 +80,7 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                var user =await repo.GetUserById(id);
+                var user =await userrepo.GetUserById(id);
                 if (user == null)
                     return (null, "Error, User not found");
                 var map = mapper.Map<UserPublicProfile>(user);
@@ -109,7 +95,7 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                var user =await repo.GetUserById(id);
+                var user =await userrepo.GetUserById(id);
                 if (user == null)
                     return (null, "Error, User not found");
                 var map = mapper.Map<UserPrivateProfile>(user);
@@ -124,7 +110,7 @@ namespace GameVault.BLL.Services.Implementation
         {
             try
             {
-                var user = await repo.GetUserById(id);
+                var user = await userrepo.GetUserById(id);
                 if (user == null)
                     return (null, "Error, User not found");
                 var map = mapper.Map<UpdateUserProfile>(user);
@@ -136,6 +122,74 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
+        public async Task<(bool,string?)> AddGameToLibrary(string userId, int gameId)
+        {
+            try
+            {
+                var user = await userrepo.GetUserById(userId);
+                var (result, game) = await gamerepo.GetByIdAsync(gameId);
+
+                if (user == null || result == false)
+                    return (false,"Error, Invalid user or game");
+
+                if (userrepo.IsGameInUserLibrary(userId,game).Result)
+                {
+                    return (false, "Game Already in your Library");
+                }
+
+                await userrepo.AddGameToLibrary(user, game);
+                return (true,null);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public async Task<(bool,string?)> RemoveGameFromLibrary(string userId, int gameId)
+        {
+            try
+            {
+                var user = await userrepo.GetUserById(userId);
+                var (result, game) = await gamerepo.GetByIdAsync(gameId);
+
+                if (user == null || result == false)
+                    return (false, "Error, Invalid user or game");
+
+                if (!userrepo.IsGameInUserLibrary(userId, game).Result)
+                {
+                    return (false, "Game is not your Library");
+                }
+
+                await userrepo.RemoveGameFromLibrary(user, game);
+                return (true,null);
+            }
+            catch (Exception ex)
+            {
+                return (false,ex.Message);
+            }
+        }
+
+        public async Task<(List<ModelVM.GameVM>?,string?)> GetUserLibrary(string userId)
+        {
+            try
+            {
+                var library = await userrepo.GetUserLibrary(userId);
+                if (library == null || library.Count == 0)
+                {
+                    return (null, "You don't have any games yet");
+                }
+                var map = mapper.Map<List<ModelVM.GameVM>>(library);
+                return (map, null);
+            }
+            catch (Exception ex)
+            {
+
+                return(null,ex.Message);
+            }
+           
+
+        }
 
     }
 }

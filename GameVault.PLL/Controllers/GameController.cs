@@ -27,7 +27,7 @@ namespace GameVault.PLL.Controllers
             if (!success || games == null)
             {
                 ViewBag.Error = "Failed to load games.";
-                return View(new List<GameVM>());
+                return base.View(new List<BLL.ModelVM.GameVM>());
             }
 
             ViewBag.Error = errorMessage;
@@ -48,7 +48,7 @@ namespace GameVault.PLL.Controllers
         {
             await LoadViewBagData(companyId);
 
-            var gameVm = new GameVM();
+            var gameVm = new BLL.ModelVM.GameVM();
             if (companyId.HasValue)
             {
                 gameVm.CompanyId = companyId.Value;
@@ -58,7 +58,7 @@ namespace GameVault.PLL.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(GameVM game)
+        public async Task<IActionResult> Add(BLL.ModelVM.GameVM game)
         {
             if (ModelState.IsValid)
             {

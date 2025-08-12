@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "E:\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {}
+    "D:\\CMP\\.NET\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {}
   },
   "projects": {
-    "E:\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {
+    "D:\\CMP\\.NET\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
+        "projectUniqueName": "D:\\CMP\\.NET\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
         "projectName": "GameVault.DAL",
-        "projectPath": "E:\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
-        "packagesPath": "C:\\Users\\sheri\\.nuget\\packages\\",
-        "outputPath": "E:\\GameVault\\GameVault.DAL\\obj\\",
+        "projectPath": "D:\\CMP\\.NET\\GameVault\\GameVault.DAL\\GameVault.DAL.csproj",
+        "packagesPath": "C:\\Users\\ibrahim\\.nuget\\packages\\",
+        "outputPath": "D:\\CMP\\.NET\\GameVault\\GameVault.DAL\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\sheri\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\ibrahim\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -68,23 +68,17 @@
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.18, )"
-            },
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
-              "target": "Package",
-              "version": "[8.0.18, )"
+              "version": "[9.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.18, )"
+              "version": "[9.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.18, )"
+              "version": "[9.0.7, )"
             }
           },
           "imports": [

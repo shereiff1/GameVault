@@ -32,6 +32,10 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDaGFuZ2VQYXNzd29yZC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[E:/GameVault/GameVault.PLL/Views/Account/ConfirmEmail.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDb25maXJtRW1haWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [E:/GameVault/GameVault.PLL/Views/Account/ConfirmForgetPassword.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxDb25maXJtRm9yZ2V0UGFzc3dvcmQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
@@ -186,6 +190,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [E:/GameVault/GameVault.PLL/Views/User/UpdateProfile.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxVcGRhdGVQcm9maWxlLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[E:/GameVault/GameVault.PLL/Views/User/UserLibrary.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVXNlclxVc2VyTGlicmFyeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [E:/GameVault/GameVault.PLL/Views/User/UserNavBar.cshtml]
