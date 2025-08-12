@@ -19,7 +19,6 @@ namespace GameVault.PLL.Controllers
             _companyServices = companyServices;
             _categoryServices = categoryServices;
         }
-
         public async Task<IActionResult> Index(string? errorMessage = null)
         {
             var (success, games) = await _gameServices.GetAllAsync();
@@ -48,7 +47,7 @@ namespace GameVault.PLL.Controllers
         {
             await LoadViewBagData(companyId);
 
-            var gameVm = new BLL.ModelVM.GameVM();
+            var gameVm = new GameVM();
             if (companyId.HasValue)
             {
                 gameVm.CompanyId = companyId.Value;
@@ -58,7 +57,7 @@ namespace GameVault.PLL.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add(BLL.ModelVM.GameVM game)
+        public async Task<IActionResult> Add(GameVM game)
         {
             if (ModelState.IsValid)
             {
