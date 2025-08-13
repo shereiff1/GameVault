@@ -73,6 +73,22 @@
                                data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-user-circle me-1"></i>Account
                             </a>
+                                <a class="dropdown-item d-flex justify-content-between"
+                                   href="@Url.Action("SetLanguage", "Home", new {
+                                                  culture = "en-US",
+                                                  returnUrl = Context.Request.Path + Context.Request.QueryString
+                                              })">
+                                    <img src="~/lib/famfamfam-flags/dist/png/us.png" width="25" height="15" class="mt-1" />
+                                    <span>English</span>
+                                </a>
+                                <a class="dropdown-item d-flex justify-content-between"
+                                   href="@Url.Action("SetLanguage", "Home", new {
+                                                  culture = "ar-EG",
+                                                  returnUrl = Context.Request.Path + Context.Request.QueryString
+                                              })">
+                                    <img src="~/lib/famfamfam-flags/dist/png/eg.png" width="25" height="15" class="mt-1" />
+                                    <span>Arabic</span>
+                                </a>
                             <ul class="dropdown-menu dropdown-menu-end gamevault-dropdown">
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
