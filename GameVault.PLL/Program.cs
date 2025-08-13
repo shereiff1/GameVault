@@ -9,17 +9,27 @@ using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
+using GameVault.PLL.Languages;
 using GameVault.PLL.Services;
 using Hangfire;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix).
+AddDataAnnotationsLocalization(options =>
+{
+    options.DataAnnotationLocalizerProvider = (type, factory) =>
+        factory.Create(typeof(SharedResource));
+});
+
 var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -95,7 +105,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     options.Cookie.SameSite = SameSiteMode.Lax;
-}); builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
+});
+builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddTokenProvider<DataProtectorTokenProvider<User>>(TokenOptions.DefaultProvider);
 
@@ -126,7 +137,24 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+var supportedCultures = new[] {
 
-app.UseHangfireDashboard("/Hangfire");
+    new CultureInfo("ar-EG"),
+    new CultureInfo("en-US")
+
+
+};
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("en-US"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures,
+    RequestCultureProviders = new List<IRequestCultureProvider>
+    {
+        new QueryStringRequestCultureProvider(),
+        new CookieRequestCultureProvider()
+    }
+});
+app.UseHangfireDashboard("/Dashboard");
 
 app.Run();
