@@ -17,8 +17,6 @@ namespace GameVault.BLL.ModelVM.Game
         [Required(ErrorMessage = "Company is required.")]
         public int CompanyId { get; set; }
 
-        [Required(ErrorMessage = "Price is required.")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
         public IFormFile formFile { get; set; }
         public string? ImagePath { get; set; }
