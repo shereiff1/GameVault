@@ -1,4 +1,5 @@
 ﻿@using GameVault.PLL
+@using GameVault.PLL.Languages
 @using GameVault.PLL.Models
 @using Microsoft.AspNetCore.Identity
 @using GameVault.BLL.ModelVM.Roles
@@ -8,5 +9,7 @@
 @using GameVault.BLL.ModelVM.Game
 @inject SignInManager<GameVault.DAL.Entities.User> SignInManager
 @inject UserManager<GameVault.DAL.Entities.User> UserManager
+@using Microsoft.Extensions.Localization;
 
+@inject IStringLocalizer<SharedResource> SharedLocalizer
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
