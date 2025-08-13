@@ -53,7 +53,7 @@ namespace GameVault.PLL.Services
         {
             var now = DateTime.Now.TimeOfDay;
             var start = new TimeSpan(14, 0, 0);  
-            var end = new TimeSpan(2, 0, 0);    
+            var end = new TimeSpan(18, 0, 0);    
 
             bool saleShouldBeActive = (end < start)
                 ? now >= start || now <= end
