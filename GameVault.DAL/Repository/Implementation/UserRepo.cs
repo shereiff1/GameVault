@@ -41,15 +41,13 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        public async Task<User?> GetUserById(string id)
+        public async Task<User?> GetUserById(string userId)
         {
             try
             {
-                var user = await db.Users.FirstOrDefaultAsync(a => a.Id == id);
-
-                if (user == null)
-                    return null;
-                return user;
+                return await db.Users
+                    .Include(u => u.Library)
+                    .FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
             }
             catch (Exception)
             {
@@ -138,11 +136,15 @@ namespace GameVault.DAL.Repository.Implementation
         {
             try
             {
-                var user = await GetUserById(userId);
+                var user = await db.Users
+                    .Include(u => u.Library)
+                    .FirstOrDefaultAsync(u => u.Id == userId && u.IsDeleted != true);
+
                 if (user?.Library == null)
                 {
-                    return null;
+                    return new List<Game>();
                 }
+
                 return user.Library.ToList();
             }
             catch (Exception)
