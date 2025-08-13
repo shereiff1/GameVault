@@ -1,45 +1,73 @@
-﻿/* Custom GameVault Styles */
+﻿/* Enhanced GameVault Dark Styles - Responsive & Darker */
 :root {
     --gamevault-primary: #667eea;
     --gamevault-secondary: #764ba2;
     --gamevault-accent: #f093fb;
-    --gamevault-dark: #1a1a2e;
-    --gamevault-darker: #16213e;
+    --gamevault-dark: #0f0f1a;
+    --gamevault-darker: #0a0a15;
+    --gamevault-darkest: #050508;
     --gamevault-text-light: #e94560;
+    --gamevault-glass: rgba(15, 15, 26, 0.9);
+    --gamevault-glass-light: rgba(15, 15, 26, 0.7);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Rajdhani', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--gamevault-darkest) 0%, var(--gamevault-dark) 50%, var(--gamevault-darker) 100%);
     background-attachment: fixed;
     min-height: 100vh;
+    color: rgba(255, 255, 255, 0.9);
+    line-height: 1.6;
 }
 
-/* Navbar Styles */
+/* Container and Layout Fixes */
+.container, .container-fluid {
+    max-width: 100%;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+/* Enhanced Navbar Styles */
 .gamevault-navbar {
-    background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
-    backdrop-filter: blur(10px);
-    border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, var(--gamevault-glass) 0%, rgba(10, 10, 21, 0.95) 100%);
+    backdrop-filter: blur(15px);
+    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
     transition: all 0.3s ease;
-    padding: 1rem 0;
+    padding: 0.8rem 0;
+    position: relative;
+    z-index: 1000;
 }
 
 .navbar-scrolled {
-    background: linear-gradient(135deg, rgba(26, 26, 46, 0.98) 0%, rgba(22, 33, 62, 0.98) 100%);
-    padding: 0.5rem 0;
+    background: linear-gradient(135deg, rgba(5, 5, 8, 0.98) 0%, rgba(10, 10, 21, 0.98) 100%);
+    padding: 0.4rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 .gamevault-logo {
     font-family: 'Orbitron', monospace;
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
     color: var(--gamevault-primary) !important;
     text-decoration: none;
     transition: all 0.3s ease;
+    font-weight: 700;
 }
 
     .gamevault-logo:hover {
         color: var(--gamevault-accent) !important;
         transform: scale(1.05);
+        filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.5));
     }
 
 .logo-text {
@@ -50,50 +78,62 @@ body {
 }
 
 .nav-link-custom {
-    color: rgba(255, 255, 255, 0.8) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
     font-weight: 500;
-    margin: 0 0.5rem;
+    margin: 0 0.3rem;
     padding: 0.5rem 1rem !important;
     border-radius: 25px;
     transition: all 0.3s ease;
     position: relative;
+    font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
     .nav-link-custom:hover, .nav-link-custom.active {
         color: white !important;
         background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
         transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
     }
 
 .gamevault-dropdown {
-    background: rgba(26, 26, 46, 0.95);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(102, 126, 234, 0.3);
+    background: var(--gamevault-glass);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(102, 126, 234, 0.2);
     border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
     .gamevault-dropdown .dropdown-item {
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.7);
         transition: all 0.3s ease;
+        padding: 0.7rem 1.2rem;
     }
 
         .gamevault-dropdown .dropdown-item:hover {
             background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
             color: white;
+            border-radius: 10px;
+            margin: 0.2rem 0.5rem;
         }
 
+/* Enhanced Main Content */
 .main-content {
     min-height: calc(100vh - 200px);
-    background: rgba(255, 255, 255, 0.95);
+    background: linear-gradient(135deg, var(--gamevault-glass-light) 0%, rgba(10, 10, 21, 0.8) 100%);
     border-radius: 20px 20px 0 0;
-    margin-top: 2rem;
-    padding: 2rem 0;
+    margin-top: 1.5rem;
+    padding: 2rem 1rem;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(102, 126, 234, 0.1);
+    box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.3);
 }
 
-/* Footer Styles */
+/* Enhanced Footer Styles */
 .gamevault-footer {
-    background: linear-gradient(135deg, var(--gamevault-dark) 0%, var(--gamevault-darker) 100%);
-    color: rgba(255, 255, 255, 0.8);
+    background: linear-gradient(135deg, var(--gamevault-darkest) 0%, var(--gamevault-darker) 100%);
+    color: rgba(255, 255, 255, 0.7);
+    border-top: 1px solid rgba(102, 126, 234, 0.2);
+    padding: 3rem 1rem 2rem;
 }
 
 .footer-title {
@@ -101,17 +141,21 @@ body {
     color: var(--gamevault-primary);
     font-weight: 700;
     margin-bottom: 1rem;
+    font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+    filter: drop-shadow(0 0 5px rgba(102, 126, 234, 0.3));
 }
 
 .footer-subtitle {
     color: var(--gamevault-accent);
     font-weight: 600;
     margin-bottom: 1rem;
+    font-size: clamp(1rem, 2vw, 1.1rem);
 }
 
 .footer-text {
     line-height: 1.6;
     margin-bottom: 1rem;
+    color: rgba(255, 255, 255, 0.6);
 }
 
 .footer-links {
@@ -124,20 +168,25 @@ body {
     }
 
     .footer-links a {
-        color: rgba(255, 255, 255, 0.6);
+        color: rgba(255, 255, 255, 0.5);
         text-decoration: none;
         transition: all 0.3s ease;
+        display: block;
+        padding: 0.2rem 0;
     }
 
         .footer-links a:hover {
             color: var(--gamevault-accent);
             padding-left: 0.5rem;
+            text-shadow: 0 0 5px rgba(240, 147, 251, 0.3);
         }
 
 .social-links {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
 .social-link {
@@ -151,62 +200,164 @@ body {
     color: white;
     text-decoration: none;
     transition: all 0.3s ease;
+    font-size: 1.2rem;
 }
 
     .social-link:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        transform: translateY(-3px) scale(1.1);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        filter: brightness(1.2);
     }
 
 .newsletter-input {
-    background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(102, 126, 234, 0.3);
     color: white;
     border-radius: 25px 0 0 25px;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
 }
 
     .newsletter-input::placeholder {
-        color: rgba(255, 255, 255, 0.5);
+        color: rgba(255, 255, 255, 0.4);
+    }
+
+    .newsletter-input:focus {
+        outline: none;
+        border-color: var(--gamevault-accent);
+        box-shadow: 0 0 10px rgba(240, 147, 251, 0.3);
+        background: rgba(255, 255, 255, 0.08);
     }
 
 .newsletter-btn {
     background: linear-gradient(45deg, var(--gamevault-primary), var(--gamevault-secondary));
     border: none;
     border-radius: 0 25px 25px 0;
+    padding: 0.7rem 1.2rem;
+    color: white;
+    font-weight: 600;
+    transition: all 0.3s ease;
 }
+
+    .newsletter-btn:hover {
+        background: linear-gradient(45deg, var(--gamevault-secondary), var(--gamevault-accent));
+        transform: translateX(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
 
 .footer-copyright {
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(255, 255, 255, 0.4);
     font-size: 0.9rem;
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(102, 126, 234, 0.1);
+    margin-top: 2rem;
 }
 
-
-.main-content {
-    margin-top: 1rem;
-    border-radius: 15px 15px 0 0;
-    padding: 1rem 0;
-}
-
-.social-links {
-    justify-content: center;
-}
-
-}
-
-/* Scrollbar Styling */
+/* Enhanced Scrollbar Styling */
 ::-webkit-scrollbar {
-    width: 8px;
+    width: 10px;
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--gamevault-dark);
+    background: var(--gamevault-darkest);
+    border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(135deg, var(--gamevault-primary), var(--gamevault-secondary));
-    border-radius: 4px;
+    border-radius: 5px;
+    border: 1px solid var(--gamevault-dark);
 }
 
     ::-webkit-scrollbar-thumb:hover {
         background: linear-gradient(135deg, var(--gamevault-secondary), var(--gamevault-accent));
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
     }
+
+/* Responsive Design Improvements */
+@media (max-width: 768px) {
+    .container, .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .main-content {
+        margin-top: 1rem;
+        border-radius: 15px 15px 0 0;
+        padding: 1.5rem 0.5rem;
+    }
+
+    .gamevault-navbar {
+        padding: 0.5rem 0;
+    }
+
+    .nav-link-custom {
+        margin: 0.2rem 0;
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.9rem;
+    }
+
+    .social-links {
+        gap: 0.8rem;
+        justify-content: center;
+    }
+
+    .social-link {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    .footer-title {
+        text-align: center;
+    }
+
+    .footer-subtitle {
+        text-align: center;
+    }
+
+    .gamevault-footer {
+        padding: 2rem 0.5rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .newsletter-input, .newsletter-btn {
+        width: 100%;
+        border-radius: 25px;
+        margin-bottom: 0.5rem;
+    }
+
+    .newsletter-btn {
+        margin-top: 0.5rem;
+    }
+}
+
+/* Loading Animation for Better UX */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.main-content {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Selection Colors */
+::selection {
+    background: var(--gamevault-accent);
+    color: var(--gamevault-darkest);
+}
+
+::-moz-selection {
+    background: var(--gamevault-accent);
+    color: var(--gamevault-darkest);
+}
