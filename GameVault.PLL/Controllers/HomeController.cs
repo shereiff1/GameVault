@@ -2,6 +2,7 @@ using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.PLL.Models;
 using GameVault.PLL.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using static GameVault.PLL.Services.SaleBackgroundService;
@@ -47,7 +48,17 @@ namespace GameVault.PLL.Controllers
                 return View(new List<GameDetails>());
             }
         }
+        [HttpGet]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
+            return LocalRedirect(returnUrl);
+        }
         public IActionResult Privacy()
         {
             return View();
