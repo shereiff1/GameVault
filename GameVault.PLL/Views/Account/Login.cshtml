@@ -1,5 +1,9 @@
 ﻿@model GameVault.BLL.ModelVM.Account.UserLogin
 
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+	ViewBag.Title = "Log In";
+}
 <div class="d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1">
     <!--begin::Form-->
     <div class="d-flex flex-center flex-column flex-lg-row-fluid">
@@ -62,7 +66,7 @@
 
             <!--begin::Form-->
             <form asp-controller="Account" asp-action="Login" class="form w-100 fv-plugins-bootstrap5 fv-plugins-framework" novalidate="novalidate" id="kt_sign_in_form" method="post">
-                o0
+               
                 
                 @if (TempData["Message"] != null)
                 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.ModelVM;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameVault.PLL.Controllers
 {
@@ -12,6 +13,7 @@ namespace GameVault.PLL.Controllers
         {
             _inventoryItemServices = inventoryItemServices;
         }
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string? errorMessage = null)
         {
             var (success, items) = await _inventoryItemServices.GetAllAsync();
@@ -26,6 +28,7 @@ namespace GameVault.PLL.Controllers
             return View(items);
         }
 
+        [Authorize]
         public async Task<IActionResult> Details(int id)
         {
             var (success, item) = await _inventoryItemServices.GetByIdAsync(id);
@@ -36,6 +39,7 @@ namespace GameVault.PLL.Controllers
             return View(item);
         }
 
+        [Authorize]
         public async Task<IActionResult> ByCompany(int companyId)
         {
             var (success, items) = await _inventoryItemServices.GetByCompanyAsync(companyId);
@@ -46,6 +50,7 @@ namespace GameVault.PLL.Controllers
             return View("Index", items);
         }
 
+        [Authorize]
         public async Task<IActionResult> ByGame(int gameId)
         {
             var (success, items) = await _inventoryItemServices.GetByGameAsync(gameId);
@@ -55,6 +60,8 @@ namespace GameVault.PLL.Controllers
 
             return View("Index", items);
         }
+
+        [Authorize(Roles = "Admin")]
 
         public async Task<IActionResult> Delete(int id)
         {

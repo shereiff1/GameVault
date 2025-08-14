@@ -69,6 +69,21 @@ namespace GameVault.DAL.Repository.Implementation
                 return false;
             }
         }
+
+        public async Task<bool> Delete(User user)
+        {
+            try
+            {
+                user.DeleteUser();
+                db.Users.Update(user);
+                await db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public async Task<bool> AddGameToLibrary(User user, Game game)
         {
             try
@@ -151,34 +166,6 @@ namespace GameVault.DAL.Repository.Implementation
             }
         }
 
-        //public bool AddFriend(User user, User friend)
-        //{
-        //    try
-        //    {
-        //       user.AddFriend(friend);
-        //        db.Users.Update(user);
-        //        db.SaveChanges();
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //}
-        //public bool RemoveFriend(User user, User friend)
-        //{
-        //    try
-        //    {
-        //       user.RemoveFriend(friend);
-        //        db.Users.Update(user);
-        //        db.SaveChanges();
-        //        return true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //        return false;
-        //    }
-        //}
 
     }
 }

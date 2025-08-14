@@ -12,11 +12,11 @@ namespace GameVault.BLL.ModelVM.Roles
     {
         public EditRoleVM()
         {
-            Users = new List<UserPublicProfile>();
+            Users = new List<UserPublicInfo>();
         }
 
         public string Id { get; set; }
 
-        public List<UserPublicProfile> Users { get; set; }
+        public List<UserPublicInfo> Users { get; set; }
     }
 }

@@ -1,7 +1,8 @@
-﻿@model List<RoleVM>
+﻿@model List<UserPublicInfo>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewBag.Title = "All Roles";
+    ViewBag.Title = "All Admins";
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
 }
 
 <div class="col-xl-12 mb-5 mb-xl-10">
@@ -11,8 +12,8 @@
         <div class="card-header pt-5">
             <!--begin::Title-->
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bold text-gray-800">System Roles</span>
-                <span class="text-gray-500 mt-1 fw-semibold fs-6">Manage application roles and permissions</span>
+                <span class="card-label fw-bold text-gray-800">App Users</span>
+                <span class="text-gray-500 mt-1 fw-semibold fs-6">Manage All Users</span>
             </h3>
             <!--end::Title-->
             <!--begin::Toolbar-->
@@ -34,15 +35,15 @@
                     <!--end::Menu item-->
                     <!--begin::Menu separator-->
                     <div class="separator mb-3 opacity-75"></div>
-                    <!--end::Menu separator-->  
+                    <!--end::Menu separator-->
                     <!--begin::Menu separator-->
                     <div class="separator mt-3 opacity-75"></div>
                     <!--end::Menu separator-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-3">
                         <div class="menu-content px-3 py-3">
-                            <a class="btn btn-primary btn-sm px-4" href="@Url.Action("CreateRole", "Role")">
-                                Create New Role
+                            <a class="btn btn-primary btn-sm px-4" href="@Url.Action("AddUser", "User")">
+                                Add New User
                             </a>
                         </div>
                     </div>
@@ -65,49 +66,42 @@
                         <!--begin::Table head-->
                         <thead>
                             <tr class="fs-7 fw-bold text-gray-500 border-bottom-0">
-                                <th class="p-0 pb-3 min-w-200px text-start">ROLE NAME</th>
-                                <th class="p-0 pb-3 min-w-150px text-start">Created By</th>
-                                <th class="p-0 pb-3 min-w-150px text-start">Created On</th>
-                                <th class="p-0 pb-3 w-125px text-center">STATUS</th>
+                                <th class="p-0 pb-3 min-w-200px text-start">Profile Picture</th>
+                                <th class="p-0 pb-3 min-w-150px text-start">Name</th>
+                                <th class="p-0 pb-3 min-w-150px text-start">Status</th>
                                 <th class="p-0 pb-3 w-100px text-end">ACTIONS</th>
                             </tr>
                         </thead>
                         <!--end::Table head-->
                         <!--begin::Table body-->
                         <tbody>
-                            @foreach (var role in Model)
+                            @foreach (var user in Model)
                             {
                                 <tr>
                                     <td>
                                         <div class="d-flex align-items-center">
                                             <div class="symbol symbol-50px me-3">
-                                                <div class="symbol-label bg-light-primary">
-                                                    <i class="ki-duotone ki-shield-tick fs-2x text-primary">
-                                                        <span class="path1"></span>
-                                                        <span class="path2"></span>
-                                                    </i>
-                                                </div>
+                                                @if (!string.IsNullOrEmpty(user.ProfilePicture))
+                                                {
+                                                    <img src="@(!string.IsNullOrEmpty(user?.ProfilePicture) ? Url.Content("~/Images/" + user.ProfilePicture) : "https://i.ibb.co/bjgY27pk/Blank-Profile-Pic.jpg")" class="w-100" alt="@user.UserName" />
+                                                }
+                                                else
+                                                {
+                                                    <div class="symbol-label bg-light-primary">
+                                                        <span class="text-primary fw-bold fs-4">@user.UserName?.Substring(0, 1).ToUpper()</span>
+                                                    </div>
+                                                }
                                             </div>
                                             <div class="d-flex justify-content-start flex-column">
-                                                <span class="text-gray-800 fw-bold mb-1 fs-6">@role.Name</span>
-                                                <span class="text-gray-500 fw-semibold d-block fs-7">System Role</span>
+                                                <span class="text-gray-800 fw-bold mb-1 fs-6">@user.UserName</span>
                                             </div>
                                         </div>
                                     </td>
+
                                     <td>
-                                        @if (!string.IsNullOrEmpty(role.CreatedBy))
+                                        @if (!string.IsNullOrEmpty(user.Name))
                                         {
-                                            <span class="text-gray-600 fw-semibold fs-7">@role.CreatedBy</span>
-                                        }
-                                        else
-                                        {
-                                            <span class="text-muted">-</span>
-                                        }
-                                    </td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(role.CreatedBy))
-                                        {
-                                            <span class="text-gray-600 fw-semibold fs-7">@role.CreatedOn</span>
+                                            <span class="text-gray-600 fw-semibold fs-7">@user.Name</span>
                                         }
                                         else
                                         {
@@ -117,19 +111,20 @@
                                     <td class="text-center">
                                         <span class="badge badge-light-success">Active</span>
                                     </td>
+                                    @(currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
                                     <td class="text-end">
                                         <div class="d-flex justify-content-end flex-shrink-0">
-                                            <a asp-controller="Role" asp-action="EditUsersInRole"
-                                               asp-route-id="@role.Id"
+                                            <a asp-controller="User" asp-action="UserProfile"
+                                               asp-route-id="@user.Id"
                                                class="btn  btn-sm btn-primary btn-sm me-1"
                                                data-bs-toggle="tooltip" title="Edit Users in Role">
                                                 <i class="ki-duotone ki-pencil fs-3">
                                                     <span class="path1"></span>
                                                     <span class="path2"></span>
                                                 </i>
-                                                Edit
+                                                ViewProfile
                                             </a>
-                                          
+
                                         </div>
                                     </td>
                                 </tr>
@@ -153,12 +148,9 @@
                     </div>
                     <div class="fw-semibold fs-1 text-gray-400 mb-7">No roles found</div>
                     <div class="fw-semibold fs-6 text-gray-600 mb-5">
-                        No roles have been created yet. Create your first role to get started.
+                        there are no admins users for the app yet .
                     </div>
-                    <a href="@Url.Action("CreateRole", "Role")" class="btn btn-primary">
-                        <i class="ki-duotone ki-plus fs-2"></i>
-                        Create First Role
-                    </a>
+                    
                 </div>
                 <!--end::Empty state-->
             }

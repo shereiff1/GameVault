@@ -1,9 +1,11 @@
 using GameVault.BLL.ModelVM.Category;
 using GameVault.BLL.Services.Abstraction;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace GameVault_PLL.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class CategoryController : Controller
     {
         private readonly ICategoryServices _categoryServices;
@@ -63,6 +65,7 @@ namespace GameVault_PLL.Controllers
                 });
             }
         }
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllCategories()
         {
             var result = await _categoryServices.GetAllAsync();

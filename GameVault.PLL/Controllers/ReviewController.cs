@@ -3,9 +3,11 @@ using GameVault.BLL.ModelVM.Review;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.DAL.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameVault_PLL.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class ReviewController : Controller
     {
         private readonly IReviewServices _reviewServices;
@@ -66,6 +68,7 @@ namespace GameVault_PLL.Controllers
                 );
             }
         }
+        [AllowAnonymous]
         public async Task<IActionResult> GetAllReviews()
         {
             var reviews = await _reviewServices.GetAllAsync();

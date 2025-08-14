@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Categories";
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+
 }
 
 <h2>Category List</h2>
@@ -13,10 +15,12 @@
     </div>
 }
 
-<div class="mb-3">
-    <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
-</div>
-
+@if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+{
+    <div class="mb-3">
+        <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
+    </div>
+}
 @if (Model == null || !Model.Any())
 {
     <div class="alert alert-info">
@@ -40,6 +44,8 @@ else
                 <tr class="@cat.Category_Id">
                     <td>@cat.Category_Name</td>
                     <td>@cat.Description</td>
+        @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+                    {
                     <td>@cat.CreatedBy</td>
                     <td>
                         <a asp-action="UpdateCategory" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-warning">Edit</a>
@@ -48,6 +54,7 @@ else
                             Delete
                         </a>
                     </td>
+                    }
                 </tr>
             }
         </tbody>

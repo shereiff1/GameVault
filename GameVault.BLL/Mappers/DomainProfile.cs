@@ -35,8 +35,8 @@ namespace GameVault.BLL.Mappers
 
             CreateMap<User, UpdateUserProfile>()
                 .ForMember(dest => dest.Password, opt => opt.MapFrom(src => src.PasswordHash)).ReverseMap();
-            CreateMap<User, UserPrivateProfile>().ReverseMap();
-            CreateMap<User, UserPublicProfile>().ReverseMap();
+            CreateMap<User, UserProfile>().ReverseMap();
+            CreateMap<User, UserPublicInfo>().ReverseMap();
 
 
             CreateMap<CreateCategory, Category>()

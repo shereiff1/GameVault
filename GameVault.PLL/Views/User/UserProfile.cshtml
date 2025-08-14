@@ -1,5 +1,8 @@
-﻿@model GameVault.BLL.ModelVM.User.UserPrivateProfile
+﻿@model GameVault.BLL.ModelVM.User.UserProfile
+@{
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
 
+}
 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
     <!--begin::Container-->
     <div class="container-xxl" id="kt_content_container">
@@ -21,9 +24,12 @@
                     <h3 class="fw-bold m-0">Profile Details</h3>
                 </div>
                 <!--end::Card title-->
-                <!--begin::Action-->
-                <a href="@Url.Action("UpdateProfile", "User", new { id = Model?.Id })" class="btn btn-sm btn-primary align-self-center">Edit Profile</a>
-                <!--end::Action-->
+                @if (currentUser != null && currentUser.Id == Model.Id)
+                {
+                    <!--begin::Action-->
+                    <a href="@Url.Action("UpdateProfile", "User", new { id = Model?.Id })" class="btn btn-sm btn-primary align-self-center">Edit Profile</a>
+                    <!--end::Action-->
+                }
             </div>
             <!--begin::Card header-->
             <!--begin::Card body-->
@@ -101,19 +107,6 @@
                     <!--begin::Col-->
                     <div class="col-lg-8">
                         <span class="fw-bold fs-6 text-gray-800">@(Model?.Library?.Count ?? 0) Games</span>
-                        @if (Model?.Library?.Any() == true)
-                        {
-                            <div class="mt-3">
-                                @foreach (var game in Model.Library.Take(5))
-                                {
-                                    <span class="badge badge-light-primary me-2 mb-2">@game.Title</span>
-                                }
-                                @if (Model.Library.Count > 5)
-                                {
-                                    <span class="text-muted fs-7">and @(Model.Library.Count - 5) more...</span>
-                                }
-                            </div>
-                        }
                     </div>
                     <!--end::Col-->
                 </div>
@@ -124,9 +117,12 @@
                         <h3 class="fw-bold m-0"></h3>
                     </div>
                     <!--end::Card title-->
-                    <!--begin::Action-->
-                    <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-sm btn-primary align-self-center">Change Password</a>
-                    <!--end::Action-->
+                    @if (currentUser != null && currentUser.Id == Model.Id)
+                    {
+                        <!--begin::Action-->
+                        <a href="@Url.Action("ChangePassword", "Account")" class="btn btn-sm btn-primary align-self-center">Change Password</a>
+                        <!--end::Action-->
+                    }
                 </div>
             </div>
             <!--end::Card body-->

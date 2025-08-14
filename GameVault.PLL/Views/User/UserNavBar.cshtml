@@ -1,8 +1,16 @@
-﻿<!--begin::Navbar-->
+﻿
+@{
+    var curruser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+
+}
+<!--begin::Navbar-->
 <div class="card mb-5 mb-xl-10">
+    @if (Model != null)
+    {
     <div class="card-body pt-9 pb-0">
         <!--begin::Details-->
         <div class="d-flex flex-wrap flex-sm-nowrap">
+          
             <!--begin: Pic-->
             <div class="me-7 mb-4">
                 <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
@@ -38,28 +46,32 @@
         <ul class="nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
             <!--begin::Nav item-->
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "PrivateProfile", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
-                   asp-action="PrivateProfile"
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "UserProfile", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                   asp-action="UserProfile"
                    asp-controller="User"
                    asp-route-id="@Model.Id">
                     Overview
                 </a>
             </li>
             <!--end::Nav item-->
+                @if (curruser != null && Model.Id == curruser.Id)
+                {
+                    <!--begin::Nav item-->
+                    <li class="nav-item mt-2">
+                        <a class="nav-link text-active-primary ms-0 me-10 py-5 @(string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "UpdateProfile", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                        asp-action="UpdateProfile"
+                        asp-controller="User">
+                            Edit Profile
+                        </a>
+                    </li>
+                }
+                <!--end::Nav item-->
             <!--begin::Nav item-->
             <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "UpdateProfile", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
-                   asp-action="UpdateProfile"
-                   asp-controller="User">
-                    Edit Profile
-                </a>
-            </li>
-            <!--end::Nav item-->
-            <!--begin::Nav item-->
-            <li class="nav-item mt-2">
-                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "UpdateProfile", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
+                <a class="nav-link text-active-primary ms-0 me-10 py-5 @(string.Equals(ViewContext.RouteData.Values["action"]?.ToString(), "UserLibrary", StringComparison.OrdinalIgnoreCase) ? "active" : "")"
                    asp-action="UserLibrary"
-                   asp-controller="User">
+                   asp-controller="User"
+                   asp-route-id ="@Model.Id">
                     Library
                 </a>
             </li>
@@ -67,5 +79,6 @@
         </ul>
         <!--begin::Navs-->
     </div>
+    }
 </div>
 <!--end::Navbar-->
