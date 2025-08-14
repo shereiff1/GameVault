@@ -1,5 +1,7 @@
 ﻿using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.Services.Abstraction;
+using GameVault.PLL.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace GameVault.PLL.Services
 {
@@ -7,17 +9,23 @@ namespace GameVault.PLL.Services
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<FeaturedGameBackgroundService> _logger;
+        private readonly IHubContext<FeaturedGameHub> _hubContext; 
 
         private static List<GameDetails> _allGames = new();
         private static int _currentGameIndex = 0;
 
         public static GameDetails? CurrentFeaturedGame { get; private set; }
-        public static DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+        private static DateTime _lastReload = DateTime.MinValue;
 
-        public FeaturedGameBackgroundService(IServiceScopeFactory scopeFactory, ILogger<FeaturedGameBackgroundService> logger)
+        public FeaturedGameBackgroundService(
+            IServiceScopeFactory scopeFactory,
+            ILogger<FeaturedGameBackgroundService> logger,
+            IHubContext<FeaturedGameHub> hubContext
+        )
         {
             _scopeFactory = scopeFactory;
             _logger = logger;
+            _hubContext = hubContext;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,8 +38,8 @@ namespace GameVault.PLL.Services
             {
                 try
                 {
-                    UpdateFeaturedGame();
-                    await Task.Delay(TimeSpan.FromSeconds(20), stoppingToken);
+                    await UpdateFeaturedGame();
+                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 }
                 catch (OperationCanceledException)
                 {
@@ -40,7 +48,7 @@ namespace GameVault.PLL.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error in Featured Game Background Service");
-                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
                 }
             }
 
@@ -62,9 +70,11 @@ namespace GameVault.PLL.Services
 
                     if (CurrentFeaturedGame == null)
                     {
-                        CurrentFeaturedGame = _allGames[0];
-                        LastUpdate = DateTime.UtcNow;
+                        _currentGameIndex = 0;
+                        CurrentFeaturedGame = _allGames[_currentGameIndex];
                     }
+
+                    _lastReload = DateTime.UtcNow;
                 }
                 else
                 {
@@ -77,22 +87,38 @@ namespace GameVault.PLL.Services
             }
         }
 
-        private void UpdateFeaturedGame()
+        private async Task UpdateFeaturedGame()
         {
-            if (DateTime.UtcNow - LastUpdate > TimeSpan.FromHours(1))
-            {
-                _ = LoadGames(); // refresh games list in the background
-            }
+            if (DateTime.UtcNow - _lastReload > TimeSpan.FromHours(1))
+                await LoadGames();
 
             if (_allGames.Count == 0)
                 return;
 
             _currentGameIndex = (_currentGameIndex + 1) % _allGames.Count;
             CurrentFeaturedGame = _allGames[_currentGameIndex];
-            LastUpdate = DateTime.UtcNow;
 
             _logger.LogInformation($"Updated featured game to: {CurrentFeaturedGame?.Title}");
+
+            if (CurrentFeaturedGame != null)
+            {
+                var dto = new
+                {
+                    GameId = CurrentFeaturedGame.GameId,
+                    Title = CurrentFeaturedGame.Title,
+                    ImagePath = CurrentFeaturedGame.ImagePath,
+                    CompanyName = CurrentFeaturedGame.CompanyName,
+                    Description = CurrentFeaturedGame.Description,
+                    Price = CurrentFeaturedGame.Price,
+                    Rating = CurrentFeaturedGame.Rating,
+                    Categories = CurrentFeaturedGame.Categories?.Select(c => new { c.Category_Name }).ToList(),
+                    Reviews = CurrentFeaturedGame.Reviews?.Select(r => new { r.Comment }).ToList()
+                };
+
+                await _hubContext.Clients.All.SendAsync("UpdateFeaturedGame", dto);
+            }
         }
+
 
         public static GameDetails? GetCurrentFeaturedGame() => CurrentFeaturedGame;
     }
