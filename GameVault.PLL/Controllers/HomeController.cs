@@ -1,9 +1,11 @@
-using System.Diagnostics;
 using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.PLL.Models;
 using GameVault.PLL.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using static GameVault.PLL.Services.SaleBackgroundService;
 
 namespace GameVault.PLL.Controllers
 {
@@ -11,13 +13,11 @@ namespace GameVault.PLL.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IGameServices gameServices;
-        private readonly IFeaturedGameService featuredGameService;
 
-        public HomeController(ILogger<HomeController> logger, IGameServices gameServices, IFeaturedGameService featuredGameService)
+        public HomeController(ILogger<HomeController> logger, IGameServices gameServices)
         {
             _logger = logger;
             this.gameServices = gameServices;
-            this.featuredGameService = featuredGameService;
         }
 
         public async Task<IActionResult> Index()
@@ -26,8 +26,19 @@ namespace GameVault.PLL.Controllers
             {
                 var (success, gameDetails) = await gameServices.GetAllGameDetailsAsync();
                 var games = success && gameDetails != null ? gameDetails : new List<GameDetails>();
-                var featuredGame = await featuredGameService.GetCurrentFeaturedGameAsync();
+
+                if (SaleStatus.IsSaleActive)
+                {
+                    foreach (var game in games)
+                    {
+                        game.Price *= 0.8m;
+                    }
+                }
+
+                var featuredGame = FeaturedGameBackgroundService.GetCurrentFeaturedGame();
                 ViewBag.FeaturedGame = featuredGame;
+                ViewBag.IsSaleActive = SaleStatus.IsSaleActive;
+
                 return View(games);
             }
             catch (Exception ex)
@@ -37,7 +48,17 @@ namespace GameVault.PLL.Controllers
                 return View(new List<GameDetails>());
             }
         }
+        [HttpGet]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(
+                CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
+            return LocalRedirect(returnUrl);
+        }
         public IActionResult Privacy()
         {
             return View();

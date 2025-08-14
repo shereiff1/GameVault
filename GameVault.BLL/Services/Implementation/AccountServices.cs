@@ -18,7 +18,6 @@ namespace GameVault.BLL.Services.Implementation
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signInManager;
         private readonly IEmailService emailService;
-
         public AccountServices(IUserRepo repo, UserManager<User> userManager, SignInManager<User> signInManager, IEmailService emailService)
         {
             this.repo = repo;
@@ -105,6 +104,10 @@ namespace GameVault.BLL.Services.Implementation
                 <p>{confirmationLink}</p>
                 <p>This link will expire in 24 hours.</p>
                 ");
+                //if (!await _roleManager.RoleExistsAsync("User"))
+                //{
+                //    await _roleManager.CreateAsync(new IdentityRole("User"));
+                //}
                 await userManager.AddToRoleAsync(user, "User");
             }
             return result;

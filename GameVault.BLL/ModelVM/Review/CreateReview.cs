@@ -7,7 +7,6 @@ namespace GameVault.BLL.ModelVM.Review
         public int Game_Id { get; set; }
         public string Comment { get; set; }
         public float Rating { get; set; }
-        public string CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
     }
 }

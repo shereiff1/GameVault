@@ -79,18 +79,33 @@ namespace GameVault_PLL.Controllers
                 return View(result.Item2);
             }
         }
-
+        [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
+            // var result = await _categoryServices.DeleteAsync(id);
+            // if (result.Item1)
+            // {
+            //     return RedirectToAction("GetAllCategories");
+            // }
+            // else
+            // {
+            //     return RedirectToAction("GetAllCategories", new { errorMessage = "Category deletion failed!" });
+            // }
             var result = await _categoryServices.DeleteAsync(id);
             if (result.Item1)
             {
-                return RedirectToAction("GetAllCategories");
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("GetAllCategories")
+                });
             }
-            else
+            return Json(new
             {
-                return RedirectToAction("GetAllCategories", new { errorMessage = "Category deletion failed!" });
-            }
+                success = false,
+                errorMessage = result.Item2,
+                data = id
+            });
         }
 
         public async Task<IActionResult> UpdateCategory(int id)

@@ -20,8 +20,8 @@ namespace GameVault.PLL.Controllers
         {
             try
             {
-                var (users, error) =await userServices.GetAllUsers();
-                
+                var (users, error) = await userServices.GetAllUsers();
+
                 if (!string.IsNullOrEmpty(error))
                 {
                     ViewBag.ErrorMessage = error;
@@ -41,8 +41,8 @@ namespace GameVault.PLL.Controllers
         {
             try
             {
-                var (users, error) = await userServices.GetAllAdmins();
-
+                var (users, error) = await userServices.GetAllPrivateUsers();
+                
                 if (!string.IsNullOrEmpty(error))
                 {
                     ViewBag.ErrorMessage = error;
@@ -266,23 +266,20 @@ namespace GameVault.PLL.Controllers
         [HttpPost]
         public async Task<IActionResult> AddGameToLibrary(int gameId)
         {
-            var userId = GetCurrentUserId().Result;
+            var userId = await GetCurrentUserId();
 
             if (string.IsNullOrEmpty(userId))
-            {
                 return RedirectToAction("Login", "Account");
-            }
-
 
             var (success, error) = await userServices.AddGameToLibrary(userId, gameId);
 
             if (!success)
             {
-                ViewBag.ErrorMessage = error ?? "Failed to Add the Game";
+                ViewBag.ErrorMessage = error ?? "Failed to add the game";
                 return View();
             }
 
-            return RedirectToAction("Library", "User");
+            return RedirectToAction("UserLibrary", "User");
         }
 
         [Authorize]
@@ -305,7 +302,7 @@ namespace GameVault.PLL.Controllers
                 return View();
             }
 
-            return RedirectToAction("Library", "User");
+            return RedirectToAction("UserLibrary", "User");
         }
 
         [Authorize]
@@ -322,7 +319,7 @@ namespace GameVault.PLL.Controllers
 
                 var (Library,error) = await userServices.GetUserLibrary(user.Id);
 
-                if(error != null)
+                if (error != null)
                 {
                     ViewBag.ErrorMessage = error ?? "Failed to load your games library";
                 }
@@ -347,7 +344,7 @@ namespace GameVault.PLL.Controllers
         {
             return User.FindFirst("Id")?.Value ??
                    User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ??
-                   User.FindFirst("sub")?.Value; 
+                   User.FindFirst("sub")?.Value;
         }
 
     }

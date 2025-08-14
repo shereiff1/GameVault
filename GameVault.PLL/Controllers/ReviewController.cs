@@ -15,64 +15,24 @@ namespace GameVault_PLL.Controllers
         {
             _reviewServices = reviewServices;
         }
+
+
         [HttpPost]
-        public async Task<IActionResult> CreateReview([FromBody] CreateReview review)
+        public async Task<IActionResult> CreateReview(CreateReview review)
         {
-            //var result = await _reviewServices.CreateAsync(review);
-            //if (result.Item1)
-            //{
-            //    return RedirectToAction("GetAllReviews");
-            //}
-            //else
-            //{
-            //    ViewBag.ErrorMessage = result.Item2;
-            //    return View("ERROR in createreview");
-            //}
-            try
+            var result = await _reviewServices.CreateAsync(review);
+            if (result.Item1)
             {
-                if (review == null)
-                {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        errorMessage = "No data received",
-                        receivedData = Request.Body
-                    });
-                }
-                var result = await _reviewServices.CreateAsync(review);
-                if (result.Item1)
-                {
-                    return Json(new
-                    {
-                        success = true,
-                        redirectUrl = Url.Action("GetAllReviews")
-                    });
-                }
-                return BadRequest(new
-                {
-                    success = false,
-                    errorMessage = result.Item2,
-                    data = review
-                });
+                return RedirectToAction("Index","Home");
             }
-            catch (Exception ex)
-            {
-                return StatusCode(500, new
-                {
-                    success = false,
-                    errorMessage = "Internal server error",
-                    detailedError = ex.Message,
-                    innerException = ex.InnerException?.Message,
-                    stackTrace = ex.StackTrace
-                }
-                );
-            }
-        }
+            ViewBag.Error = result.Item2;
+            return View(review);
+        } 
         [AllowAnonymous]
         public async Task<IActionResult> GetAllReviews()
         {
             var reviews = await _reviewServices.GetAllAsync();
-            if ( reviews.Item2 == null)
+            if (reviews.Item2 == null)
             {
                 ViewBag.ErrorMessage = reviews.Item2;
                 return View("No data to get ");
@@ -96,7 +56,7 @@ namespace GameVault_PLL.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateReview ([FromBody]ReviewDTO review)
+        public async Task<IActionResult> UpdateReview([FromBody] ReviewDTO review)
         {
             var result = await _reviewServices.UpdateAsync(review);
             if (result.Item1)
@@ -118,7 +78,7 @@ namespace GameVault_PLL.Controllers
         public async Task<IActionResult> Update(int id)
         {
             var result = await _reviewServices.GetByIdAsync(id);
-            if (result.Item2 !=null)
+            if (result.Item2 != null)
             {
                 return View(result.Item2);
             }
@@ -131,4 +91,4 @@ namespace GameVault_PLL.Controllers
 
     }
 }
-        
+

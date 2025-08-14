@@ -1,9 +1,10 @@
-@using GameVault.BLL.ModelVM.Game
+﻿@using GameVault.BLL.ModelVM.Game
 @model List<GameDetails>
 @{
-    ViewData["Title"] = "Home Page - GameVault";
-    var featuredGame = ViewBag.FeaturedGame as GameDetails;
-    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+	ViewData["Title"] = "Home Page - GameVault";
+	var featuredGame = ViewBag.FeaturedGame as GameDetails;
+	var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+	var isSaleActive = ViewBag.IsSaleActive; // Make sure this is available for all cards
 }
 
 <div class="container-fluid">
@@ -14,6 +15,12 @@
 				<p class="lead">Discover amazing games from top developers around the world</p>
 				<hr class="my-4 bg-white">
 				<p class="mb-4">Your ultimate destination for the latest and greatest games</p>
+				@if (isSaleActive)
+				{
+					<div class="alert alert-warning mt-3">
+						<i class="fas fa-fire"></i> <strong>FLASH SALE!</strong> 20% OFF all games until 5 AM! <i class="fas fa-fire"></i>
+					</div>
+				}
 			</div>
 		</div>
 	</div>
@@ -45,9 +52,25 @@
 
 									@if (featuredGame.Price > 0)
 									{
-										<span class="badge bg-success position-absolute top-0 end-0 m-3 fs-5">
-											$@featuredGame.Price.ToString("F2")
-										</span>
+										@if (isSaleActive)
+										{
+											<div class="position-absolute top-0 end-0 m-3">
+												<div class="badge bg-danger fs-5 mb-1 d-block">
+													<i class="fas fa-fire"></i> SALE!
+												</div>
+												<div class="badge bg-success fs-6 d-block">
+													<s class="text-decoration-line-through">$@featuredGame.Price.ToString("F2")</s>
+													<br>
+													$@((featuredGame.Price * 0.8m).ToString("F2"))
+												</div>
+											</div>
+										}
+										else
+										{
+											<span class="badge bg-success position-absolute top-0 end-0 m-3 fs-5">
+												$@featuredGame.Price.ToString("F2")
+											</span>
+										}
 									}
 									else
 									{
@@ -118,18 +141,34 @@
 
 									<div class="mt-auto">
 										<div class="row g-2">
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<a asp-controller="Game" asp-action="GameDetails" asp-route-id="@featuredGame.GameId"
 												   class="btn btn-primary w-100 details-link" data-game-id="@featuredGame.GameId">
 													<i class="fas fa-eye"></i> View Details
 												</a>
 											</div>
-											<div class="col-md-6">
+											<div class="col-md-4">
 												<a asp-controller="Payment"
 												   asp-action="BuyGame"
 												   asp-route-GameId="@featuredGame.GameId"
 												   class="btn btn-success w-100 buy-link">
-													<i class="fas fa-cart-plus"></i> Buy Game
+													<i class="fas fa-cart-plus"></i>
+													@if (isSaleActive && featuredGame.Price > 0)
+													{
+														<span>Buy $@((featuredGame.Price * 0.8m).ToString("F2"))</span>
+													}
+													else
+													{
+														<span>Buy Game</span>
+													}
+												</a>
+											</div>
+											<div class="col-md-4">
+												<a asp-controller="Review"
+												   asp-action="Create"
+												   asp-route-GameId="@featuredGame.GameId"
+												   class="btn btn-warning w-100 review-link">
+													<i class="fas fa-star"></i> Add Review
 												</a>
 											</div>
 										</div>
@@ -156,7 +195,16 @@
 			@foreach (var game in Model)
 			{
 				<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="card h-100 shadow-sm game-card">
+					<div class="card h-100 shadow-sm game-card @(isSaleActive && game.Price > 0 ? "border-danger" : "")">
+						@if (isSaleActive && game.Price > 0)
+						{
+							<div class="sale-ribbon">
+								<span class="badge bg-danger position-absolute" style="top: 10px; left: -5px; z-index: 10; transform: rotate(-15deg); font-size: 0.8rem;">
+									<i class="fas fa-fire"></i> 20% OFF
+								</span>
+							</div>
+						}
+
 						<div class="position-relative">
 							@if (!string.IsNullOrEmpty(game.ImagePath))
 							{
@@ -171,9 +219,23 @@
 
 							@if (game.Price > 0)
 							{
-								<span class="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
-									$@game.Price.ToString("F2")
-								</span>
+								@if (isSaleActive)
+								{
+									<div class="position-absolute top-0 end-0 m-2">
+										<div class="badge bg-danger fs-6 mb-1 d-block">
+											<s>$@game.Price.ToString("F2")</s>
+										</div>
+										<div class="badge bg-success fs-6 d-block">
+											$@((game.Price * 0.8m).ToString("F2"))
+										</div>
+									</div>
+								}
+								else
+								{
+									<span class="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
+										$@game.Price.ToString("F2")
+									</span>
+								}
 							}
 							else
 							{
@@ -268,12 +330,32 @@
 										<i class="fas fa-eye"></i> View Details
 									</a>
 
-									<a asp-controller="Payment"
-									   asp-action="BuyGame"
-									   asp-route-GameId="@game.GameId"
-									   class="btn btn-outline-success btn-sm buy-link">
-										<i class="fas fa-cart-plus"></i> Buy
-									</a>
+									<div class="row g-2">
+										<div class="col-6">
+											<a asp-controller="Payment"
+											   asp-action="BuyGame"
+											   asp-route-GameId="@game.GameId"
+											   class="btn @(isSaleActive && game.Price > 0 ? "btn-danger" : "btn-outline-success") btn-sm w-100 buy-link">
+												<i class="fas fa-cart-plus"></i>
+												@if (isSaleActive && game.Price > 0)
+												{
+													<span>$@((game.Price * 0.8m).ToString("F2"))</span>
+												}
+												else
+												{
+													<span>Buy</span>
+												}
+											</a>
+										</div>
+										<div class="col-6">
+											<a asp-controller="Review"
+											   asp-action="Create"
+											   asp-route-GameId="@game.GameId"
+											   class="btn btn-outline-warning btn-sm w-100 review-link">
+												<i class="fas fa-star"></i> Review
+											</a>
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -282,25 +364,25 @@
 			}
 		</div>
 
-    }
-    else if (currentUser != null && UserManager.IsInRoleAsync(currentUser,"Admin").Result)
-    {
-        <div class="row">
-            <div class="col-12 text-center">
-                <div class="alert alert-info py-5" role="alert">
-                    <i class="fas fa-gamepad fa-3x mb-3 text-muted"></i>
-                    <h4 class="alert-heading">No Games Available</h4>
-                    <p class="mb-0">There are currently no games to display. Check back later for new releases!</p>
-                    <hr>
-                    <p class="mb-0">
-                        <a asp-controller="Game" asp-action="Add" class="btn btn-primary">Add New Game</a>
-                        <a asp-controller="Company" asp-action="Add" class="btn btn-outline-primary ms-2">Add Company</a>
-                    </p>
+	}
+	else if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+	{
+		<div class="row">
+			<div class="col-12 text-center">
+				<div class="alert alert-info py-5" role="alert">
+					<i class="fas fa-gamepad fa-3x mb-3 text-muted"></i>
+					<h4 class="alert-heading">No Games Available</h4>
+					<p class="mb-0">There are currently no games to display. Check back later for new releases!</p>
+					<hr>
+					<p class="mb-0">
+						<a asp-controller="Game" asp-action="Add" class="btn btn-primary">Add New Game</a>
+						<a asp-controller="Company" asp-action="Add" class="btn btn-outline-primary ms-2">Add Company</a>
+					</p>
 
-                </div>
-            </div>
-        </div>
-    }
+				</div>
+			</div>
+		</div>
+	}
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -328,9 +410,18 @@
 			});
 		});
 
+		// show loading for review links
+		document.querySelectorAll('.review-link').forEach(link => {
+			link.addEventListener('click', function() {
+				const original = this.innerHTML;
+				this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+				setTimeout(() => { if (document.contains(this)) this.innerHTML = original; }, 2000);
+			});
+		});
+
 		// optional auto-refresh (keeps your previous behavior)
-		setInterval(function() {
-			window.location.reload();
-		}, 30000);
+		// setInterval(function() {
+		// 	window.location.reload();
+		// }, 30000)
 	});
 </script>

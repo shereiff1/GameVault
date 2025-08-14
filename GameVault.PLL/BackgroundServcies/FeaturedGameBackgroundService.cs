@@ -1,22 +1,22 @@
-﻿using GameVault.BLL.Services.Abstraction;
-using GameVault.BLL.ModelVM.Game;
+﻿using GameVault.BLL.ModelVM.Game;
+using GameVault.BLL.Services.Abstraction;
 
 namespace GameVault.PLL.Services
 {
     public class FeaturedGameBackgroundService : BackgroundService
     {
-        private readonly IServiceScopeFactory _serviceScopeFactory;
+        private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<FeaturedGameBackgroundService> _logger;
-
-        public static GameDetails? CurrentFeaturedGame { get; private set; }
-        public static DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
         private static List<GameDetails> _allGames = new();
         private static int _currentGameIndex = 0;
 
-        public FeaturedGameBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<FeaturedGameBackgroundService> logger)
+        public static GameDetails? CurrentFeaturedGame { get; private set; }
+        public static DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+
+        public FeaturedGameBackgroundService(IServiceScopeFactory scopeFactory, ILogger<FeaturedGameBackgroundService> logger)
         {
-            _serviceScopeFactory = serviceScopeFactory;
+            _scopeFactory = scopeFactory;
             _logger = logger;
         }
 
@@ -30,8 +30,7 @@ namespace GameVault.PLL.Services
             {
                 try
                 {
-                    await UpdateFeaturedGame();
-
+                    UpdateFeaturedGame();
                     await Task.Delay(TimeSpan.FromSeconds(20), stoppingToken);
                 }
                 catch (OperationCanceledException)
@@ -41,7 +40,7 @@ namespace GameVault.PLL.Services
                 catch (Exception ex)
                 {
                     _logger.LogError(ex, "Error in Featured Game Background Service");
-                    await Task.Delay(TimeSpan.FromSeconds(30), stoppingToken);
+                    await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
                 }
             }
 
@@ -52,16 +51,16 @@ namespace GameVault.PLL.Services
         {
             try
             {
-                using var scope = _serviceScopeFactory.CreateScope();
+                using var scope = _scopeFactory.CreateScope();
                 var gameServices = scope.ServiceProvider.GetRequiredService<IGameServices>();
 
-                var (success, gameDetails) = await gameServices.GetAllGameDetailsAsync();
-                if (success && gameDetails != null && gameDetails.Any())
+                var (success, games) = await gameServices.GetAllGameDetailsAsync();
+                if (success && games != null && games.Any())
                 {
-                    _allGames = gameDetails.ToList();
+                    _allGames = games.ToList();
                     _logger.LogInformation($"Loaded {_allGames.Count} games for featured rotation");
 
-                    if (CurrentFeaturedGame == null && _allGames.Any())
+                    if (CurrentFeaturedGame == null)
                     {
                         CurrentFeaturedGame = _allGames[0];
                         LastUpdate = DateTime.UtcNow;
@@ -69,37 +68,32 @@ namespace GameVault.PLL.Services
                 }
                 else
                 {
-                    _logger.LogWarning("Failed to load games or no games available");
+                    _logger.LogWarning("No games found for featured rotation");
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to load games from database");
+                _logger.LogError(ex, "Failed to load games");
             }
         }
 
-        private async Task UpdateFeaturedGame()
+        private void UpdateFeaturedGame()
         {
             if (DateTime.UtcNow - LastUpdate > TimeSpan.FromHours(1))
             {
-                await LoadGames();
+                _ = LoadGames(); // refresh games list in the background
             }
 
             if (_allGames.Count == 0)
-            {
-                _logger.LogWarning("No games available for featured rotation");
                 return;
-            }
 
             _currentGameIndex = (_currentGameIndex + 1) % _allGames.Count;
             CurrentFeaturedGame = _allGames[_currentGameIndex];
             LastUpdate = DateTime.UtcNow;
 
-            _logger.LogInformation($"Updated featured game to: {CurrentFeaturedGame.Title}");
+            _logger.LogInformation($"Updated featured game to: {CurrentFeaturedGame?.Title}");
         }
-        public static GameDetails? GetCurrentFeaturedGame()
-        {
-            return CurrentFeaturedGame;
-        }
+
+        public static GameDetails? GetCurrentFeaturedGame() => CurrentFeaturedGame;
     }
 }

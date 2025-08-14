@@ -11,7 +11,10 @@
                 </div>
                 <div class="card-body">
                     <!-- Payment Form -->
-                    <form id="paymentForm" novalidate>
+                    <form id="paymentForm"
+                          asp-controller="User"
+                          asp-action="AddGameToLibrary"
+                          asp-route-gameId="@ViewBag.GameId">
                         <div id="payment-form">
                             <div id="paymentError" class="alert alert-danger" style="display:none;"></div>
 
@@ -242,7 +245,7 @@
                 const gameId = @Html.Raw(ViewBag.GameId ?? "1"); // Default to 1 if not provided
 
                 // Redirect to User controller, AddGameToLibrary action
-                window.location.href = '@Url.Action("AddGameToLibrary", "User")?Id=' + gameId;
+                window.location.href = '@Url.Action("AddGameToLibrary", "User")?gameId=' + gameId;
             }, 3000); // 3 second delay to simulate processing
         }
     });
