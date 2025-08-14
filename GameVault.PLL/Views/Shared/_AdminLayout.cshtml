@@ -10,7 +10,7 @@
     <title>@ViewData["Title"] - GameVault</title>
     <meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport" />
     <link rel="icon" href="~/assets/img/kaiadmin/favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="~/css/Home.css" />
+    <link rel="stylesheet" href="~/css/Layout.css" />
     <!-- Fonts and icons -->
     <script src="~/assets/js/plugin/webfont/webfont.min.js"></script>
     <script>
@@ -50,6 +50,23 @@
     <!-- 5. Custom CSS with Layout Protection (HIGHEST PRIORITY) -->
     <!-- Your Custom CSS Last -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+     <a class="dropdown-item d-flex justify-content-between"
+                                   href="@Url.Action("SetLanguage", "Home", new {
+                                                  culture = "en-US",
+                                                  returnUrl = Context.Request.Path + Context.Request.QueryString
+                                              })">
+                                    <img src="~/lib/famfamfam-flags/dist/png/us.png" width="25" height="15" class="mt-1" />
+                                    <span>English</span>
+                                </a>
+                                <a class="dropdown-item d-flex justify-content-between"
+                                   href="@Url.Action("SetLanguage", "Home", new {
+                                                  culture = "ar-EG",
+                                                  returnUrl = Context.Request.Path + Context.Request.QueryString
+                                              })">
+                                    <img src="~/lib/famfamfam-flags/dist/png/eg.png" width="25" height="15" class="mt-1" />
+                                    <span>Arabic</span>
+                                </a>
+
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
@@ -160,36 +177,36 @@
         </div>
     </div>
 
-    <!-- Core JS Files - Load jQuery First -->
-    <script src="~/assets/js/core/jquery-3.7.1.min.js"></script>
-    <script src="~/assets/js/core/popper.min.js"></script>
-    <script src="~/assets/js/core/bootstrap.min.js"></script>
+    // <!-- Core JS Files - Load jQuery First -->
+    // <script src="~/assets/js/core/jquery-3.7.1.min.js"></script>
+    // <script src="~/assets/js/core/popper.min.js"></script>
+    // <script src="~/assets/js/core/bootstrap.min.js"></script>
 
-    <!-- Additional Plugin JS -->
-    <script src="~/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="~/assets/js/plugin/chart.js/chart.min.js"></script>
-    <script src="~/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
-    <script src="~/assets/js/plugin/chart-circle/circles.min.js"></script>
-    <script src="~/assets/js/plugin/datatables/datatables.min.js"></script>
-    <script src="~/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
-    <script src="~/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
-    <script src="~/assets/js/plugin/jsvectormap/world.js"></script>
-    <script src="~/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+    // <!-- Additional Plugin JS -->
+    // <script src="~/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
+    // <script src="~/assets/js/plugin/chart.js/chart.min.js"></script>
+    // <script src="~/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
+    // <script src="~/assets/js/plugin/chart-circle/circles.min.js"></script>
+    // <script src="~/assets/js/plugin/datatables/datatables.min.js"></script>
+    // <script src="~/assets/js/plugin/bootstrap-notify/bootstrap-notify.min.js"></script>
+    // <script src="~/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
+    // <script src="~/assets/js/plugin/jsvectormap/world.js"></script>
+    // <script src="~/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
 
-    <!-- KaiAdmin Core -->
-    <script src="~/assets/js/kaiadmin.min.js"></script>
-    <script src="~/assets/js/setting-demo.js"></script>
-    <script src="~/assets/js/demo.js"></script>
+    // <!-- KaiAdmin Core -->
+    // <script src="~/assets/js/kaiadmin.min.js"></script>
+    // <script src="~/assets/js/setting-demo.js"></script>
+    // <script src="~/assets/js/demo.js"></script>
 
-    <!-- Plugin JS -->
-    <script>var hostUrl = "~/Plugin/";</script>
-    <script src="~/Plugin/js/plugins.bundle.js"></script>
-    <script src="~/Plugin/js/scripts.bundle.js"></script>
+    // <!-- Plugin JS -->
+    // <script>var hostUrl = "~/Plugin/";</script>
+    // <script src="~/Plugin/js/plugins.bundle.js"></script>
+    // <script src="~/Plugin/js/scripts.bundle.js"></script>
 
-    <!-- Additional Libraries -->
-    <script src="~/lib/bootbox.js/bootbox.min.js"></script>
-    <script src="~/js/validation-styling.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    // <!-- Additional Libraries -->
+    // <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    // <script src="~/js/validation-styling.js"></script>
+    // <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Plugins", required: false)
 

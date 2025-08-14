@@ -1,0 +1,18 @@
+﻿@model GameVault.BLL.ModelVM.Game.GameDetails
+@{
+    var isSaleActive = ViewBag.IsSaleActive ?? false;
+}
+
+@if (Model != null)
+{
+    <div class="featured-game-card mx-auto">
+        <div class="card border-0 shadow-lg" style="max-width: 800px;">
+            <!-- Your existing Featured Game markup here -->
+            <div class="card-body">
+                <h3>@Model.Title</h3>
+                <p>@Model.CompanyName</p>
+                <p>@Model.Description</p>
+            </div>
+        </div>
+    </div>
+}

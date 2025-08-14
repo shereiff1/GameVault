@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Categories";
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
 }
 
 <h2>Category List</h2>
@@ -13,9 +14,12 @@
     </div>
 }
 
-<div class="mb-3">
-    <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
-</div>
+@if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+{
+    <div class="mb-3">
+        <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
+    </div>
+}
 
 @if (Model == null || !Model.Any())
 {
@@ -30,8 +34,11 @@ else
             <tr>
                 <th>Category Name</th>
                 <th>Description</th>
-                <th>Created By</th>
-                <th style="width: 180px;">Actions</th>
+                @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+                {
+                    <th>Created By</th>
+                    <th style="width: 180px;">Actions</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -40,43 +47,45 @@ else
                 <tr class="@cat.Category_Id">
                     <td>@cat.Category_Name</td>
                     <td>@cat.Description</td>
-                    <td>@cat.CreatedBy</td>
-                    <td>
-                        <a asp-action="UpdateCategory" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-warning">Edit</a>
-                        <button  asp-route-id="@cat.Category_Id" class="btn btn-sm btn-danger del" data-id="@cat.Category_Id"
-                           onclick="return confirm('Are you sure you want to delete this category?');">
-                            Delete
-                        </button>
-                    </td>
+
+                    @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+                    {
+                        <td>@cat.CreatedBy</td>
+                        <td>
+                            <a asp-action="UpdateCategory" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-warning">Edit</a>
+                            <button asp-route-id="@cat.Category_Id" class="btn btn-sm btn-danger del" data-id="@cat.Category_Id"
+                                    onclick="return confirm('Are you sure you want to delete this category?');">
+                                Delete
+                            </button>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
     </table>
 }
- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
-    $( document ).ready(function() {
-   $(".del").click(async function(e){
-                e.preventDefault();
-                   let id=   $(this).attr('data-id')
-                   console.log(id)
-                       $.ajax({
-          url: "https://localhost:44341/Category/Delete/"+id,         
-        type: "POST",   
-		  contentType: "application/json",
-        dataType: "json",   
-         success: function(response) {
-            
-            if(response.success){
-                  $('.'+id).fadeOut()
-            }
-             
-        },
-         error: function(xhr, status, error) {
-                 console.log('Error:', error);
-             }
+    $(document).ready(function() {
+        $(".del").click(function(e){
+            e.preventDefault();
+            let id = $(this).attr('data-id');
+            console.log(id);
+            $.ajax({
+                url: "https://localhost:44341/Category/Delete/" + id,
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                success: function(response) {
+                    if(response.success){
+                        $('.' + id).fadeOut();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log('Error:', error);
+                }
+            });
+        });
     });
-   })
-       })
 </script>

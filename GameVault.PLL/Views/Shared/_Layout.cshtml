@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="~/GameVault.PLL.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Layout.css" />
     <link rel="stylesheet" href="~/css/Home.css" />
+    <link rel="icon" type="image/png" href="~/favicon.png">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -145,7 +147,7 @@
                         <!-- Right Side Menu -->
                         <ul class="navbar-nav order-lg-1 order-2">
                             <li class="nav-item">
-                                <a class="nav-link nav-link-custom position-relative" asp-action="UserLibrary" asp-controller="User" asp-route-id ="@currentUser.Id">
+                                <a class="nav-link nav-link-custom position-relative" asp-action="UserLibrary" asp-controller="User" asp-route-id="@currentUser.Id">
                                     <i class="fas fa-shopping-cart me-1"></i>Cart
                                 </a>
                             </li>
