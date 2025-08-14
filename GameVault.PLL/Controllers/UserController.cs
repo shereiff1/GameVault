@@ -41,7 +41,7 @@ namespace GameVault.PLL.Controllers
         {
             try
             {
-                var (users, error) = await userServices.GetAllPrivateUsers();
+                var (users, error) = await userServices.GetAllAdmins();
                 
                 if (!string.IsNullOrEmpty(error))
                 {

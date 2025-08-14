@@ -1,5 +1,6 @@
 
 using System;
+using System.Web;
 using System.Security.Claims;
 using GameVault.BLL.ModelVM.Account;
 using GameVault.BLL.Services.Abstraction;
@@ -132,7 +133,6 @@ namespace GameVault.BLL.Services.Implementation
                     var resetLink = urlAction("ResetPassword", "Account",
                         new { email = user.Email, token = Uri.EscapeDataString(token) }, scheme);
 
-                    // Send email
                     await emailService.SendEmailAsync(
                         user.Email,
                         "Reset Your Password",
@@ -188,8 +188,7 @@ namespace GameVault.BLL.Services.Implementation
                             $@"
                     <h2>Password Changed</h2>
                     <p>Your password has been successfully changed.</p>
-                    <p>If you did not make this change, please contact our support team immediately.</p>
-                    <p>For security reasons, you may want to:</p>
+                    
                     <ul>
                         <li>Sign in with your new password to verify it works</li>
                         <li>Review your account activity</li>
