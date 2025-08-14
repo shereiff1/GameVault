@@ -2,8 +2,6 @@
 
 @{
     ViewData["Title"] = "Categories";
-    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
-
 }
 
 <h2>Category List</h2>
@@ -15,12 +13,10 @@
     </div>
 }
 
-@if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
-{
-    <div class="mb-3">
-        <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
-    </div>
-}
+<div class="mb-3">
+    <a asp-controller="Category" asp-action="Create" class="btn btn-primary">Add New Category</a>
+</div>
+
 @if (Model == null || !Model.Any())
 {
     <div class="alert alert-info">
@@ -44,17 +40,14 @@ else
                 <tr class="@cat.Category_Id">
                     <td>@cat.Category_Name</td>
                     <td>@cat.Description</td>
-        @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
-                    {
                     <td>@cat.CreatedBy</td>
                     <td>
                         <a asp-action="UpdateCategory" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@cat.Category_Id" class="btn btn-sm btn-danger del" data-id="@cat.Category_Id"
+                        <button  asp-route-id="@cat.Category_Id" class="btn btn-sm btn-danger del" data-id="@cat.Category_Id"
                            onclick="return confirm('Are you sure you want to delete this category?');">
                             Delete
-                        </a>
+                        </button>
                     </td>
-                    }
                 </tr>
             }
         </tbody>
@@ -63,33 +56,27 @@ else
  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
 
 <script>
-    document.querySelector('.del').addEventListener('click', async function (e) {
-        e.preventDefault();
-        try {
-             let id=   this.getAttribute('data-id')
-             console.log(id)
-            const response = await fetch('http:localhost:44341/Category/Delete', {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    Category_Id:id
-                })
-            });
-            if (response.ok)
-         $( document ).ready(function() {
-       $('.del').click(function(e){
-                e.preventDefault()
-               let id=   $(this).attr('data-id')
-               $('.'+id).fadeOut()
-       })
+    $( document ).ready(function() {
+   $(".del").click(async function(e){
+                e.preventDefault();
+                   let id=   $(this).attr('data-id')
+                   console.log(id)
+                       $.ajax({
+          url: "https://localhost:44341/Category/Delete/"+id,         
+        type: "POST",   
+		  contentType: "application/json",
+        dataType: "json",   
+         success: function(response) {
+            
+            if(response.success){
+                  $('.'+id).fadeOut()
+            }
+             
+        },
+         error: function(xhr, status, error) {
+                 console.log('Error:', error);
+             }
     });
-        }
-          catch (error) {
-        console.error('Error:', error);
-        alert('An unexpected error occurred.');
-    }
-    })
-  
+   })
+       })
 </script>
