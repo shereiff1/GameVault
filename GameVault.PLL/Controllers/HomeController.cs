@@ -20,6 +20,17 @@ namespace GameVault.PLL.Controllers
             this.gameServices = gameServices;
         }
 
+        [HttpGet]
+        public IActionResult GetFeaturedGamePartial()
+        {
+            var featuredGame = FeaturedGameBackgroundService.GetCurrentFeaturedGame();
+            if (featuredGame == null)
+                return NotFound();
+
+            ViewBag.IsSaleActive = SaleStatus.IsSaleActive;
+            return PartialView("_FeaturedGamePartial", featuredGame);
+        }
+
         public async Task<IActionResult> Index()
         {
             try
@@ -48,6 +59,7 @@ namespace GameVault.PLL.Controllers
                 return View(new List<GameDetails>());
             }
         }
+
         [HttpGet]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
@@ -59,6 +71,7 @@ namespace GameVault.PLL.Controllers
 
             return LocalRedirect(returnUrl);
         }
+
         public IActionResult Privacy()
         {
             return View();

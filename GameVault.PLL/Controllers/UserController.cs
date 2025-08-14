@@ -41,7 +41,7 @@ namespace GameVault.PLL.Controllers
         {
             try
             {
-                var (users, error) = await userServices.GetAllPrivateUsers();
+                var (users, error) = await userServices.GetAllAdmins();
                 
                 if (!string.IsNullOrEmpty(error))
                 {
@@ -133,7 +133,7 @@ namespace GameVault.PLL.Controllers
                     ViewBag.ErrorMessage = error ?? "Failed to update profile.";
                     return View(model);
                 }
-                return RedirectToAction("PrivateProfile", new { id = model.Id });
+                return RedirectToAction("MyProfile", new { id = model.Id });
             }
             catch (Exception ex)
             {
@@ -262,8 +262,7 @@ namespace GameVault.PLL.Controllers
         }
 
         [Authorize]
-
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> AddGameToLibrary(int gameId)
         {
             var userId = await GetCurrentUserId();
@@ -286,23 +285,23 @@ namespace GameVault.PLL.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveGameFromLibrary(int gameId)
         {
-            var userId = GetCurrentUserId().Result;
-
+            var userId = await GetCurrentUserId();
             if (string.IsNullOrEmpty(userId))
             {
                 return RedirectToAction("Login", "Account");
             }
 
-
             var (success, error) = await userServices.RemoveGameFromLibrary(userId, gameId);
-
             if (!success)
             {
-                ViewBag.ErrorMessage = error ?? "Failed to remove the Game";
-                return View();
+                TempData["ErrorMessage"] = error ?? "Failed to remove the game";
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Game removed successfully";
             }
 
-            return RedirectToAction("UserLibrary", "User");
+            return RedirectToAction("MyProfile", "User");
         }
 
         [Authorize]

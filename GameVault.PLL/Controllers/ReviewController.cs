@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace GameVault_PLL.Controllers
 {
-    [Authorize(Roles ="Admin")]
+    [Authorize(Roles = "Admin")]
     public class ReviewController : Controller
     {
         private readonly IReviewServices _reviewServices;
@@ -18,48 +18,48 @@ namespace GameVault_PLL.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateReview([FromBody]CreateReview review)
+        public async Task<IActionResult> CreateReview([FromBody] CreateReview review)
         {
             try
-{
-    if (review == null)
-    {
-        return BadRequest(new
-        {
-            success = false,
-            errorMessage = "No data received",
-            receivedData = Request.Body
-        });
-    }
-    var result = await _reviewServices.CreateAsync(review);
-    if (result.Item1)
-    {
-        return Json(new
-        {
-            success = true,
-            redirectUrl = Url.Action("GetAllReviews")
-        });
-    }
-    return BadRequest(new
-    {
-        success = false,
-        errorMessage = result.Item2,
-        data = review
-    });
-}
-catch (Exception ex)
-{
-    return StatusCode(500, new
-    {
-        success = false,
-        errorMessage = "Internal server error",
-        detailedError = ex.Message,
-        innerException = ex.InnerException?.Message,
-        stackTrace = ex.StackTrace
-    }
-    );
-}
-        } 
+            {
+                if (review == null)
+                {
+                    return BadRequest(new
+                    {
+                        success = false,
+                        errorMessage = "No data received",
+                        receivedData = Request.Body
+                    });
+                }
+                var result = await _reviewServices.CreateAsync(review);
+                if (result.Item1)
+                {
+                    return Json(new
+                    {
+                        success = true,
+                        redirectUrl = Url.Action("GetAllReviews")
+                    });
+                }
+                return BadRequest(new
+                {
+                    success = false,
+                    errorMessage = result.Item2,
+                    data = review
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    success = false,
+                    errorMessage = "Internal server error",
+                    detailedError = ex.Message,
+                    innerException = ex.InnerException?.Message,
+                    stackTrace = ex.StackTrace
+                }
+                );
+            }
+        }
         [AllowAnonymous]
         public async Task<IActionResult> GetAllReviews()
         {
@@ -71,24 +71,25 @@ catch (Exception ex)
             }
             return View(reviews.Item2);
         }
-         [HttpPost]
- public async Task<IActionResult> Delete(int id)
- {
-     var result = await _reviewServices.DeleteAsync(id);
-     if (result.Item1)
-     {
-         return Json(new
-         {
-             success = true,
-             redirectUrl = Url.Action("GetAllReviews")
-         });
-     }
-     return Json(new
-     {
-         success = false,
-         errorMessage = result.Item2,
-         data = id
-     });
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _reviewServices.DeleteAsync(id);
+            if (result.Item1)
+            {
+                return Json(new
+                {
+                    success = true,
+                    redirectUrl = Url.Action("GetAllReviews")
+                });
+            }
+            return Json(new
+            {
+                success = false,
+                errorMessage = result.Item2,
+                data = id
+            });
+        }
         public IActionResult Create()
         {
             return View();
