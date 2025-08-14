@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
     var profileImageUrl = !string.IsNullOrEmpty(currentUser?.ProfilePicture)
         ? Url.Content("~/Images/" + currentUser.ProfilePicture)
@@ -31,26 +30,50 @@
     <!-- Navbar Header -->
     <nav class="navbar navbar-header navbar-header-transparent navbar-expand-lg border-bottom">
         <div class="container-fluid">
+            <!-- Desktop Search Form -->
             <nav class="navbar navbar-header-left navbar-expand-lg navbar-form nav-search p-0 d-none d-lg-flex">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <button type="submit" class="btn btn-search pe-1">
-                            <i class="fa fa-search search-icon"></i>
-                        </button>
+                <form asp-controller="User" asp-action="Search" method="get" class="d-flex w-100">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-search pe-1">
+                                <i class="fa fa-search search-icon"></i>
+                            </button>
+                        </div>
+                        <input type="text"
+                               name="searchTerm"
+                               placeholder="Search users..."
+                               class="form-control"
+                               value="@ViewBag.SearchTerm"
+                               autocomplete="off">
                     </div>
-                    <input type="text" placeholder="Search ..." class="form-control">
-                </div>
+                </form>
             </nav>
 
             <ul class="navbar-nav topbar-nav ms-md-auto align-items-center">
+                <!-- Mobile Search Dropdown -->
                 <li class="nav-item topbar-icon dropdown hidden-caret d-flex d-lg-none">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false" aria-haspopup="true">
+                    <a class="nav-link dropdown-toggle"
+                       data-bs-toggle="dropdown"
+                       href="#"
+                       role="button"
+                       aria-expanded="false"
+                       aria-haspopup="true">
                         <i class="fa fa-search"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-search animated fadeIn">
-                        <form class="navbar-left navbar-form nav-search">
+                        <form asp-controller="User" asp-action="Search" method="get" class="navbar-left navbar-form nav-search">
                             <div class="input-group">
-                                <input type="text" placeholder="Search ..." class="form-control">
+                                <input type="text"
+                                       name="searchTerm"
+                                       placeholder="Search users..."
+                                       class="form-control"
+                                       value="@ViewBag.SearchTerm"
+                                       autocomplete="off">
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-search">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
                             </div>
                         </form>
                     </ul>
@@ -122,7 +145,7 @@
                                     </p>
                                     @if (SignInManager.IsSignedIn(User))
                                     {
-                                        <a href="@Url.Action("PrivateProfile", "User")" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
+                                        <a href="@Url.Action("UserProfile", "User")" class="btn btn-xs btn-secondary btn-sm">View Profile</a>
                                     }
                                     else
                                     {
@@ -135,15 +158,10 @@
                             <div class="dropdown-divider"></div>
                             @if (SignInManager.IsSignedIn(User))
                             {
-                                <a class="dropdown-item" href="@Url.Action("PrivateProfile", "User")">
+                                <a class="dropdown-item" href="@Url.Action("UserProfile", "User")">
                                     <i class="fas fa-user"></i> My Profile
                                 </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-wallet"></i> My Balance
-                                </a>
-                                <a class="dropdown-item" href="#">
-                                    <i class="fas fa-inbox"></i> Inbox
-                                </a>
+                          
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="@Url.Action("UpdateProfile", "User")">
                                     <i class="fas fa-cog"></i> Account Settings
@@ -174,3 +192,39 @@
 <!-- End Navbar -->
 </div>
 
+<!-- Additional JavaScript for Search Enhancement    -->
+<script>
+    $(document).ready(function() {
+        // Enhanced search functionality
+        $('.nav-search input[name="searchTerm"]').on('keypress', function(e) {
+            if (e.which === 13) { // Enter key
+                $(this).closest('form').submit();
+            }
+        });
+
+        // Auto-focus search input when mobile dropdown opens
+        $('.dropdown-search').on('shown.bs.dropdown', function() {
+            $(this).find('input[name="searchTerm"]').focus();
+        });
+
+        // Clear search on escape key
+        $('.nav-search input[name="searchTerm"]').on('keyup', function(e) {
+            if (e.which === 27) { // Escape key
+                $(this).val('');
+            }
+        });
+
+        // Initialize Bootstrap dropdowns explicitly
+        var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'))
+        var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+            return new bootstrap.Dropdown(dropdownToggleEl)
+        });
+
+        // Fix for profile dropdown
+        $('#profileDropdown').on('click', function(e) {
+            e.preventDefault();
+            var dropdown = new bootstrap.Dropdown(this);
+            dropdown.toggle();
+        });
+    });
+</script>

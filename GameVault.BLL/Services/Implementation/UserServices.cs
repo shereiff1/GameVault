@@ -11,6 +11,7 @@ using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Identity;
 
 namespace GameVault.BLL.Services.Implementation
 {
@@ -18,13 +19,15 @@ namespace GameVault.BLL.Services.Implementation
     {
         private readonly IUserRepo userrepo;
         private readonly IGameRepo gamerepo;
+        private readonly UserManager<User> userManager;
         private readonly IMapper mapper;
 
-        public UserServices(IUserRepo repo, IMapper mapper,IGameRepo gamerepo)
+        public UserServices(IUserRepo repo, IMapper mapper, IGameRepo gamerepo, UserManager<User> userManager)
         {
             this.userrepo = repo;
             this.mapper = mapper;
             this.gamerepo = gamerepo;
+            this.userManager = userManager;
         }
 
 
@@ -33,7 +36,7 @@ namespace GameVault.BLL.Services.Implementation
             try
             {
                 if (user == null)
-                    return (false,"Ivalid Update, please try again");
+                    return (false, "Ivalid Update, please try again");
                 user.ProfilePicture = Upload.UploadFile("Images", user.ImageFile);
                 var User = await userrepo.GetUserById(user.Id);
                 User.UpdateProfile(user.UserName, user.Name, user.ProfilePicture);
@@ -45,14 +48,14 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(List<UserPrivateProfile>?, string)> GetAllPrivateUsers()
+        public async Task<(List<UserProfile>?, string)> GetAllUsersProfiles()
         {
             try
             {
-                var users =await userrepo.GetAll();
+                var users = await userrepo.GetAll();
                 if (users == null)
                     return (null, "There are no users yet");
-                var map = mapper.Map<List<UserPrivateProfile>>(users);
+                var map = mapper.Map<List<UserProfile>>(users);
                 return (map, null);
             }
             catch (Exception ex)
@@ -61,14 +64,14 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(List<UserPublicProfile>?, string)> GetAllUsers()
+        public async Task<(List<UserPublicInfo>?, string)> GetAllUsers()
         {
             try
             {
                 var users = await userrepo.GetAll();
                 if (users == null)
                     return (null, "There are no users yet");
-                var map = mapper.Map<List<UserPublicProfile>>(users);
+                var map = mapper.Map<List<UserPublicInfo>>(users);
                 return (map, null);
             }
             catch (Exception ex)
@@ -76,14 +79,14 @@ namespace GameVault.BLL.Services.Implementation
                 return (null, ex.Message);
             }
         }
-        public async Task<(UserPublicProfile?, string?)> GetPublicProfile(string id)
+        public async Task<(UserPublicInfo?, string?)> GetPublicInfo(string id)
         {
             try
             {
-                var user =await userrepo.GetUserById(id);
+                var user = await userrepo.GetUserById(id);
                 if (user == null)
                     return (null, "Error, User not found");
-                var map = mapper.Map<UserPublicProfile>(user);
+                var map = mapper.Map<UserPublicInfo>(user);
                 return (map, null);
             }
             catch (Exception ex)
@@ -91,14 +94,14 @@ namespace GameVault.BLL.Services.Implementation
                 return (null, ex.Message);
             }
         }
-        public async Task<(UserPrivateProfile?, string?)> GetPrivateProfile(string id)
+        public async Task<(UserProfile?, string?)> GetProfile(string id)
         {
             try
             {
-                var user =await userrepo.GetUserById(id);
+                var user = await userrepo.GetUserById(id);
                 if (user == null)
                     return (null, "Error, User not found");
-                var map = mapper.Map<UserPrivateProfile>(user);
+                var map = mapper.Map<UserProfile>(user);
                 return (map, null);
             }
             catch (Exception ex)
@@ -122,7 +125,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool,string?)> AddGameToLibrary(string userId, int gameId)
+        public async Task<(bool, string?)> AddGameToLibrary(string userId, int gameId)
         {
             try
             {
@@ -130,15 +133,15 @@ namespace GameVault.BLL.Services.Implementation
                 var (result, game) = await gamerepo.GetByIdAsync(gameId);
 
                 if (user == null || result == false)
-                    return (false,"Error, Invalid user or game");
+                    return (false, "Error, Invalid user or game");
 
-                if (userrepo.IsGameInUserLibrary(userId,game).Result)
+                if (userrepo.IsGameInUserLibrary(userId, game).Result)
                 {
                     return (false, "Game Already in your Library");
                 }
 
                 await userrepo.AddGameToLibrary(user, game);
-                return (true,null);
+                return (true, null);
             }
             catch (Exception ex)
             {
@@ -146,7 +149,7 @@ namespace GameVault.BLL.Services.Implementation
             }
         }
 
-        public async Task<(bool,string?)> RemoveGameFromLibrary(string userId, int gameId)
+        public async Task<(bool, string?)> RemoveGameFromLibrary(string userId, int gameId)
         {
             try
             {
@@ -162,15 +165,15 @@ namespace GameVault.BLL.Services.Implementation
                 }
 
                 await userrepo.RemoveGameFromLibrary(user, game);
-                return (true,null);
+                return (true, null);
             }
             catch (Exception ex)
             {
-                return (false,ex.Message);
+                return (false, ex.Message);
             }
         }
 
-        public async Task<(List<ModelVM.GameVM>?,string?)> GetUserLibrary(string userId)
+        public async Task<(List<ModelVM.GameVM>?, string?)> GetUserLibrary(string userId)
         {
             try
             {
@@ -185,11 +188,60 @@ namespace GameVault.BLL.Services.Implementation
             catch (Exception ex)
             {
 
-                return(null,ex.Message);
+                return (null, ex.Message);
             }
-           
+
 
         }
+        public async Task<(List<UserPublicInfo>?, string)> GetAllAdmins()
+        {
+            try
+            {
+                var users = await userManager.GetUsersInRoleAsync("Admin");
+                if (users == null)
+                    return (null, "There are no admins yet");
+                var map = mapper.Map<List<UserPublicInfo>>(users);
+                return (map, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+        }
 
+        public async Task<(bool, string?)> DeleteUser(string userId)
+        {
+            try
+            {
+                var user = await userrepo.GetUserById(userId);
+
+                if (user == null)
+                    return (false, "Error,User Doesn't Exist");
+
+                await userrepo.Delete(user);
+                return (true, null);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message);
+            }
+        }
+
+        public async Task<(UserPublicInfo, string?)> GetUserById(string id)
+        {
+            try
+            {
+                var user = await userrepo.GetUserById(id);
+                if (user == null)
+                    return (null, "Error, User not found");
+                var map = mapper.Map<UserPublicInfo>(user);
+                return (map, null);
+            }
+            catch (Exception ex)
+            {
+                return (null, ex.Message);
+            }
+
+        }
     }
 }

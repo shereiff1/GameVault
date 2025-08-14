@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.ModelVM;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameVault.PLL.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class CompanyController : Controller
     {
         private readonly ICompanyServices _companyServices;
@@ -13,6 +15,7 @@ namespace GameVault.PLL.Controllers
             _companyServices = companyServices;
         }
 
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string? errorMessage = null)
         {
             var (success, companies) = await _companyServices.GetAllAsync();

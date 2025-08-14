@@ -1,5 +1,9 @@
 ﻿@{
     Layout = null;
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+    var profileImageUrl = !string.IsNullOrEmpty(currentUser?.ProfilePicture)
+        ? Url.Content("~/Images/" + currentUser.ProfilePicture)
+        : "https://i.ibb.co/bjgY27pk/Blank-Profile-Pic.jpg";
 }
 
 
@@ -9,16 +13,72 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - GameVault.PLL</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/Plugin/css/plugins.bundle.css" type="text/css" />
     <link rel="stylesheet" href="~/Plugin/css/style.bundle.css" type="text/css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/GameVault.PLL.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Layout.css" />
     <link rel="stylesheet" href="~/css/Home.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .user-search-form {
+            max-width: 300px;
+        }
 
+        .search-input-group {
+            position: relative;
+        }
+
+            .search-input-group .form-control {
+                border-radius: 20px;
+                padding-left: 40px;
+                background-color: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.3);
+                color: #fff;
+            }
+
+                .search-input-group .form-control::placeholder {
+                    color: rgba(255, 255, 255, 0.7);
+                }
+
+                .search-input-group .form-control:focus {
+                    background-color: rgba(255, 255, 255, 0.15);
+                    border-color: #007bff;
+                    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+                    color: #fff;
+                }
+
+        .search-btn {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            z-index: 3;
+            padding: 0;
+        }
+
+            .search-btn:hover {
+                color: #fff;
+            }
+
+        .profile-image {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .username-text {
+            font-weight: 500;
+            margin-left: 0.5rem;
+        }
+    </style>
 </head>
 <body>
     <header class="sticky-top">
@@ -60,45 +120,73 @@
                         </li>
                     </ul>
 
-                    <!-- Right Side Menu -->
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link nav-link-custom position-relative" href="#">
-                                <i class="fas fa-shopping-cart me-1"></i>Cart
+                    <!-- User Search Form -->
+                    @if (currentUser != null)
+                    {
+                        <div class="d-flex justify-content-center order-lg-0 order-3 w-100 w-lg-auto my-3 my-lg-0">
+                            <form asp-controller="User" asp-action="Search" method="get" class="user-search-form me-lg-3">
+                                <div class="search-input-group">
+                                    <button type="submit" class="search-btn">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                    <input type="text"
+                                           name="searchTerm"
+                                           placeholder="Search users..."
+                                           class="form-control"
+                                           value="@ViewBag.SearchTerm"
+                                           autocomplete="off">
+                                </div>
+                            </form>
+                        </div>
+                    }
 
-                            </a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link nav-link-custom dropdown-toggle" href="#" id="userDropdown" role="button"
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle me-1"></i>Account
-                            </a>
-                                <a class="dropdown-item d-flex justify-content-between"
-                                   href="@Url.Action("SetLanguage", "Home", new {
-                                                  culture = "en-US",
-                                                  returnUrl = Context.Request.Path + Context.Request.QueryString
-                                              })">
-                                    <img src="~/lib/famfamfam-flags/dist/png/us.png" width="25" height="15" class="mt-1" />
-                                    <span>English</span>
+                    @if (currentUser != null)
+                    {
+                        <!-- Right Side Menu -->
+                        <ul class="navbar-nav order-lg-1 order-2">
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom position-relative" asp-action="UserLibrary" asp-controller="User" asp-route-id ="@currentUser.Id">
+                                    <i class="fas fa-shopping-cart me-1"></i>Cart
                                 </a>
-                                <a class="dropdown-item d-flex justify-content-between"
-                                   href="@Url.Action("SetLanguage", "Home", new {
-                                                  culture = "ar-EG",
-                                                  returnUrl = Context.Request.Path + Context.Request.QueryString
-                                              })">
-                                    <img src="~/lib/famfamfam-flags/dist/png/eg.png" width="25" height="15" class="mt-1" />
-                                    <span>Arabic</span>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link nav-link-custom dropdown-toggle d-flex align-items-center" href="#" id="userDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="@profileImageUrl" alt="Profile" class="profile-image me-2" />
+                                    <span class="username-text d-none d-lg-inline">@(currentUser.UserName ?? "User")</span>
+                                    <span class="username-text d-lg-none">Account</span>
                                 </a>
-                            <ul class="dropdown-menu dropdown-menu-end gamevault-dropdown">
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profile</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-heart me-2"></i>Wishlist</a></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-history me-2"></i>Orders</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
-                                <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                                <ul class="dropdown-menu dropdown-menu-end gamevault-dropdown">
+                                    <li><a class="dropdown-item" asp-action="MyProfile" asp-controller="User"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                    <li><a class="dropdown-item" asp-action="UserLibrary" asp-controller="User" asp-route-id="@currentUser.Id"><i class="fas fa-shopping-cart me-1"></i>Cart</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-action="UpdateProfile" asp-controller="User"><i class="fas fa-cog me-2"></i>Account Settings</a></li>
+                                    <li>
+                                        <form asp-action="Logout" asp-controller="Account" method="post" style="display: inline;">
+                                            <button type="submit" class="dropdown-item text-danger" style="border: none; background: none; width: 100%; text-align: left;">
+                                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    }
+                    else
+                    {
+                        <ul class="navbar-nav">
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom" asp-action="Login" asp-controller="Account">
+                                    <span class="btn btn-sm btn-outline-light">Log in</span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-custom" asp-action="SignUp" asp-controller="Account">
+                                    <span class="btn btn-sm btn-primary">Sign Up</span>
+                                </a>
+                            </li>
+                        </ul>
+                    }
                 </div>
             </div>
         </nav>
@@ -109,17 +197,15 @@
         @RenderBody()
     </main>
 
-    
-   
-    <!-- Plugin JS -->
-    <script>var hostUrl = "~/Plugin/";</script>
-    <script src="~/Plugin/js/plugins.bundle.js"></script>
-    <script src="~/Plugin/js/scripts.bundle.js"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-   
+
+    @* <!-- Plugin JS -->
+    <script>var hostUrl = "~/Plugin/";</script>
+    <script src="~/Plugin/js/plugins.bundle.js"></script>
+    <script src="~/Plugin/js/scripts.bundle.js"></script> *@
 
     @await RenderSectionAsync("Plugins", required: false)
 

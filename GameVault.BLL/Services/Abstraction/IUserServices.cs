@@ -9,13 +9,13 @@ namespace GameVault.BLL.Services.Abstraction
     public interface IUserServices
     {
         //public (bool,string?) AddUser(UserSignUp user);
-        public Task<(List<UserPublicProfile>?,string)> GetAllUsers();
+        public Task<(List<UserPublicInfo>?,string)> GetAllUsers();
         public Task<(bool,string?)> UpdateUserProfile(UpdateUserProfile user);
-        public Task<(List<UserPrivateProfile>?, string)> GetAllPrivateUsers();
+        public Task<(List<UserProfile>?, string)> GetAllUsersProfiles();
 
-        public Task<(UserPrivateProfile?, string?)> GetPrivateProfile(string id);
+        public Task<(UserProfile?, string?)> GetProfile(string id);
 
-        public Task<(UserPublicProfile?, string?)> GetPublicProfile(string id);
+        public Task<(UserPublicInfo?, string?)> GetPublicInfo(string id);
         public Task<(UpdateUserProfile?, string?)> GetUserInfo(string id);
 
         public Task<(bool,string?)> AddGameToLibrary(string userId, int gameId);
@@ -23,6 +23,11 @@ namespace GameVault.BLL.Services.Abstraction
 
         public Task<(List<GameVM>?,string?)> GetUserLibrary(string userId);
 
+        public Task<(List<UserPublicInfo>?, string)> GetAllAdmins();
+
+        public Task<(bool,string?)> DeleteUser(string userId);
+
+        public Task<(UserPublicInfo, string?)> GetUserById(string id);
 
     }
 }

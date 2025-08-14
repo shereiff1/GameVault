@@ -3,6 +3,8 @@
 
 @{
     ViewData["Title"] = "Companies";
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+
 }
 
 <h2>Company List</h2>
@@ -13,10 +15,12 @@
         @ViewBag.Error
     </div>
 }
-
-<div class="mb-3">
-    <a asp-action="Add" class="btn btn-primary">Add New Company</a>
+@if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+{
+    <div class="mb-3">
+        <a asp-action="Add" class="btn btn-primary">Add New Company</a>
 </div>
+}
 
 @if (Model == null || !Model.Any())
 {
@@ -41,15 +45,18 @@ else
                 <tr>
                     <td>@company.CompanyName</td>
                     <td>@company.CompanyInfo</td>
-                    <td>@company.CreatedBy</td>
-                    <td>
-                        <a asp-action="Edit" asp-route-id="@company.CompanyId" class="btn btn-sm btn-warning">Edit</a>
+        @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+                    {
+                        <td>@company.CreatedBy</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@company.CompanyId" class="btn btn-sm btn-warning">Edit</a>
                         <a asp-action="Delete" asp-route-id="@company.CompanyId"
                            class="btn btn-sm btn-danger"
                            onclick="return confirm('Are you sure you want to delete this company?');">
                             Delete
                         </a>
                     </td>
+                    }
                 </tr>
             }
         </tbody>

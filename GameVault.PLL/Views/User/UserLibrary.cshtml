@@ -1,7 +1,9 @@
 ﻿@model List<GameVault.BLL.ModelVM.GameVM>
 
 @{
-    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+    var currentUser = await UserManager.FindByIdAsync(ViewBag.UserId);
+    if(currentUser == null)
+        currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
 }
 
 @{

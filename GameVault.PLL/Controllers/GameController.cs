@@ -4,9 +4,11 @@ using GameVault.BLL.ModelVM;
 using GameVault.BLL.ModelVM.Game;
 using GameVault.BLL.ModelVM.Category;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GameVault.PLL.Controllers
 {
+    [Authorize(Roles ="Admin")]
     public class GameController : Controller
     {
         private readonly IGameServices _gameServices;
@@ -19,6 +21,8 @@ namespace GameVault.PLL.Controllers
             _companyServices = companyServices;
             _categoryServices = categoryServices;
         }
+
+        [AllowAnonymous]
         public async Task<IActionResult> Index(string? errorMessage = null)
         {
             var (success, games) = await _gameServices.GetAllAsync();
@@ -33,6 +37,7 @@ namespace GameVault.PLL.Controllers
             return View(games);
         }
 
+        [Authorize]
         public async Task<IActionResult> GameDetails(int id)
         {
             var (success, gameDetails) = await _gameServices.GetGameDetails(id);
@@ -103,7 +108,7 @@ namespace GameVault.PLL.Controllers
 
             return RedirectToAction("Index");
         }
-
+        [Authorize]
         public async Task<IActionResult> ByCompany(int companyId)
         {
             var (success, games) = await _gameServices.GetByCompanyAsync(companyId);
@@ -126,6 +131,7 @@ namespace GameVault.PLL.Controllers
             return RedirectToAction("Create", "Category", new { returnToGame = true });
         }
 
+        [Authorize]
         private async Task LoadViewBagData(int? selectedCompanyId = null)
         {
             // Load companies

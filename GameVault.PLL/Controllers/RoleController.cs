@@ -33,7 +33,6 @@ namespace GameVault.PLL.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateRole(CreateRoleVM model)
         {
             if (!ModelState.IsValid)

@@ -124,6 +124,8 @@
 </style>
 
 @section Scripts {
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const stars = document.querySelectorAll('.star');
@@ -180,5 +182,30 @@
                 }
             });
         });
+document.getElementById('formSubmit').addEventListener('click',async function(e){
+    e.preventDefault()
+      try {
+  const response = await fetch('/Review/CreateReview', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+        Player_Id: document.getElementById('Player_Id').value,
+      Game_Id: document.getElementById('Game_Id').value,
+      Rating: document.getElementById('Rating').value,
+ 	   Comment: document.getElementById('Comment').value,
+      CreatedBy: document.getElementById('CreatedBy').value,
+    }),
+  });
+        const newPost = await response.json();
+  if (!response.ok) throw new Error("Failed to create Review");
+
+  console.log("New Review:", newPost);
+  window.location.href = '/Review/GetAllReviews';
+} catch (error) {
+  console.error("Create Error:", error);
+}
+})
     </script>
 }

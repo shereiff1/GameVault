@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@{
+    Layout = null;
+    ViewBag.Title = "App Manager";
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -43,17 +48,15 @@
     <link rel="stylesheet" href="~/lib/animate.css/animate.min.css" />
 
     <!-- 5. Custom CSS with Layout Protection (HIGHEST PRIORITY) -->
-    
-
     <!-- Your Custom CSS Last -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
-     <!--begin::Theme mode setup on page load-->
-         <script>var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if (localStorage.getItem("data-theme") !== null) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }</script>
-     <!--end::Theme mode setup on page load-->
+    <!--begin::Theme mode setup on page load-->
+    <script>var defaultThemeMode = "light"; var themeMode; if (document.documentElement) { if (document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if (localStorage.getItem("data-theme") !== null) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }</script>
+    <!--end::Theme mode setup on page load-->
     <div class="wrapper">
         <!-- Sidebar -->
         <partial name="_AdminAside" />
@@ -74,10 +77,7 @@
             <footer class="footer">
                 <div class="container-fluid d-flex justify-content-between">
                     <nav class="pull-left">
-                        <ul class="nav">
-                            <li class="nav-item">
-                                <a class="nav-link" href="http://www.themekita.com">ThemeKita</a>
-                            </li>
+                        <ul class="nav">                     
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Help</a>
                             </li>
@@ -160,10 +160,12 @@
         </div>
     </div>
 
-    <!-- Core JS Files -->
+    <!-- Core JS Files - Load jQuery First -->
     <script src="~/assets/js/core/jquery-3.7.1.min.js"></script>
     <script src="~/assets/js/core/popper.min.js"></script>
     <script src="~/assets/js/core/bootstrap.min.js"></script>
+
+    <!-- Additional Plugin JS -->
     <script src="~/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
     <script src="~/assets/js/plugin/chart.js/chart.min.js"></script>
     <script src="~/assets/js/plugin/jquery.sparkline/jquery.sparkline.min.js"></script>
@@ -173,6 +175,8 @@
     <script src="~/assets/js/plugin/jsvectormap/jsvectormap.min.js"></script>
     <script src="~/assets/js/plugin/jsvectormap/world.js"></script>
     <script src="~/assets/js/plugin/sweetalert/sweetalert.min.js"></script>
+
+    <!-- KaiAdmin Core -->
     <script src="~/assets/js/kaiadmin.min.js"></script>
     <script src="~/assets/js/setting-demo.js"></script>
     <script src="~/assets/js/demo.js"></script>
@@ -192,6 +196,18 @@
     <!-- Charts Initialization Script -->
     <script>
         $(document).ready(function() {
+            // Initialize Bootstrap components
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Initialize dropdowns
+            var dropdownElementList = [].slice.call(document.querySelectorAll('[data-bs-toggle="dropdown"]'));
+            var dropdownList = dropdownElementList.map(function (dropdownToggleEl) {
+                return new bootstrap.Dropdown(dropdownToggleEl);
+            });
+
             // Chart initialization
             if ($("#lineChart").length) {
                 $("#lineChart").sparkline([102, 109, 120, 99, 110, 105, 115], {
@@ -225,6 +241,16 @@
                   fillColor: "rgba(255, 165, 52, .14)",
                 });
             }
+
+            $('.nav-search form').on('submit', function(e) {
+                var searchTerm = $(this).find('input[name="searchTerm"]').val().trim();
+                if (!searchTerm) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
+          
         });
     </script>
 

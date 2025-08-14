@@ -1,7 +1,7 @@
 
 namespace GameVault.BLL.ModelVM.User
 {
-    public class UserPublicProfile
+    public class UserPublicInfo
     {
         public string Id { get; set; }
         public string? Name { get; set; }

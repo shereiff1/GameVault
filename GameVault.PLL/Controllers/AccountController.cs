@@ -1,13 +1,15 @@
-
+using Microsoft.AspNetCore.Mvc;
 using GameVault.BLL.ModelVM.Account;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
 using GameVault.DAL.Entities;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+
 
 namespace GameVault.PLL.Controllers
 {
+
     public class AccountController : Controller
     {   
         private readonly IAccountServices services;
@@ -87,7 +89,6 @@ namespace GameVault.PLL.Controllers
             return View(login);            
         }
 
-        [HttpPost]
         public async Task<IActionResult> Logout()
         {
             
@@ -102,6 +103,7 @@ namespace GameVault.PLL.Controllers
             return View();
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult ChangePassword()
         {

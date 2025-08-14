@@ -15,7 +15,7 @@ namespace GameVault.PLL.Controllers
             this.userServices = userServices;
         }
 
-        // GET: User/Index - Display all public users
+        
         public async Task<IActionResult> Index()
         {
             try
@@ -37,14 +37,12 @@ namespace GameVault.PLL.Controllers
             }
         }
 
-        // GET: User/AllPrivateUsers - Display all private user profiles (Admin only)
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> AllPrivateUsers()
+        public async Task<IActionResult> AllAdmins()
         {
             try
             {
                 var (users, error) = await userServices.GetAllPrivateUsers();
-
+                
                 if (!string.IsNullOrEmpty(error))
                 {
                     ViewBag.ErrorMessage = error;
@@ -55,13 +53,13 @@ namespace GameVault.PLL.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "An error occurred while loading private user data.";
+                ViewBag.ErrorMessage = "An error occurred while loading users.";
                 return View();
             }
         }
 
-        // GET: User/Profile/{id} - Display user profile
-        public async Task<IActionResult> PublicProfile(string id)
+        [Authorize]
+        public async Task<IActionResult> UserProfile(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -70,11 +68,11 @@ namespace GameVault.PLL.Controllers
 
             try
             {
-                var (user, error) = await userServices.GetPublicProfile(id);
+                var (user, error) = await userServices.GetProfile(id);
 
                 if (!string.IsNullOrEmpty(error))
                 {
-                    return NotFound(error);
+                    return View(error);
                 }
 
                 return View(user);
@@ -85,31 +83,6 @@ namespace GameVault.PLL.Controllers
                 return View();
             }
         }
-        public async Task<IActionResult> PrivateProfile(string id)
-        {
-            if (string.IsNullOrEmpty(id))
-            {
-                return NotFound("User ID is required.");
-            }
-
-            try
-            {
-                var (user, error) = await userServices.GetPrivateProfile(id);
-
-                if (!string.IsNullOrEmpty(error))
-                {
-                    return NotFound(error);
-                }
-
-                return View(user);
-            }
-            catch (Exception ex)
-            {
-                ViewBag.ErrorMessage = "An error occurred while loading user profile.";
-                return View();
-            }
-        }
-        // GET: User/UpdateProfile - Show update profile form
         [Authorize]
         public async Task<IActionResult> UpdateProfile()
         {
@@ -137,10 +110,8 @@ namespace GameVault.PLL.Controllers
             }
         }
 
-        // POST: User/UpdateProfile - Handle profile update
         [HttpPost]
         [Authorize]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateProfile(UpdateUserProfile model)
         {
             if (!ModelState.IsValid)
@@ -150,7 +121,6 @@ namespace GameVault.PLL.Controllers
 
             try
             {
-                // Ensure the user can only update their own profile
                 var userId = await GetCurrentUserId();
                 if (string.IsNullOrEmpty(userId) || userId != model.Id)
                 {
@@ -172,14 +142,58 @@ namespace GameVault.PLL.Controllers
             }
         }
 
-        // GET: User/Search - Search users
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+
+            try
+            {
+                var (user, error) = await userServices.GetProfile(id);
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    return View();
+                }
+
+                return View(user);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "An error occurred while getting the user.";
+                return View();
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+
+            try
+            {
+                var (success, error) = await userServices.DeleteUser(id);
+
+                if (!success)
+                {
+                    ViewBag.Message = error;
+                }
+
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "An error occurred while getting the user.";
+                return View();
+            }
+        }
+        [Authorize]
         public async Task<IActionResult> Search(string searchTerm)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(searchTerm))
                 {
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Index","Home");
                 }
 
                 var (users, error) = await userServices.GetAllUsers();
@@ -187,27 +201,46 @@ namespace GameVault.PLL.Controllers
                 if (!string.IsNullOrEmpty(error))
                 {
                     ViewBag.ErrorMessage = error;
-                    return View("Index", new List<UserPublicProfile>());
+                    return View("Index", new List<UserPublicInfo>());
                 }
 
                 var filteredUsers = users?.Where(u =>
                     u.UserName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
                     (!string.IsNullOrEmpty(u.Name) && u.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                ).ToList() ?? new List<UserPublicProfile>();
+                ).ToList() ?? new List<UserPublicInfo>();
 
                 ViewBag.SearchTerm = searchTerm;
                 ViewBag.ResultCount = filteredUsers.Count;
 
-                return View("Index", filteredUsers);
+                return View("SearchResult", filteredUsers);
             }
             catch (Exception ex)
             {
                 ViewBag.ErrorMessage = "An error occurred during search.";
-                return View("Index", new List<UserPublicProfile>());
+                return View("SearchResult", new List<UserPublicInfo>());
             }
         }
 
-        // GET: User/MyProfile - Show current user's profile
+        public async Task<IActionResult> SearchResult(List<UserPublicInfo> Result)
+        {
+            try
+            {
+                if (Result == null || !Result.Any())
+                {
+                    return RedirectToAction("Index","Home");
+                }
+
+                ViewBag.ResultCount = Result.Count;
+
+                return View(Result);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "An error occurred while displaying search results.";
+                return RedirectToAction("Index","Home");
+            }
+        }
+
         [Authorize]
         public async Task<IActionResult> MyProfile()
         {
@@ -219,7 +252,7 @@ namespace GameVault.PLL.Controllers
                     return RedirectToAction("Login", "Account");
                 }
 
-                return RedirectToAction("PrivateProfile", new { id = userId });
+                return RedirectToAction("UserProfile", new { id = userId });
             }
             catch (Exception ex)
             {
@@ -228,7 +261,9 @@ namespace GameVault.PLL.Controllers
             }
         }
 
-        [HttpGet]
+        [Authorize]
+
+        [HttpPost]
         public async Task<IActionResult> AddGameToLibrary(int gameId)
         {
             var userId = await GetCurrentUserId();
@@ -247,6 +282,7 @@ namespace GameVault.PLL.Controllers
             return RedirectToAction("UserLibrary", "User");
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> RemoveGameFromLibrary(int gameId)
         {
@@ -270,22 +306,24 @@ namespace GameVault.PLL.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> UserLibrary()
+        public async Task<IActionResult> UserLibrary(string id)
         {
             try
             {
-                var userId = await GetCurrentUserId();
-                if (string.IsNullOrEmpty(userId))
+
+                var (user,Error) = await userServices.GetUserById(id);
+                if (!string.IsNullOrEmpty(Error))
                 {
-                    return RedirectToAction("Login", "Account");
+                    return RedirectToAction("Index", "Home");
                 }
 
-                var (Library, error) = await userServices.GetUserLibrary(userId);
+                var (Library,error) = await userServices.GetUserLibrary(user.Id);
 
                 if (error != null)
                 {
                     ViewBag.ErrorMessage = error ?? "Failed to load your games library";
                 }
+                ViewBag.UserId = user.Id;
                 return View(Library);
             }
             catch (Exception ex)
@@ -295,21 +333,19 @@ namespace GameVault.PLL.Controllers
             }
         }
 
-
-        public IActionResult UserNavBar()
+        [Authorize]
+        public IActionResult UserNavBar(int id)
         {
+
             return View();
         }
 
-        // Helper method to get current user ID from claims
         private async Task<string?> GetCurrentUserId()
         {
             return User.FindFirst("Id")?.Value ??
                    User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ??
                    User.FindFirst("sub")?.Value;
         }
-
-
 
     }
 }
