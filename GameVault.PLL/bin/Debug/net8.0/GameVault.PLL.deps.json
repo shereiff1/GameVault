@@ -22,6 +22,11 @@
         },
         "runtime": {
           "GameVault.PLL.dll": {}
+        },
+        "resources": {
+          "ar-EG/GameVault.PLL.resources.dll": {
+            "locale": "ar-EG"
+          }
         }
       },
       "AutoMapper/15.0.1": {

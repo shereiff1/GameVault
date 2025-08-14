@@ -9,6 +9,7 @@ using GameVault.DAL.Database;
 using GameVault.DAL.Entities;
 using GameVault.DAL.Repository.Abstraction;
 using GameVault.DAL.Repository.Implementation;
+using GameVault.PLL.Hubs;
 using GameVault.PLL.Languages;
 using GameVault.PLL.Services;
 using Hangfire;
@@ -79,6 +80,8 @@ builder.Services.AddScoped<IAccountServices, AccountServices>();
 builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IRoleService, RoleServices>();
 builder.Services.AddHostedService<SaleBackgroundService>();
+builder.Services.AddHostedService<FeaturedGameBackgroundService>();
+
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 
@@ -112,11 +115,12 @@ builder.Services.AddIdentityCore<User>(options => options.SignIn.RequireConfirme
 
 builder.Services.AddHangfire(x => x.UseSqlServerStorage(connectionString));
 builder.Services.AddHangfireServer();
-
+builder.Services.AddSignalR();
 
 
 var app = builder.Build();
 
+app.MapHub<FeaturedGameHub>("/featuredGameHub");
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

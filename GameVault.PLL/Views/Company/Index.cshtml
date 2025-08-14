@@ -4,7 +4,6 @@
 @{
     ViewData["Title"] = "Companies";
     var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
-
 }
 
 <h2>Company List</h2>
@@ -15,11 +14,12 @@
         @ViewBag.Error
     </div>
 }
+
 @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
 {
     <div class="mb-3">
         <a asp-action="Add" class="btn btn-primary">Add New Company</a>
-</div>
+    </div>
 }
 
 @if (Model == null || !Model.Any())
@@ -35,8 +35,11 @@ else
             <tr>
                 <th>Company Name</th>
                 <th>Company Info</th>
-                <th>Created By</th>
-                <th style="width: 180px;">Actions</th>
+                @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+                {
+                    <th>Created By</th>
+                    <th style="width: 180px;">Actions</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -45,17 +48,17 @@ else
                 <tr>
                     <td>@company.CompanyName</td>
                     <td>@company.CompanyInfo</td>
-        @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+                    @if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
                     {
                         <td>@company.CreatedBy</td>
                         <td>
                             <a asp-action="Edit" asp-route-id="@company.CompanyId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@company.CompanyId"
-                           class="btn btn-sm btn-danger"
-                           onclick="return confirm('Are you sure you want to delete this company?');">
-                            Delete
-                        </a>
-                    </td>
+                            <a asp-action="Delete" asp-route-id="@company.CompanyId"
+                               class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this company?');">
+                                Delete
+                            </a>
+                        </td>
                     }
                 </tr>
             }

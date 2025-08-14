@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GameVault.DAL")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8372b8d9264690d7a6f8d179c8767cddb066d1b9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fd20560ae5800d2d6319289b39da145ef8334f3e")]
 [assembly: System.Reflection.AssemblyProductAttribute("GameVault.DAL")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GameVault.DAL")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

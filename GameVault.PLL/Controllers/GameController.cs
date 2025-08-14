@@ -37,7 +37,7 @@ namespace GameVault.PLL.Controllers
             return View(games);
         }
 
-        [Authorize]
+        [AllowAnonymous]
         public async Task<IActionResult> GameDetails(int id)
         {
             var (success, gameDetails) = await _gameServices.GetGameDetails(id);

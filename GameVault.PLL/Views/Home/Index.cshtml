@@ -1,427 +1,507 @@
 ﻿@using GameVault.BLL.ModelVM.Game
 @model List<GameDetails>
 @{
-	ViewData["Title"] = "Home Page - GameVault";
-	var featuredGame = ViewBag.FeaturedGame as GameDetails;
-	var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
-	var isSaleActive = ViewBag.IsSaleActive; // Make sure this is available for all cards
+    ViewData["Title"] = "Home Page - GameVault";
+    var featuredGame = ViewBag.FeaturedGame as GameDetails;
+    var currentUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+    var isSaleActive = ViewBag.IsSaleActive;
 }
 
 <div class="container-fluid">
-	<div class="row mb-5">
-		<div class="col-12">
-			<div class="jumbotron bg-primary text-white text-center py-5 rounded">
-				<h1 class="display-4 fw-bold">Welcome to GameVault</h1>
-				<p class="lead">Discover amazing games from top developers around the world</p>
-				<hr class="my-4 bg-white">
-				<p class="mb-4">Your ultimate destination for the latest and greatest games</p>
-				@if (isSaleActive)
-				{
-					<div class="alert alert-warning mt-3">
-						<i class="fas fa-fire"></i> <strong>FLASH SALE!</strong> 20% OFF all games until 5 AM! <i class="fas fa-fire"></i>
-					</div>
-				}
-			</div>
-		</div>
-	</div>
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="jumbotron bg-primary text-white text-center py-5 rounded">
+                <h1 class="display-4 fw-bold">Welcome to GameVault</h1>
+                <p class="lead">Discover amazing games from top developers around the world</p>
+                <hr class="my-4 bg-white">
+                <p class="mb-4">Your ultimate destination for the latest and greatest games</p>
+                @if (isSaleActive)
+                {
+                    <div class="alert alert-warning mt-3">
+                        <i class="fas fa-fire"></i> <strong>FLASH SALE!</strong> 20% OFF all games until 4 PM! <i class="fas fa-fire"></i>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
 
-	@if (featuredGame != null)
-	{
-		<div class="row mb-5">
-			<div class="col-12">
-				<h2 class="text-center mb-4">
-					<i class="fas fa-star text-warning"></i>
-					Game of the Moment
-					<i class="fas fa-star text-warning"></i>
-				</h2>
-				<div class="featured-game-card mx-auto">
-					<div class="card border-0 shadow-lg" style="max-width: 800px;">
-						<div class="row g-0">
-							<div class="col-md-5">
-								<div class="position-relative h-100">
-									@if (!string.IsNullOrEmpty(featuredGame.ImagePath))
-									{
-										<img src="~/Files/@featuredGame.ImagePath" class="img-fluid h-100 w-100 rounded-start" alt="@featuredGame.Title" style="object-fit: cover; min-height: 300px;">
-									}
-									else
-									{
-										<div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start" style="min-height: 300px;">
-											<i class="fas fa-gamepad text-muted" style="font-size: 4rem;"></i>
-										</div>
-									}
+    @if (featuredGame != null)
+    {
+        <div class="featured-game" id="featured-game-container">
+            <div class="col-12">
+                <h2 class="text-center mb-4">
+                    <i class="fas fa-star text-warning"></i>
+                    Game of the Moment
+                    <i class="fas fa-star text-warning"></i>
+                </h2>
+                <div class="featured-game-card mx-auto">
+                    <div class="card border-0 shadow-lg" style="max-width: 800px;">
+                        <div class="row g-0">
+                            <div class="col-md-5">
+                                <div class="position-relative h-100">
+                                    @if (!string.IsNullOrEmpty(featuredGame.ImagePath))
+                                    {
+                                        <img src="~/Files/@featuredGame.ImagePath" class="img-fluid h-100 w-100 rounded-start" alt="@featuredGame.Title" style="object-fit: cover; min-height: 300px;">
+                                    }
+                                    else
+                                    {
+                                        <div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start" style="min-height: 300px;">
+                                            <i class="fas fa-gamepad text-muted" style="font-size: 4rem;"></i>
+                                        </div>
+                                    }
 
-									@if (featuredGame.Price > 0)
-									{
-										@if (isSaleActive)
-										{
-											<div class="position-absolute top-0 end-0 m-3">
-												<div class="badge bg-danger fs-5 mb-1 d-block">
-													<i class="fas fa-fire"></i> SALE!
-												</div>
-												<div class="badge bg-success fs-6 d-block">
-													<s class="text-decoration-line-through">$@featuredGame.Price.ToString("F2")</s>
-													<br>
-													$@((featuredGame.Price * 0.8m).ToString("F2"))
-												</div>
-											</div>
-										}
-										else
-										{
-											<span class="badge bg-success position-absolute top-0 end-0 m-3 fs-5">
-												$@featuredGame.Price.ToString("F2")
-											</span>
-										}
-									}
-									else
-									{
-										<span class="badge bg-info position-absolute top-0 end-0 m-3 fs-5">
-											Free
-										</span>
-									}
-								</div>
-							</div>
+                                    @if (featuredGame.Price > 0)
+                                    {
+                                        @if (isSaleActive)
+                                        {
+                                            <div class="position-absolute top-0 end-0 m-3">
+                                                <div class="badge bg-danger fs-5 mb-1 d-block">
+                                                    <i class="fas fa-fire"></i> SALE!
+                                                </div>
+                                                <div class="badge bg-success fs-6 d-block">
+                                                    <s class="text-decoration-line-through">$@featuredGame.Price.ToString("F2")</s>
+                                                    <br>
+                                                    $@((featuredGame.Price * 0.8m).ToString("F2"))
+                                                </div>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-success position-absolute top-0 end-0 m-3 fs-5">
+                                                $@featuredGame.Price.ToString("F2")
+                                            </span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info position-absolute top-0 end-0 m-3 fs-5">
+                                            Free
+                                        </span>
+                                    }
+                                </div>
+                            </div>
 
-							<div class="col-md-7">
-								<div class="card-body p-4 d-flex flex-column h-100">
-									<div>
-										<h3 class="card-title fw-bold text-primary mb-2">@featuredGame.Title</h3>
+                            <div class="col-md-7">
+                                <div class="card-body p-4 d-flex flex-column h-100">
+                                    <div>
+                                        <h3 class="card-title fw-bold text-primary mb-2">@featuredGame.Title</h3>
 
-										<p class="text-muted mb-3">
-											<i class="fas fa-building"></i> @featuredGame.CompanyName
-										</p>
+                                        <p class="text-muted mb-3">
+                                            <i class="fas fa-building"></i> @featuredGame.CompanyName
+                                        </p>
 
-										@if (featuredGame.Categories != null && featuredGame.Categories.Any())
-										{
-											<div class="mb-3">
-												@foreach (var category in featuredGame.Categories.Take(4))
-												{
-													<span class="badge bg-secondary me-1 mb-1">@category.Category_Name</span>
-												}
-												@if (featuredGame.Categories.Count > 4)
-												{
-													<span class="badge bg-light text-dark">+@(featuredGame.Categories.Count - 4) more</span>
-												}
-											</div>
-										}
+                                        @if (featuredGame.Categories != null && featuredGame.Categories.Any())
+                                        {
+                                            <div class="mb-3">
+                                                @foreach (var category in featuredGame.Categories.Take(4))
+                                                {
+                                                    <span class="badge bg-secondary me-1 mb-1">@category.Category_Name</span>
+                                                }
+                                                @if (featuredGame.Categories.Count > 4)
+                                                {
+                                                    <span class="badge bg-light text-dark">+@(featuredGame.Categories.Count - 4) more</span>
+                                                }
+                                            </div>
+                                        }
 
-										<p class="card-text mb-3" style="max-height: 100px; overflow-y: auto;">
-											@(string.IsNullOrEmpty(featuredGame.Description) ? "No description available." : featuredGame.Description)
-										</p>
+                                        <p class="card-text mb-3" style="max-height: 100px; overflow-y: auto;">
+                                            @(string.IsNullOrEmpty(featuredGame.Description) ? "No description available." : featuredGame.Description)
+                                        </p>
 
-										@if (featuredGame.Rating > 0)
-										{
-											<div class="d-flex align-items-center mb-3">
-												<span class="text-warning me-2">
-													@for (int i = 1; i <= 5; i++)
-													{
-														if (i <= Math.Floor(featuredGame.Rating))
-														{
-															<i class="fas fa-star"></i>
-														}
-														else if (i <= featuredGame.Rating)
-														{
-															<i class="fas fa-star-half-alt"></i>
-														}
-														else
-														{
-															<i class="far fa-star"></i>
-														}
-													}
-												</span>
-												<span class="fw-bold me-3">@featuredGame.Rating.ToString("F1")</span>
-												@if (featuredGame.Reviews != null && featuredGame.Reviews.Any())
-												{
-													<small class="text-muted">
-														(@featuredGame.Reviews.Count review@(featuredGame.Reviews.Count != 1 ? "s" : ""))
-													</small>
-												}
-											</div>
-										}
-									</div>
+                                        @if (featuredGame.Rating > 0)
+                                        {
+                                            <div class="d-flex align-items-center mb-3">
+                                                <span class="text-warning me-2">
+                                                    @for (int i = 1; i <= 5; i++)
+                                                    {
+                                                        if (i <= Math.Floor(featuredGame.Rating))
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else if (i <= featuredGame.Rating)
+                                                        {
+                                                            <i class="fas fa-star-half-alt"></i>
+                                                        }
+                                                        else
+                                                        {
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </span>
+                                                <span class="fw-bold me-3">@featuredGame.Rating.ToString("F1")</span>
+                                                @if (featuredGame.Reviews != null && featuredGame.Reviews.Any())
+                                                {
+                                                    <small class="text-muted">
+                                                        (@featuredGame.Reviews.Count review@(featuredGame.Reviews.Count != 1 ? "s" : ""))
+                                                    </small>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
 
-									<div class="mt-auto">
-										<div class="row g-2">
-											<div class="col-md-4">
-												<a asp-controller="Game" asp-action="GameDetails" asp-route-id="@featuredGame.GameId"
-												   class="btn btn-primary w-100 details-link" data-game-id="@featuredGame.GameId">
-													<i class="fas fa-eye"></i> View Details
-												</a>
-											</div>
-											<div class="col-md-4">
-												<a asp-controller="Payment"
-												   asp-action="BuyGame"
-												   asp-route-GameId="@featuredGame.GameId"
-												   class="btn btn-success w-100 buy-link">
-													<i class="fas fa-cart-plus"></i>
-													@if (isSaleActive && featuredGame.Price > 0)
-													{
-														<span>Buy $@((featuredGame.Price * 0.8m).ToString("F2"))</span>
-													}
-													else
-													{
-														<span>Buy Game</span>
-													}
-												</a>
-											</div>
-											<div class="col-md-4">
-												<a asp-controller="Review"
-												   asp-action="Create"
-												   asp-route-GameId="@featuredGame.GameId"
-												   class="btn btn-warning w-100 review-link">
-													<i class="fas fa-star"></i> Add Review
-												</a>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	}
+                                    <div class="mt-auto">
+                                        <div class="row g-2">
+                                            <div class="col-md-4">
+                                                <a asp-controller="Game" asp-action="GameDetails" asp-route-id="@featuredGame.GameId"
+                                                   class="btn btn-primary w-100 details-link" data-game-id="@featuredGame.GameId">
+                                                    <i class="fas fa-eye"></i> View Details
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a asp-controller="Payment"
+                                                   asp-action="BuyGame"
+                                                   asp-route-GameId="@featuredGame.GameId"
+                                                   class="btn btn-success w-100 buy-link">
+                                                    <i class="fas fa-cart-plus"></i>
+                                                    @if (isSaleActive && featuredGame.Price > 0)
+                                                    {
+                                                        <span>Buy $@((featuredGame.Price * 0.8m).ToString("F2"))</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Buy Game</span>
+                                                    }
+                                                </a>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <a asp-controller="Review"
+                                                   asp-action="Create"
+                                                   asp-route-GameId="@featuredGame.GameId"
+                                                   class="btn btn-warning w-100 review-link">
+                                                    <i class="fas fa-star"></i> Add Review
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 
-	@if (Model != null && Model.Any())
-	{
-		<div class="row mb-4">
-			<div class="col-12">
-				<h2 class="text-center mb-4">All Games</h2>
-				<p class="text-center text-muted mb-5">Browse our collection of @Model.Count amazing games</p>
-			</div>
-		</div>
+    @if (Model != null && Model.Any())
+    {
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="text-center mb-4">All Games</h2>
+                <p class="text-center text-muted mb-5">Browse our collection of @Model.Count amazing games</p>
+            </div>
+        </div>
 
-		<div class="row g-4">
-			@foreach (var game in Model)
-			{
-				<div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
-					<div class="card h-100 shadow-sm game-card @(isSaleActive && game.Price > 0 ? "border-danger" : "")">
-						@if (isSaleActive && game.Price > 0)
-						{
-							<div class="sale-ribbon">
-								<span class="badge bg-danger position-absolute" style="top: 10px; left: -5px; z-index: 10; transform: rotate(-15deg); font-size: 0.8rem;">
-									<i class="fas fa-fire"></i> 20% OFF
-								</span>
-							</div>
-						}
+        <div class="row g-4">
+            @foreach (var game in Model)
+            {
+                <div class="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+                    <div class="card h-100 shadow-sm game-card @(isSaleActive && game.Price > 0 ? "border-danger" : "")">
+                        @if (isSaleActive && game.Price > 0)
+                        {
+                            <div class="sale-ribbon">
+                                <span class="badge bg-danger position-absolute" style="top: 10px; left: -5px; z-index: 10; transform: rotate(-15deg); font-size: 0.8rem;">
+                                    <i class="fas fa-fire"></i> 20% OFF
+                                </span>
+                            </div>
+                        }
 
-						<div class="position-relative">
-							@if (!string.IsNullOrEmpty(game.ImagePath))
-							{
-								<img src="~/Files/@game.ImagePath" class="card-img-top" alt="@game.Title" style="height: 200px; object-fit: cover;">
-							}
-							else
-							{
-								<div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
-									<i class="fas fa-gamepad text-muted" style="font-size: 3rem;"></i>
-								</div>
-							}
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(game.ImagePath))
+                            {
+                                <img src="~/Files/@game.ImagePath" class="card-img-top" alt="@game.Title" style="height: 200px; object-fit: cover;">
+                            }
+                            else
+                            {
+                                <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                                    <i class="fas fa-gamepad text-muted" style="font-size: 3rem;"></i>
+                                </div>
+                            }
 
-							@if (game.Price > 0)
-							{
-								@if (isSaleActive)
-								{
-									<div class="position-absolute top-0 end-0 m-2">
-										<div class="badge bg-danger fs-6 mb-1 d-block">
-											<s>$@game.Price.ToString("F2")</s>
-										</div>
-										<div class="badge bg-success fs-6 d-block">
-											$@((game.Price * 0.8m).ToString("F2"))
-										</div>
-									</div>
-								}
-								else
-								{
-									<span class="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
-										$@game.Price.ToString("F2")
-									</span>
-								}
-							}
-							else
-							{
-								<span class="badge bg-info position-absolute top-0 end-0 m-2">
-									Free
-								</span>
-							}
-						</div>
+                            @if (game.Price > 0)
+                            {
+                                @if (isSaleActive)
+                                {
+                                    <div class="position-absolute top-0 end-0 m-2">
+                                        <div class="badge bg-danger fs-6 mb-1 d-block">
+                                            <s>$@game.Price.ToString("F2")</s>
+                                        </div>
+                                        <div class="badge bg-success fs-6 d-block">
+                                            $@((game.Price * 0.8m).ToString("F2"))
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success position-absolute top-0 end-0 m-2 fs-6">
+                                        $@game.Price.ToString("F2")
+                                    </span>
+                                }
+                            }
+                            else
+                            {
+                                <span class="badge bg-info position-absolute top-0 end-0 m-2">
+                                    Free
+                                </span>
+                            }
+                        </div>
 
-						<div class="card-body d-flex flex-column">
-							<h5 class="card-title text-truncate" title="@game.Title">@game.Title</h5>
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title text-truncate" title="@game.Title">@game.Title</h5>
 
-							<p class="card-text text-muted small mb-2">
-								<i class="fas fa-building"></i> @game.CompanyName
-							</p>
+                            <p class="card-text text-muted small mb-2">
+                                <i class="fas fa-building"></i> @game.CompanyName
+                            </p>
 
-							<p class="card-text flex-grow-1 text-truncate-3" title="@game.Description">
-								@(string.IsNullOrEmpty(game.Description) ? "No description available." : game.Description)
-							</p>
+                            <p class="card-text flex-grow-1 text-truncate-3" title="@game.Description">
+                                @(string.IsNullOrEmpty(game.Description) ? "No description available." : game.Description)
+                            </p>
 
-							@if (game.Categories != null && game.Categories.Any())
-							{
-								<div class="mb-3">
-									@foreach (var category in game.Categories.Take(3))
-									{
-										<span class="badge bg-secondary me-1 mb-1">@category.Category_Name</span>
-									}
-									@if (game.Categories.Count > 3)
-									{
-										<span class="badge bg-light text-dark">+@(game.Categories.Count - 3) more</span>
-									}
-								</div>
-							}
+                            @if (game.Categories != null && game.Categories.Any())
+                            {
+                                <div class="mb-3">
+                                    @foreach (var category in game.Categories.Take(3))
+                                    {
+                                        <span class="badge bg-secondary me-1 mb-1">@category.Category_Name</span>
+                                    }
+                                    @if (game.Categories.Count > 3)
+                                    {
+                                        <span class="badge bg-light text-dark">+@(game.Categories.Count - 3) more</span>
+                                    }
+                                </div>
+                            }
 
-							<div class="d-flex justify-content-between align-items-center mb-3">
-								<div>
-									@if (game.Rating > 0)
-									{
-										<div class="d-flex align-items-center">
-											<span class="text-warning me-1">
-												@for (int i = 1; i <= 5; i++)
-												{
-													if (i <= Math.Floor(game.Rating))
-													{
-														<i class="fas fa-star"></i>
-													}
-													else if (i <= game.Rating)
-													{
-														<i class="fas fa-star-half-alt"></i>
-													}
-													else
-													{
-														<i class="far fa-star"></i>
-													}
-												}
-											</span>
-											<small class="text-muted">@game.Rating.ToString("F1")</small>
-										</div>
-									}
-									else
-									{
-										<small class="text-muted">No ratings yet</small>
-									}
-								</div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div>
+                                    @if (game.Rating > 0)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <span class="text-warning me-1">
+                                                @for (int i = 1; i <= 5; i++)
+                                                {
+                                                    if (i <= Math.Floor(game.Rating))
+                                                    {
+                                                        <i class="fas fa-star"></i>
+                                                    }
+                                                    else if (i <= game.Rating)
+                                                    {
+                                                        <i class="fas fa-star-half-alt"></i>
+                                                    }
+                                                    else
+                                                    {
+                                                        <i class="far fa-star"></i>
+                                                    }
+                                                }
+                                            </span>
+                                            <small class="text-muted">@game.Rating.ToString("F1")</small>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <small class="text-muted">No ratings yet</small>
+                                    }
+                                </div>
 
-								@if (game.Reviews != null && game.Reviews.Any())
-								{
-									<small class="text-muted">
-										<i class="fas fa-comment"></i> @game.Reviews.Count review@(game.Reviews.Count != 1 ? "s" : "")
-									</small>
-								}
-							</div>
+                                @if (game.Reviews != null && game.Reviews.Any())
+                                {
+                                    <small class="text-muted">
+                                        <i class="fas fa-comment"></i> @game.Reviews.Count review@(game.Reviews.Count != 1 ? "s" : "")
+                                    </small>
+                                }
+                            </div>
 
-							@if (game.Reviews != null && game.Reviews.Any())
-							{
-								var firstReview = game.Reviews.FirstOrDefault();
-								@if (firstReview != null && !string.IsNullOrEmpty(firstReview.Comment))
-								{
-									<div class="mb-3">
-										<small class="text-muted fst-italic">
-											<i class="fas fa-quote-left"></i>
-											"@(firstReview.Comment.Length > 60 ? firstReview.Comment.Substring(0, 60) + "..." : firstReview.Comment)"
-											<i class="fas fa-quote-right"></i>
-										</small>
-									</div>
-								}
-							}
+                            @if (game.Reviews != null && game.Reviews.Any())
+                            {
+                                var firstReview = game.Reviews.FirstOrDefault();
+                                @if (firstReview != null && !string.IsNullOrEmpty(firstReview.Comment))
+                                {
+                                    <div class="mb-3">
+                                        <small class="text-muted fst-italic">
+                                            <i class="fas fa-quote-left"></i>
+                                            "@(firstReview.Comment.Length > 60 ? firstReview.Comment.Substring(0, 60) + "..." : firstReview.Comment)"
+                                            <i class="fas fa-quote-right"></i>
+                                        </small>
+                                    </div>
+                                }
+                            }
 
-							<div class="mt-auto">
-								<div class="d-grid gap-2">
-									<a asp-controller="Game" asp-action="GameDetails" asp-route-id="@game.GameId" class="btn btn-primary details-link" data-game-id="@game.GameId">
-										<i class="fas fa-eye"></i> View Details
-									</a>
+                            <div class="mt-auto">
+                                <div class="d-grid gap-2">
+                                    <a asp-controller="Game" asp-action="GameDetails" asp-route-id="@game.GameId" class="btn btn-primary details-link" data-game-id="@game.GameId">
+                                        <i class="fas fa-eye"></i> View Details
+                                    </a>
 
-									<div class="row g-2">
-										<div class="col-6">
-											<a asp-controller="Payment"
-											   asp-action="BuyGame"
-											   asp-route-GameId="@game.GameId"
-											   class="btn @(isSaleActive && game.Price > 0 ? "btn-danger" : "btn-outline-success") btn-sm w-100 buy-link">
-												<i class="fas fa-cart-plus"></i>
-												@if (isSaleActive && game.Price > 0)
-												{
-													<span>$@((game.Price * 0.8m).ToString("F2"))</span>
-												}
-												else
-												{
-													<span>Buy</span>
-												}
-											</a>
-										</div>
-										<div class="col-6">
-											<a asp-controller="Review"
-											   asp-action="Create"
-											   asp-route-GameId="@game.GameId"
-											   class="btn btn-outline-warning btn-sm w-100 review-link">
-												<i class="fas fa-star"></i> Review
-											</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			}
-		</div>
-
-	}
-	else if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
-	{
-		<div class="row">
-			<div class="col-12 text-center">
-				<div class="alert alert-info py-5" role="alert">
-					<i class="fas fa-gamepad fa-3x mb-3 text-muted"></i>
-					<h4 class="alert-heading">No Games Available</h4>
-					<p class="mb-0">There are currently no games to display. Check back later for new releases!</p>
-					<hr>
-					<p class="mb-0">
-						<a asp-controller="Game" asp-action="Add" class="btn btn-primary">Add New Game</a>
-						<a asp-controller="Company" asp-action="Add" class="btn btn-outline-primary ms-2">Add Company</a>
-					</p>
-
-				</div>
-			</div>
-		</div>
-	}
+                                    <div class="row g-2">
+                                        <div class="col-6">
+                                            <a asp-controller="Payment"
+                                               asp-action="BuyGame"
+                                               asp-route-GameId="@game.GameId"
+                                               class="btn @(isSaleActive && game.Price > 0 ? "btn-danger" : "btn-outline-success") btn-sm w-100 buy-link">
+                                                <i class="fas fa-cart-plus"></i>
+                                                @if (isSaleActive && game.Price > 0)
+                                                {
+                                                    <span>$@((game.Price * 0.8m).ToString("F2"))</span>
+                                                }
+                                                else
+                                                {
+                                                    <span>Buy</span>
+                                                }
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a asp-controller="Review"
+                                               asp-action="Create"
+                                               asp-route-GameId="@game.GameId"
+                                               class="btn btn-outline-warning btn-sm w-100 review-link">
+                                                <i class="fas fa-star"></i> Review
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (currentUser != null && UserManager.IsInRoleAsync(currentUser, "Admin").Result)
+    {
+        <div class="row">
+            <div class="col-12 text-center">
+                <div class="alert alert-info py-5" role="alert">
+                    <i class="fas fa-gamepad fa-3x mb-3 text-muted"></i>
+                    <h4 class="alert-heading">No Games Available</h4>
+                    <p class="mb-0">There are currently no games to display. Check back later for new releases!</p>
+                    <hr>
+                    <p class="mb-0">
+                        <a asp-controller="Game" asp-action="Add" class="btn btn-primary">Add New Game</a>
+                        <a asp-controller="Company" asp-action="Add" class="btn btn-outline-primary ms-2">Add Company</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
 <script>
-	document.addEventListener('DOMContentLoaded', function() {
-		// show a quick loading state for buy links (anchors) and let navigation continue
-		document.querySelectorAll('.buy-link').forEach(link => {
-			link.addEventListener('click', function() {
-				// small visual feedback before navigation
-				const original = this.innerHTML;
-				this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-				// no preventDefault -> normal navigation will occur
-				// restore only in case navigation is canceled (rare)
-				setTimeout(() => { if (document.contains(this)) this.innerHTML = original; }, 2000);
-			});
-		});
+    document.addEventListener('DOMContentLoaded', () => {
+        const isSaleActive = @((isSaleActive ?? false).ToString().ToLower());
 
-		// show loading for details links
-		document.querySelectorAll('.details-link').forEach(link => {
-			link.addEventListener('click', function() {
-				const original = this.innerHTML;
-				this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-				setTimeout(() => { if (document.contains(this)) this.innerHTML = original; }, 2000);
-			});
-		});
+        function prop(obj, ...names) {
+            if (!obj) return undefined;
+            for (const n of names) {
+                if (Object.prototype.hasOwnProperty.call(obj, n)) return obj[n];
+                const lower = Object.keys(obj).find(k => k.toLowerCase() === n.toLowerCase());
+                if (lower) return obj[lower];
+            }
+            return undefined;
+        }
 
-		// show loading for review links
-		document.querySelectorAll('.review-link').forEach(link => {
-			link.addEventListener('click', function() {
-				const original = this.innerHTML;
-				this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
-				setTimeout(() => { if (document.contains(this)) this.innerHTML = original; }, 2000);
-			});
-		});
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/featuredGameHub")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
 
-		// optional auto-refresh (keeps your previous behavior)
-		// setInterval(function() {
-		// 	window.location.reload();
-		// }, 30000)
-	});
+        connection.on("UpdateFeaturedGame", incoming => {
+            try {
+                console.log('[FeaturedGame] update received:', incoming);
+                if (!incoming) return; // ignore null/empty
+
+                const id = prop(incoming, 'gameId', 'GameId');
+                const title = prop(incoming, 'title', 'Title');
+                if (!id || !title) { console.warn('Invalid payload - ignoring'); return; }
+
+                const image = prop(incoming, 'imagePath', 'ImagePath');
+                const company = prop(incoming, 'companyName', 'CompanyName') || '';
+                const desc = prop(incoming, 'description', 'Description') || '';
+                const price = Number(prop(incoming, 'price', 'Price') || 0);
+                const rating = Number(prop(incoming, 'rating', 'Rating') || 0);
+                const categories = prop(incoming, 'categories', 'Categories') || [];
+                const reviews = prop(incoming, 'reviews', 'Reviews') || [];
+
+                // Ensure wrapper exists (we'll only replace its innerHTML so outer container persists)
+                let wrapper = document.getElementById('featured-game-container');
+                if (!wrapper) {
+                    wrapper = document.createElement('div');
+                    wrapper.id = 'featured-game-container';
+                    const j = document.querySelector('.jumbotron');
+                    if (j && j.parentNode) j.parentNode.insertBefore(wrapper, j.nextSibling);
+                    else (document.querySelector('.container-fluid') || document.body).insertBefore(wrapper, (document.querySelector('.container-fluid') || document.body).firstChild);
+                }
+
+                // Build inner HTML (only inside wrapper)
+                const catsHtml = categories.length ? `<div class="mb-3">${categories.slice(0,4).map(c => `<span class="badge bg-secondary me-1 mb-1">${c.category_Name ?? c.Category_Name ?? ''}</span>`).join('')}${categories.length>4?`<span class="badge bg-light text-dark">+${categories.length-4} more</span>`:''}</div>` : '';
+
+                let stars = '';
+                if (rating > 0) {
+                    stars = '<span class="text-warning me-2">';
+                    for (let i=1;i<=5;i++){
+                        if (i <= Math.floor(rating)) stars += '<i class="fas fa-star"></i>';
+                        else if (i <= rating) stars += '<i class="fas fa-star-half-alt"></i>';
+                        else stars += '<i class="far fa-star"></i>';
+                    }
+                    stars += `</span><span class="fw-bold me-3">${rating.toFixed(1)}</span>`;
+                    if (reviews.length) stars += `<small class="text-muted">(${reviews.length} review${reviews.length!==1?'s':''})</small>`;
+                    stars = `<div class="d-flex align-items-center mb-3">${stars}</div>`;
+                }
+
+                const saleBadge = (price>0 && isSaleActive) ? `<div class="position-absolute top-0 end-0 m-3"><div class="badge bg-danger fs-5 mb-1 d-block"><i class="fas fa-fire"></i> SALE!</div><div class="badge bg-success fs-6 d-block"><s class="text-decoration-line-through">$${price.toFixed(2)}</s><br>$${(price*0.8).toFixed(2)}</div></div>`
+                                    : (price>0?`<span class="badge bg-success position-absolute top-0 end-0 m-3 fs-5">$${price.toFixed(2)}</span>`:`<span class="badge bg-info position-absolute top-0 end-0 m-3 fs-5">Free</span>`);
+
+                const inner = `
+                    <div class="col-12">
+                        <h2 class="text-center mb-4"><i class="fas fa-star text-warning"></i> Game of the Moment <i class="fas fa-star text-warning"></i></h2>
+                        <div class="featured-game-card mx-auto">
+                            <div class="card border-0 shadow-lg" style="max-width:800px;">
+                                <div class="row g-0">
+                                    <div class="col-md-5">
+                                        <div class="position-relative h-100">
+                                            ${image ? `<img src="/Files/${image}" class="img-fluid h-100 w-100 rounded-start" alt="${title}" style="object-fit:cover;min-height:300px;">` : `<div class="bg-light d-flex align-items-center justify-content-center h-100 rounded-start" style="min-height:300px;"><i class="fas fa-gamepad text-muted" style="font-size:4rem;"></i></div>`}
+                                            ${saleBadge}
+                                        </div>
+                                    </div>
+                                    <div class="col-md-7">
+                                        <div class="card-body p-4 d-flex flex-column h-100">
+                                            <div>
+                                                <h3 class="card-title fw-bold text-primary mb-2">${title}</h3>
+                                                <p class="text-muted mb-3"><i class="fas fa-building"></i> ${company}</p>
+                                                ${catsHtml}
+                                                <p class="card-text mb-3" style="max-height:100px;overflow-y:auto;">${desc || 'No description available.'}</p>
+                                                ${stars}
+                                            </div>
+                                            <div class="mt-auto">
+                                                <div class="row g-2">
+                                                    <div class="col-md-4"><a href="/Game/GameDetails/${id}" class="btn btn-primary w-100 details-link"><i class="fas fa-eye"></i> View Details</a></div>
+                                                    <div class="col-md-4"><a href="/Payment/BuyGame?GameId=${id}" class="btn btn-success w-100 buy-link"><i class="fas fa-cart-plus"></i>${isSaleActive && price>0 ? ` Buy $${(price*0.8).toFixed(2)}` : ' Buy Game'}</a></div>
+                                                    <div class="col-md-4"><a href="/Review/Create?GameId=${id}" class="btn btn-warning w-100 review-link"><i class="fas fa-star"></i> Add Review</a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+
+                // Replace only the content inside wrapper so we don't accidentally remove outer wrappers/CSS
+                wrapper.innerHTML = inner;
+                console.log('[FeaturedGame] DOM updated for', title);
+
+            } catch (err) {
+                console.error('[FeaturedGame] render error', err);
+            }
+        });
+
+        connection.start()
+            .then(() => console.log('SignalR Connected'))
+            .catch(err => console.error('SignalR Connection Error:', err));
+
+        connection.onclose(() => {
+            console.log('SignalR disconnected — reconnecting...');
+            setTimeout(() => connection.start(), 3000);
+        });
+    });
 </script>
+
