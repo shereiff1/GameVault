@@ -1,10 +1,12 @@
-using Microsoft.AspNetCore.Mvc;
+using System.Web;
 using GameVault.BLL.ModelVM.Account;
 using GameVault.BLL.Services.Abstraction;
 using GameVault.BLL.Services.Implementation;
 using GameVault.DAL.Entities;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 
 namespace GameVault.PLL.Controllers
@@ -149,11 +151,12 @@ namespace GameVault.PLL.Controllers
                 TempData["Error"] = "Invalid password reset link.";
                 return RedirectToAction("Login");
             }
+            var decodedToken = Uri.UnescapeDataString(token);
 
             var model = new ResetPassword
             {
                 Email = email,
-                Token = token
+                Token = decodedToken
             };
 
             return View(model);
@@ -166,6 +169,9 @@ namespace GameVault.PLL.Controllers
             {
                 try
                 {
+                    var decodedToken = Uri.UnescapeDataString(model.Token);
+                    model.Token = decodedToken;
+
                     var result = await services.ResetPassword(model);
 
                     if (result.Succeeded)

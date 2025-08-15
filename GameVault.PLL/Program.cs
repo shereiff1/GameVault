@@ -33,8 +33,8 @@ AddDataAnnotationsLocalization(options =>
 
 var connectionString = builder.Configuration.GetConnectionString("defaultConnection");
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<ApplicationDbContext>
+    (options =>options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 builder.Services.AddAutoMapper(x => x.AddProfile(new DomainProfile()));
 
 
