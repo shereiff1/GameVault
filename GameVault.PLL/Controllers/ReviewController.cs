@@ -18,46 +18,17 @@ namespace GameVault_PLL.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> CreateReview([FromBody] CreateReview review)
+        public async Task<IActionResult> CreateReview( CreateReview review)
         {
-            try
+            var result = await _reviewServices.CreateAsync(review);
+            if (result.Item1)
             {
-                if (review == null)
-                {
-                    return BadRequest(new
-                    {
-                        success = false,
-                        errorMessage = "No data received",
-                        receivedData = Request.Body
-                    });
-                }
-                var result = await _reviewServices.CreateAsync(review);
-                if (result.Item1)
-                {
-                    return Json(new
-                    {
-                        success = true,
-                        redirectUrl = Url.Action("GetAllReviews")
-                    });
-                }
-                return BadRequest(new
-                {
-                    success = false,
-                    errorMessage = result.Item2,
-                    data = review
-                });
+                return RedirectToAction("GetAllReviews");
             }
-            catch (Exception ex)
+            else
             {
-                return StatusCode(500, new
-                {
-                    success = false,
-                    errorMessage = "Internal server error",
-                    detailedError = ex.Message,
-                    innerException = ex.InnerException?.Message,
-                    stackTrace = ex.StackTrace
-                }
-                );
+                ViewBag.ErrorMessage = result.Item2;
+                return View("ERROR in createreview");
             }
         }
         [AllowAnonymous]
@@ -74,28 +45,22 @@ namespace GameVault_PLL.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _reviewServices.DeleteAsync(id);
+                       var result = await _reviewServices.DeleteAsync(id);
             if (result.Item1)
             {
-                return Json(new
-                {
-                    success = true,
-                    redirectUrl = Url.Action("GetAllReviews")
-                });
+                return RedirectToAction("GetAllReviews");
             }
-            return Json(new
+            else
             {
-                success = false,
-                errorMessage = result.Item2,
-                data = id
-            });
+                return RedirectToAction("GetAllReviews", new { errorMessage = "Review deletion failed!" });
+            }
         }
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateReview([FromBody] ReviewDTO review)
+        public async Task<IActionResult> UpdateReview( ReviewDTO review)
         {
             var result = await _reviewServices.UpdateAsync(review);
             if (result.Item1)
