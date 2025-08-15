@@ -30,7 +30,7 @@ namespace GameVault.PLL.Controllers
             if (!success || games == null)
             {
                 ViewBag.Error = "Failed to load games.";
-                return base.View(new List<BLL.ModelVM.GameVM>());
+                return base.View(new List<GameVM>());
             }
 
             ViewBag.Error = errorMessage;
