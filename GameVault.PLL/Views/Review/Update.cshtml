@@ -51,3 +51,34 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+    document.getElementById('formSubmit').addEventListener('click', async function (e) {
+        e.preventDefault();
+        try {
+            const response = await fetch('http://localhost:44341/Review/UpdateReview', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify
+				({
+					Review_Id: @Model.Review_Id,
+                    Player_Id: document.getElementById('Player_Id').value,
+                    Game_Id: document.getElementById('Game_Id').value,
+                    Rating: document.getElementById('Rating').value,
+                    Comment: document.getElementById('Comment').value,
+					CreatedBy: document.getElementById('CreatedBy').value
+
+                }),
+            });
+                        const updatedReview = await response.json();
+            if (!response.ok) throw new Error("Failed to update Review");
+            console.log("Updated Review:", updatedReview);
+            window.location.href = '/Review/GetAllReviews';
+        } catch (error) {
+            console.error("Update Error:", error);
+        }
+    });
+</script>
