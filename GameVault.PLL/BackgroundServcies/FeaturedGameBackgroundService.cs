@@ -9,7 +9,7 @@ namespace GameVault.PLL.Services
     {
         private readonly IServiceScopeFactory _scopeFactory;
         private readonly ILogger<FeaturedGameBackgroundService> _logger;
-        private readonly IHubContext<FeaturedGameHub> _hubContext; 
+        private readonly IHubContext<FeaturedGameHub> _hubContext;
 
         private static List<GameDetails> _allGames = new();
         private static int _currentGameIndex = 0;
@@ -17,11 +17,7 @@ namespace GameVault.PLL.Services
         public static GameDetails? CurrentFeaturedGame { get; private set; }
         private static DateTime _lastReload = DateTime.MinValue;
 
-        public FeaturedGameBackgroundService(
-            IServiceScopeFactory scopeFactory,
-            ILogger<FeaturedGameBackgroundService> logger,
-            IHubContext<FeaturedGameHub> hubContext
-        )
+        public FeaturedGameBackgroundService(IServiceScopeFactory scopeFactory, ILogger<FeaturedGameBackgroundService> logger, IHubContext<FeaturedGameHub> hubContext)
         {
             _scopeFactory = scopeFactory;
             _logger = logger;

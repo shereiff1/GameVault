@@ -6,6 +6,7 @@ using GameVault.BLL.ModelVM.Game;
 
 namespace GameVault.PLL.Controllers
 {
+    
     public class UserController : Controller
     {
         private readonly IUserServices userServices;
@@ -15,7 +16,7 @@ namespace GameVault.PLL.Controllers
             this.userServices = userServices;
         }
 
-        
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> Index()
         {
             try
@@ -37,6 +38,7 @@ namespace GameVault.PLL.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AllAdmins()
         {
             try
@@ -187,6 +189,11 @@ namespace GameVault.PLL.Controllers
             }
         }
         [Authorize]
+        public IActionResult SearchUser()
+        {
+            return View();
+        }
+        [Authorize]
         public async Task<IActionResult> Search(string searchTerm)
         {
             try
@@ -274,8 +281,8 @@ namespace GameVault.PLL.Controllers
 
             if (!success)
             {
-                ViewBag.ErrorMessage = error ?? "Failed to add the game";
-                return View();
+                TempData["ErrorMessage"] = error ?? "Failed to add the game";
+                return RedirectToAction("Index", "Home");
             }
 
             return RedirectToAction("UserLibrary", "User");

@@ -40,7 +40,7 @@ namespace GameVault.BLL.Mappers
 
 
             CreateMap<CreateCategory, Category>()
-    .ForMember(dest => dest.Category_Name, opt => opt.MapFrom(src => src.Category_Name));
+                .ForMember(dest => dest.Category_Name, opt => opt.MapFrom(src => src.Category_Name));
 
         }
     }

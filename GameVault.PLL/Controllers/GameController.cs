@@ -134,17 +134,68 @@ namespace GameVault.PLL.Controllers
         [Authorize]
         private async Task LoadViewBagData(int? selectedCompanyId = null)
         {
-            // Load companies
             var (companySuccess, companies) = await _companyServices.GetAllAsync();
             ViewBag.Companies = companySuccess && companies != null
                 ? new SelectList(companies, "CompanyId", "CompanyName", selectedCompanyId)
                 : new SelectList(new List<CompanyVM>(), "CompanyId", "CompanyName");
 
-            // Load categories
             var (categorySuccess, categories) = await _categoryServices.GetAllAsync();
             ViewBag.Categories = categorySuccess && categories != null
                 ? new MultiSelectList(categories, "Category_Id", "Category_Name")
                 : new MultiSelectList(new List<CategoryDTO>(), "Category_Id", "Category_Name");
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(searchTerm))
+                {
+                    return RedirectToAction("Index");
+                }
+
+                var (success, games) = await _gameServices.GetAllAsync();
+
+                if (!success || games == null)
+                {
+                    ViewBag.ErrorMessage = "Failed to load games for search.";
+                    return View("SearchResult", new List<GameVM>());
+                }
+                var filteredGames = games
+                    .Where(g => !string.IsNullOrEmpty(g.Title) &&
+                                g.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+
+                ViewBag.SearchTerm = searchTerm;
+                ViewBag.ResultCount = filteredGames.Count;
+
+                return View("SearchResult", filteredGames);
+            }
+            catch (Exception)
+            {
+                ViewBag.ErrorMessage = "An error occurred during search.";
+                return View("SearchResult", new List<GameVM>());
+            }
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> SearchResult(List<GameVM> Result)
+        {
+            try
+            {
+                if (Result == null || !Result.Any())
+                {
+                    return RedirectToAction("Index");
+                }
+
+                ViewBag.ResultCount = Result.Count;
+                return View(Result);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ErrorMessage = "An error occurred while displaying search results.";
+                return RedirectToAction("Index");
+            }
         }
     }
 }

@@ -1,0 +1,302 @@
+﻿@{
+	ViewData["Title"] = "Search Users";
+}
+
+<div class="search-user-container">
+	<div class="search-header">
+		<div class="search-icon-wrapper">
+			<i class="fas fa-users search-main-icon"></i>
+		</div>
+		<h1 class="search-title">Find GameVault Users</h1>
+		<p class="search-subtitle">Discover and connect with fellow gamers in the GameVault community</p>
+	</div>
+
+	<div class="search-form-container">
+		<form asp-controller="User" asp-action="Search" method="get" class="user-search-form">
+			<div class="search-input-group">
+				<button type="submit" class="search-btn">
+					<i class="fas fa-search"></i>
+				</button>
+				<input type="text"
+					   name="searchTerm"
+					   placeholder="Search users..."
+					   class="form-control"
+					   value="@ViewBag.SearchTerm"
+					   autocomplete="off"
+					   autofocus>
+			</div>
+			<div class="search-tips">
+				<i class="fas fa-info-circle me-2"></i>
+				Search by username, display name
+			</div>
+		</form>
+	</div>
+
+	@if (ViewBag.SearchResults != null)
+	{
+		<div class="search-results-section">
+			<h3 class="results-title">
+				<i class="fas fa-search-plus me-2"></i>
+				Search Results for "@ViewBag.SearchTerm"
+			</h3>
+
+			@if (((IEnumerable<dynamic>)ViewBag.SearchResults).Any())
+			{
+				<div class="results-grid">
+					@foreach (var user in ViewBag.SearchResults)
+					{
+						<div class="user-card">
+							<div class="user-avatar">
+								<img src="@(!string.IsNullOrEmpty(user.ProfilePicture)
+																														  		  ? Url.Content("~/Images/" + user.ProfilePicture)
+																														  		  : "https://i.ibb.co/bjgY27pk/Blank-Profile-Pic.jpg")"
+						 alt="@user.UserName Profile"
+						 class="avatar-img">
+				</div>
+				<div class="user-info">
+					<h5 class="user-name">@user.UserName</h5>
+					<p class="user-email">@user.Email</p>
+					<div class="user-actions">
+						<a href="@Url.Action("UserProfile", "User", new { id = user.Id })"
+						   class="btn btn-sm btn-primary">
+							<i class="fas fa-user me-1"></i>View Profile
+						</a>
+					</div>
+				</div>
+			</div>
+						}
+				</div>
+			}
+			else
+			{
+				<div class="no-results">
+					<div class="no-results-icon">
+						<i class="fas fa-user-slash"></i>
+					</div>
+					<h4>No Users Found</h4>
+					<p>We couldn't find any users matching "<strong>@ViewBag.SearchTerm</strong>"</p>
+					<div class="search-suggestions">
+						<p>Try:</p>
+						<ul>
+							<li>Checking your spelling</li>
+							<li>Using different keywords</li>
+							<li>Searching for partial usernames</li>
+						</ul>
+					</div>
+				</div>
+			}
+		</div>
+	}
+</div>
+
+<style>
+	.search-user-container {
+		min-height: 80vh;
+		background: linear-gradient(135deg, #0f1419 0%, #1a2332 50%, #2d3748 100%);
+		padding: 2rem 0;
+	}
+
+	.search-header {
+		text-align: center;
+		margin-bottom: 3rem;
+		padding: 2rem 1rem;
+	}
+
+	.search-icon-wrapper {
+		margin-bottom: 1.5rem;
+	}
+
+	.search-main-icon {
+		font-size: 4rem;
+		color: #00d4ff;
+		text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+	}
+
+	.search-title {
+		color: #fff;
+		font-family: 'Orbitron', monospace;
+		font-size: 2.5rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+		text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+	}
+
+	.search-subtitle {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 1.1rem;
+		max-width: 600px;
+		margin: 0 auto;
+		line-height: 1.6;
+	}
+
+	.search-form-container {
+		display: flex;
+		justify-content: center;
+		padding: 0 2rem;
+		margin-bottom: 2rem;
+	}
+
+	.user-search-form {
+		max-width: 600px;
+		width: 100%;
+	}
+
+	.search-input-group {
+		position: relative;
+		margin-bottom: 1rem;
+	}
+
+		.search-input-group .form-control {
+			border-radius: 25px;
+			padding: 1rem 1rem 1rem 3rem;
+			background-color: rgba(255, 255, 255, 0.1);
+			border: 2px solid rgba(0, 212, 255, 0.3);
+			color: #fff;
+			font-size: 1.1rem;
+		}
+
+			.search-input-group .form-control::placeholder {
+				color: rgba(255, 255, 255, 0.7);
+				font-style: italic;
+			}
+
+			.search-input-group .form-control:focus {
+				background-color: rgba(255, 255, 255, 0.15);
+				border-color: #00d4ff;
+				box-shadow: 0 0 0 0.2rem rgba(0, 212, 255, 0.25);
+				color: #fff;
+			}
+
+	.search-btn {
+		position: absolute;
+		left: 15px;
+		top: 50%;
+		transform: translateY(-50%);
+		background: none;
+		border: none;
+		color: rgba(255, 255, 255, 0.7);
+		z-index: 3;
+		padding: 0;
+		font-size: 1.1rem;
+	}
+
+		.search-btn:hover {
+			color: #00d4ff;
+		}
+
+	.search-tips {
+		text-align: center;
+		color: rgba(255, 255, 255, 0.6);
+		font-size: 0.9rem;
+		font-style: italic;
+	}
+
+	.search-results-section {
+		max-width: 1200px;
+		margin: 0 auto;
+		padding: 0 2rem;
+	}
+
+	.results-title {
+		color: #fff;
+		font-family: 'Orbitron', monospace;
+		font-size: 1.5rem;
+		margin-bottom: 2rem;
+		text-align: center;
+	}
+
+	.results-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+		gap: 1.5rem;
+	}
+
+	.user-card {
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 15px;
+		padding: 1.5rem;
+		text-align: center;
+		transition: all 0.3s ease;
+		border: 1px solid rgba(0, 212, 255, 0.3);
+	}
+
+		.user-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 10px 25px rgba(0, 212, 255, 0.2);
+			border-color: #00d4ff;
+		}
+
+	.user-avatar {
+		margin-bottom: 1rem;
+	}
+
+	.avatar-img {
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		object-fit: cover;
+		border: 3px solid rgba(0, 212, 255, 0.5);
+		transition: all 0.3s ease;
+	}
+
+	.user-card:hover .avatar-img {
+		border-color: #00d4ff;
+		box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+	}
+
+	.user-info {
+		color: #fff;
+	}
+
+	.user-name {
+		font-family: 'Orbitron', monospace;
+		font-weight: 600;
+		margin-bottom: 0.5rem;
+		color: #00d4ff;
+	}
+
+	.user-email {
+		color: rgba(255, 255, 255, 0.7);
+		font-size: 0.9rem;
+		margin-bottom: 1rem;
+	}
+
+	.no-results {
+		text-align: center;
+		padding: 3rem 2rem;
+		color: #fff;
+	}
+
+	.no-results-icon {
+		font-size: 4rem;
+		color: rgba(255, 255, 255, 0.3);
+		margin-bottom: 1.5rem;
+	}
+
+	.no-results h4 {
+		font-family: 'Orbitron', monospace;
+		margin-bottom: 1rem;
+		color: #00d4ff;
+	}
+
+	.no-results p {
+		color: rgba(255, 255, 255, 0.7);
+		margin-bottom: 1.5rem;
+	}
+
+	.search-suggestions ul {
+		list-style: none;
+		padding: 0;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.search-suggestions li {
+		padding: 0.25rem 0;
+	}
+
+		.search-suggestions li:before {
+			content: "→";
+			margin-right: 0.5rem;
+			color: #00d4ff;
+		}
+</style>

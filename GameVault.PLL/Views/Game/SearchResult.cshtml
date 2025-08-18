@@ -1,0 +1,146 @@
+﻿@model List<GameVault.BLL.ModelVM.GameVM>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Search Results";
+}
+
+<div class="col-xl-12 mb-5 mb-xl-10">
+    <div class="card card-flush h-xl-100">
+        <!--begin::Header-->
+        <div class="card-header pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bold text-gray-800">Search Results</span>
+                <span class="text-gray-500 mt-1 fw-semibold fs-6">Games that match your search criteria</span>
+                @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+                {
+                    <div class="text-muted fs-7 mt-2">
+                        Searched for: "<strong>@ViewBag.SearchTerm</strong>" - Found @ViewBag.ResultCount result(s)
+                    </div>
+                }
+            </h3>
+            <div class="card-toolbar">
+                <a href="@Url.Action("Index", "Game")" class="btn btn-sm btn-light me-2">
+                    <i class="ki-duotone ki-arrow-left fs-3">
+                        <span class="path1"></span>
+                        <span class="path2"></span>
+                    </i>
+                    Back to Search
+                </a>
+            </div>
+        </div>
+        <!--end::Header-->
+        <!--begin::Body-->
+        <div class="card-body pt-6">
+            @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+            {
+                <div class="alert alert-danger d-flex align-items-center p-5 mb-5">
+                    <i class="ki-duotone ki-shield-cross fs-2hx text-danger me-4"></i>
+                    <div class="d-flex flex-column">
+                        <h4 class="mb-1 text-danger">Error</h4>
+                        <span>@ViewBag.ErrorMessage</span>
+                    </div>
+                </div>
+            }
+
+            @if (Model != null && Model.Any())
+            {
+                <div class="d-flex align-items-center justify-content-between mb-5">
+                    <div class="text-gray-600 fw-semibold fs-7">
+                        Showing @Model.Count game(s) matching your search
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-row-dashed align-middle gs-0 gy-3 my-0">
+                        <thead>
+                            <tr class="fs-7 fw-bold text-gray-500 border-bottom-0">
+                                <th class="p-0 pb-3 min-w-200px text-start">Title</th>
+                                <th class="p-0 pb-3 min-w-150px text-start">Description</th>
+                                <th class="p-0 pb-3 min-w-100px text-start">Price</th>
+                                <th class="p-0 pb-3 w-100px text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var game in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="symbol symbol-50px me-3">
+                                                <div class="symbol-label bg-light-primary">
+                                                    <span class="text-primary fw-bold fs-4">@game.Title?.Substring(0, 1).ToUpper()</span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <span class="text-gray-800 fw-bold mb-1 fs-6">@game.Title</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if (!string.IsNullOrEmpty(game.Description))
+                                        {
+                                            <span class="text-gray-600 fw-semibold fs-7">@game.Description</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted fs-7">No description</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="text-gray-800 fw-bold">@game.Price</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end flex-shrink-0">
+                                            <a asp-controller="Game" asp-action="GameDetails"
+                                               asp-route-id="@game.GameId"
+                                               class="btn btn-sm btn-primary"
+                                               data-bs-toggle="tooltip" title="View Game">
+                                                <i class="ki-duotone ki-eye fs-3"></i>
+                                                View
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-10">
+                    <div class="mb-7">
+                        <i class="ki-duotone ki-magnifier fs-5x text-gray-400"></i>
+                    </div>
+                    <div class="fw-semibold fs-1 text-gray-400 mb-7">No games found</div>
+                    <div class="fw-semibold fs-6 text-gray-600 mb-5">
+                        @if (!string.IsNullOrEmpty(ViewBag.SearchTerm))
+                        {
+                            <text>No games match your search criteria for "@ViewBag.SearchTerm".<br />Try a different search term.</text>
+                        }
+                        else
+                        {
+                            <text>No search results to display.</text>
+                        }
+                    </div>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="@Url.Action("Index", "Game")" class="btn btn-light">
+                            <i class="ki-duotone ki-magnifier fs-2"></i>
+                            Try New Search
+                        </a>
+                    </div>
+                </div>
+            }
+        </div>
+        <!--end: Card Body-->
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('[data-bs-toggle="tooltip"]').tooltip();
+        setTimeout(function () {
+            $('.alert').fadeOut('slow');
+        }, 5000);
+    </script>
+}

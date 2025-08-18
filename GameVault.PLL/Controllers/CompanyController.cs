@@ -67,8 +67,6 @@ namespace GameVault.PLL.Controllers
             ViewBag.ReturnToGame = returnToGame;
             return View(company);
         }
-
-
         public async Task<IActionResult> Edit(int id)
         {
             var (success, company) = await _companyServices.GetByIdAsync(id);

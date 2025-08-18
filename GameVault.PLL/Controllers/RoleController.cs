@@ -42,7 +42,6 @@ namespace GameVault.PLL.Controllers
 
             try
             {
-                // Ensure CreatedBy is set if empty
                 if (string.IsNullOrEmpty(model.CreatedBy))
                 {
                     model.CreatedBy = User.Identity?.Name ?? "System";

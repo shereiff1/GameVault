@@ -18,7 +18,7 @@
                 @if (isSaleActive)
                 {
                     <div class="alert alert-warning mt-3">
-                        <i class="fas fa-fire"></i> <strong>FLASH SALE!</strong> 20% OFF all games until 4 PM! <i class="fas fa-fire"></i>
+                        <i class="fas fa-fire"></i> <strong>FLASH SALE!</strong> 20% OFF all games until 5 PM! <i class="fas fa-fire"></i>
                     </div>
                 }
             </div>
@@ -407,7 +407,7 @@
         connection.on("UpdateFeaturedGame", incoming => {
             try {
                 console.log('[FeaturedGame] update received:', incoming);
-                if (!incoming) return; // ignore null/empty
+                if (!incoming) return; 
 
                 const id = prop(incoming, 'gameId', 'GameId');
                 const title = prop(incoming, 'title', 'Title');
@@ -421,7 +421,6 @@
                 const categories = prop(incoming, 'categories', 'Categories') || [];
                 const reviews = prop(incoming, 'reviews', 'Reviews') || [];
 
-                // Ensure wrapper exists (we'll only replace its innerHTML so outer container persists)
                 let wrapper = document.getElementById('featured-game-container');
                 if (!wrapper) {
                     wrapper = document.createElement('div');
@@ -431,7 +430,6 @@
                     else (document.querySelector('.container-fluid') || document.body).insertBefore(wrapper, (document.querySelector('.container-fluid') || document.body).firstChild);
                 }
 
-                // Build inner HTML (only inside wrapper)
                 const catsHtml = categories.length ? `<div class="mb-3">${categories.slice(0,4).map(c => `<span class="badge bg-secondary me-1 mb-1">${c.category_Name ?? c.Category_Name ?? ''}</span>`).join('')}${categories.length>4?`<span class="badge bg-light text-dark">+${categories.length-4} more</span>`:''}</div>` : '';
 
                 let stars = '';
@@ -484,8 +482,6 @@
                             </div>
                         </div>
                     </div>`;
-
-                // Replace only the content inside wrapper so we don't accidentally remove outer wrappers/CSS
                 wrapper.innerHTML = inner;
                 console.log('[FeaturedGame] DOM updated for', title);
 

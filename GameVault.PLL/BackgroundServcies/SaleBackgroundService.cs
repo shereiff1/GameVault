@@ -15,7 +15,7 @@ namespace GameVault.PLL.Services
 
         public static class SaleStatus
         {
-            public static bool IsSaleActive { get; internal set; }
+            public static bool IsSaleActive { get; set; }
         }
 
         public SaleBackgroundService(IServiceScopeFactory serviceScopeFactory, ILogger<SaleBackgroundService> logger)
@@ -52,8 +52,8 @@ namespace GameVault.PLL.Services
         private async Task UpdateSaleStatus()
         {
             var now = DateTime.Now.TimeOfDay;
-            var start = new TimeSpan(14, 0, 0);  
-            var end = new TimeSpan(18, 0, 0);    
+            var start = new TimeSpan(14, 0, 0);
+            var end = new TimeSpan(17, 0, 0);
 
             bool saleShouldBeActive = (end < start)
                 ? now >= start || now <= end
@@ -61,27 +61,6 @@ namespace GameVault.PLL.Services
 
             if (saleShouldBeActive != _saleActive || DateTime.UtcNow - _lastCheck > TimeSpan.FromHours(1))
             {
-                using var scope = _serviceScopeFactory.CreateScope();
-                var gameServices = scope.ServiceProvider.GetRequiredService<IGameServices>();
-
-                var (success, games) = await gameServices.GetAllGameDetailsAsync();
-                if (success && games != null)
-                {
-                    foreach (var game in games)
-                    {
-                        if (saleShouldBeActive)
-                            game.Price = game.Price * 0.8m;
-                        else
-                            game.Price = game.Price;
-                    }
-
-                    _logger.LogInformation($"Sale status updated: {(saleShouldBeActive ? "ACTIVE" : "INACTIVE")} for {games.Count()} games.");
-                }
-                else
-                {
-                    _logger.LogWarning("No games found or failed to fetch games for sale update.");
-                }
-
                 _saleActive = saleShouldBeActive;
                 SaleStatus.IsSaleActive = saleShouldBeActive;
                 _lastCheck = DateTime.UtcNow;
