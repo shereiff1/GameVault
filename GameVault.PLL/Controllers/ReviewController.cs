@@ -39,7 +39,7 @@ namespace GameVault_PLL.Controllers
         }
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _reviewServices.DeleteAsync(id);
+                       var result = await _reviewServices.DeleteAsync(id);
             if (result.Item1)
             {
                 return RedirectToAction("GetAllReviews");
@@ -54,7 +54,7 @@ namespace GameVault_PLL.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateReview([FromBody] ReviewDTO review)
+        public async Task<IActionResult> UpdateReview( ReviewDTO review)
         {
             var result = await _reviewServices.UpdateAsync(review);
             if (result.Item1)

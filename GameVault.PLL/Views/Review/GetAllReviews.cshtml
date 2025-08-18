@@ -57,30 +57,4 @@ else
         </tbody>
     </table>
 }
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script>
-     $( document ).ready(function() {
-$(".del").click(async function(e){
-             e.preventDefault();
-                let id=   $(this).attr('data-id')
-                console.log(id)
-                    $.ajax({
-       url: "https://localhost:44341/Review/Delete/"+id,
-     type: "POST",
-       contentType: "application/json",
-     dataType: "json",
-      success: function(response) {
-
-         if(response.success){
-               $('.'+id).fadeOut()
-         }
-
-     },
-      error: function(xhr, status, error) {
-              console.log('Error:', error);
-          }
- });
-})
-    })
-</script>
 
